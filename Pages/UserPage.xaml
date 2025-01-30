@@ -6,12 +6,15 @@
 
     <ScrollView>
         <VerticalStackLayout Padding="20" Spacing="10">
-            <SearchBar x:Name="SearchBar" Placeholder="Search by name" TextChanged="OnSearchBarTextChanged" TextColor="Black" />
+            <Frame Padding="10" Margin="5" BackgroundColor="LightCyan"  CornerRadius="10" BorderColor="LightGray" HasShadow="False">
+                <SearchBar x:Name="SearchBar" Placeholder="Search by name" TextChanged="OnSearchBarTextChanged" TextColor="Black"/>
+            </Frame>
+          
             <ListView x:Name="UserListView" HasUnevenRows="True" ItemTapped="UserListView_ItemTapped">
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <ViewCell>
-                            <Frame Padding="10" Margin="5" BackgroundColor="LightBlue"  CornerRadius="10" BorderColor="LightGray" HasShadow="False">
+                            <Frame Padding="10" Margin="5" BackgroundColor="LightCyan"  CornerRadius="10" BorderColor="LightGray" HasShadow="False">
                                 <StackLayout Spacing="5">
                                     <Label Text="{Binding Id}" FontSize="10" TextColor="Black" />
                                     <Label Text="{Binding FullName}" FontSize="18" TextColor="Black" />

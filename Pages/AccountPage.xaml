@@ -5,29 +5,43 @@
              BackgroundColor="White">
     <ScrollView>
         <VerticalStackLayout Padding="20" Spacing="5">
-            <Entry x:Name="UsernameEntry" Placeholder="Username" TextColor="Black"/>
-            <Entry x:Name="PasswordEntry" Placeholder="Password" IsPassword="True" TextColor="Black" Margin="0,0,20,0" />
+            <Frame Padding="10" Margin="5" BackgroundColor="LightCyan"  CornerRadius="10" BorderColor="LightGray" HasShadow="False">
+                <Grid ColumnDefinitions="2*,2*,*" RowDefinitions="Auto">
+                    <Entry x:Name="UsernameEntry" Placeholder="Username" TextColor="Black" Grid.Column="0" />
+                    <Entry x:Name="PasswordEntry" Placeholder="Password" IsPassword="True" TextColor="Black" Grid.Column="1" />
+                    <Picker x:Name="RolePicker" ItemDisplayBinding="{Binding Description}" TextColor="Black" Grid.Column="2" />
+                </Grid>
+            </Frame>
+            
+            <Frame Padding="10" Margin="5" BackgroundColor="LightCyan"  CornerRadius="10" BorderColor="LightGray" HasShadow="False">
+                <Grid ColumnDefinitions="2*,2*,*" ColumnSpacing="10">
+                    <Entry x:Name="FirstNameEntry" Placeholder="FName" TextColor="Black" Grid.Column="0" />
+                    <Entry x:Name="LastNameEntry" Placeholder="LName" TextColor="Black" Grid.Column="1" />
+                    <Entry x:Name="MiddleNameEntry" Placeholder="MName" TextColor="Black" Grid.Column="2" />
+                </Grid>
+            </Frame>
 
-            <Grid ColumnSpacing="10">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="2*" />
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="2*" />
-                </Grid.ColumnDefinitions>
+            <Frame Padding="10" Margin="5" BackgroundColor="LightCyan"  CornerRadius="10" BorderColor="LightGray" HasShadow="False">
+                <Grid ColumnDefinitions="4*,*" RowDefinitions="Auto">
+                    <Entry x:Name="AddressEntry" Placeholder="Address" TextColor="Black" Grid.Column="0"/>
+                    <DatePicker x:Name="BirthDatePicker" TextColor="Black" Grid.Column="1" />
+                </Grid>
+            </Frame>
 
-                <Entry x:Name="FirstNameEntry" Placeholder="First Name" TextColor="Black" Grid.Column="0" />
-                <Entry x:Name="MiddleNameEntry" Placeholder="Mid Name" TextColor="Black" Grid.Column="1" />
-                <Entry x:Name="LastNameEntry" Placeholder="Last Name" TextColor="Black" Grid.Column="2" />
-            </Grid>
+            <Frame Padding="10" Margin="5" BackgroundColor="LightCyan"  CornerRadius="10" BorderColor="LightGray" HasShadow="False">
+                <Grid ColumnDefinitions="*,*" RowDefinitions="Auto">
+                    <Entry x:Name="MobileEntry" Placeholder="Mobile Number" Keyboard="Telephone" TextColor="Black" Grid.Column="0"/>
+                    <Entry x:Name="EmailEntry" Placeholder="Email Address" Keyboard="Email" TextColor="Black" Grid.Column="1" />
 
-            <Label Text="Birth Date:" VerticalOptions="Center" />
-            <DatePicker x:Name="BirthDatePicker" TextColor="Black" />
-            <Entry x:Name="MobileEntry" Placeholder="Mobile Number" Keyboard="Telephone" TextColor="Black" />
-            <Entry x:Name="EmailEntry" Placeholder="Email Address" Keyboard="Email" TextColor="Black" />
-            <Entry x:Name="AddressEntry" Placeholder="Address" TextColor="Black" />
-            <Editor x:Name="NoteEditor" Placeholder="Note" AutoSize="TextChanges" TextColor="Black" HeightRequest="100" />
-            <Label Text="Role:" VerticalOptions="Center" />
-            <Picker x:Name="RolePicker" ItemDisplayBinding="{Binding Description}" TextColor="Black" BackgroundColor="AliceBlue" />
+                </Grid>
+            </Frame>
+
+            <Frame Padding="10" Margin="5" BackgroundColor="LightCyan"  CornerRadius="10" BorderColor="LightGray" HasShadow="False">
+                <Grid ColumnDefinitions="*,*" RowDefinitions="Auto">
+                    <Editor x:Name="NoteEditor" Placeholder="Note" AutoSize="TextChanges" TextColor="Black" HeightRequest="50" />
+                </Grid>
+            </Frame>
+            
             <Button Text="Save" x:Name="SaveButton" Clicked="SaveButton_Clicked" />
 
         </VerticalStackLayout>
