@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using DentalApp.Pages;
+using Microsoft.Extensions.Logging;
 
 namespace DentalApp
 {
@@ -14,9 +15,11 @@ namespace DentalApp
                     fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
                     fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
                 });
+            builder.Services.AddTransient<UserPage>();
+            builder.Services.AddTransient<AccountPage>();
 
 #if DEBUG
-    		builder.Logging.AddDebug();
+            builder.Logging.AddDebug();
 #endif
 
             return builder.Build();

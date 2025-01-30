@@ -6,10 +6,16 @@
     xmlns:pages="clr-namespace:DentalApp.Pages"
     Shell.FlyoutBehavior="Flyout">
 
-    <FlyoutItem Title="User" Icon="dashboard_icon.png">
+    <FlyoutItem Title="User">
         <Tab Title="User">
             <ShellContent ContentTemplate="{DataTemplate pages:UserPage}" Route="UserPage" />
         </Tab>
     </FlyoutItem>
+    <FlyoutItem Title="Account">
+        <Tab Title="Account">
+            <ShellContent ContentTemplate="{DataTemplate pages:AccountPage}" Route="AccountPage" />
+        </Tab>
+    </FlyoutItem>
+
 
 </Shell>
