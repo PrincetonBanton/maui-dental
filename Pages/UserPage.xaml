@@ -2,11 +2,11 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="DentalApp.Pages.UserPage"
-             BackgroundColor="White">
+             BackgroundColor="LightCyan">
 
     <ScrollView>
         <VerticalStackLayout Padding="20" Spacing="10">
-            <Frame Padding="10" Margin="5" BackgroundColor="LightCyan"  CornerRadius="10" BorderColor="LightGray" HasShadow="False">
+            <Frame Padding="10" Margin="5" BackgroundColor="White"  CornerRadius="10" BorderColor="LightGray" HasShadow="False">
                 <SearchBar x:Name="SearchBar" Placeholder="Search by name" TextChanged="OnSearchBarTextChanged" TextColor="Black"/>
             </Frame>
           
@@ -14,9 +14,9 @@
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <ViewCell>
-                            <Frame Padding="10" Margin="5" BackgroundColor="LightCyan"  CornerRadius="10" BorderColor="LightGray" HasShadow="False">
+                            <Frame Padding="10" Margin="5" BackgroundColor="White"  CornerRadius="10" BorderColor="LightGray" HasShadow="False">
                                 <StackLayout Spacing="5">
-                                    <Label Text="{Binding Id}" FontSize="10" TextColor="Black" />
+                                    <!--<Label Text="{Binding Id}" FontSize="10" TextColor="Black" />-->
                                     <Label Text="{Binding FullName}" FontSize="18" TextColor="Black" />
                                     <Label Text="{Binding RoleName}" FontSize="14" TextColor="Gray" />
                                     <Label Text="{Binding Email}" FontSize="12" TextColor="Gray" />

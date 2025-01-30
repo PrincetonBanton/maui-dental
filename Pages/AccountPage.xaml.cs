@@ -16,10 +16,6 @@ namespace DentalApp.Pages
 
             if (user != null)
             {
-                string userDetails = $"Username: {user.Username}\n" +
-                                    $"Role ID: {user.RoleId}";
-                DisplayAlert("User Details", userDetails, "OK");
-
                 UsernameEntry.Text = user.Username;
                 PasswordEntry.Text = ""; 
                 FirstNameEntry.Text = user.FirstName;
@@ -30,12 +26,10 @@ namespace DentalApp.Pages
                 EmailEntry.Text = user.Email;
                 AddressEntry.Text = user.Address;
                 NoteEditor.Text = user.Note;
-
                 LoadAndSetRole(user.RoleId);
-            }
-            else
+            } else
             {
-                LoadAndSetRole(1);
+                RolePicker.Title = "Role";  //Load sa api
             }
         }
 
@@ -69,11 +63,6 @@ namespace DentalApp.Pages
                 _user.Note = NoteEditor.Text;
                 _user.RoleId = RolePicker.SelectedIndex + 1; // Assuming RoleId starts from 1
 
-                string userDetails = $"Username: {_user.Username}\n" +
-                    $"Role ID: {_user.RoleId}";
-
-                DisplayAlert("User Details", userDetails, "OK");
-
                 var isUpdated = await _apiService.UpdateUserAsync(_user);
 
                 if (isUpdated)
@@ -102,11 +91,6 @@ namespace DentalApp.Pages
                     Note = NoteEditor.Text,
                     RoleId = RolePicker.SelectedIndex + 1
                 };
-
-                string userDetails = $"Username: {newUser.Username}\n" +
-                       $"Role ID: {newUser.RoleId}";
-
-                await DisplayAlert("User Details", userDetails, "OK");
                 var isCreated = await _apiService.RegisterUserAsync(newUser);
 
                 if (isCreated)
