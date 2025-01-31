@@ -34,14 +34,14 @@ namespace DentalApp.Pages
         private async void UserListView_ItemTapped(object sender, ItemTappedEventArgs e)
         {
             if (e.Item is not User selectedUser) return;
-            string action = await DisplayActionSheet("Action", "Cancel", null, "Edit", "Delete");
+            string action = await DisplayActionSheet(" ", "Cancel", null, "Edit", "Delete");
             if (action == "Edit")
             {
-                string userDetails = $"ID: {selectedUser.Id}\n" +
-                     $"Username: {selectedUser.Username}\n" +
-                     $"Role ID: {selectedUser.RoleId}\n" +
-                     $"Status: {selectedUser.Status}";
-                await DisplayAlert("User Details", userDetails, "OK");
+                //string userDetails = $"ID: {selectedUser.Id}\n" +
+                //     $"Username: {selectedUser.Username}\n" +
+                //     $"Role ID: {selectedUser.RoleId}\n" +
+                //     $"Status: {selectedUser.Status}";
+                //await DisplayAlert("User Details", userDetails, "OK");
                 await Navigation.PushAsync(new AccountPage(selectedUser));
             }
             else if (action == "Delete" && await DisplayAlert("Confirm", "Delete this user?", "Yes", "No"))
