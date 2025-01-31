@@ -52,8 +52,11 @@ namespace DentalApp.Services
 
 
         // User Methods
-        public Task<List<User>> GetUsersAsync()
-            => GetAsync<List<User>>("User/GetAll") ?? Task.FromResult(new List<User>());
+        public async Task<List<User>> GetUsersAsync()
+        {
+            var users = await GetAsync<List<User>>("User/GetAll") ?? new List<User>();
+            return users.OrderBy(u => u.FullName).ToList();
+        }
 
         public Task<User?> GetUserByIdAsync(int id)
             => GetAsync<User>($"User/Get/{id}");

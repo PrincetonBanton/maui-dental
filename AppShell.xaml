@@ -16,6 +16,16 @@
             <ShellContent ContentTemplate="{DataTemplate pages:AccountPage}" Route="AccountPage" />
         </Tab>
     </FlyoutItem>
+    <FlyoutItem Title="Patient">
+        <Tab Title="Patient">
+            <ShellContent ContentTemplate="{DataTemplate pages:PatientPage}" Route="PatientPage" />
+        </Tab>
+    </FlyoutItem>
+    <FlyoutItem Title="Product">
+        <Tab Title="Product">
+            <ShellContent ContentTemplate="{DataTemplate pages:ProductPage}" Route="ProductPage" />
+        </Tab>
+    </FlyoutItem>
 
 
 </Shell>

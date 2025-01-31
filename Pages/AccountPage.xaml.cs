@@ -11,13 +11,12 @@ namespace DentalApp.Pages
         public AccountPage(User user = null)
         {
             InitializeComponent();
-            //CheckConnectivity();
             _user = user;
 
             if (user != null)
             {
                 UsernameEntry.Text = user.Username;
-                PasswordEntry.Text = ""; 
+                PasswordEntry.Text = "";
                 FirstNameEntry.Text = user.FirstName;
                 MiddleNameEntry.Text = user.MiddleName;
                 LastNameEntry.Text = user.LastName;
@@ -26,25 +25,34 @@ namespace DentalApp.Pages
                 EmailEntry.Text = user.Email;
                 AddressEntry.Text = user.Address;
                 NoteEditor.Text = user.Note;
-                LoadAndSetRole(user.RoleId);
-            } else
+                LoadAndSetRole(user.RoleId); // Load role based on user data
+            }
+            else
             {
-                RolePicker.Title = "Role";  //Load sa api
+                LoadAndSetRole(null); // Load roles for new user
             }
         }
 
-        private async void LoadAndSetRole(int roleId)
+        private async void LoadAndSetRole(int? roleId)
         {
-            var roles = await _apiService.GetRolesAsync();
-            RolePicker.ItemsSource = roles;
+            var roles = await _apiService.GetRolesAsync() ?? new List<Role>();
 
-            //Debug: Show all role IDs loaded
-            //string roleIds = string.Join(", ", roles.Select(r => r.Id));
-            //await DisplayAlert("Debug", $"Loaded roles: {roleIds}", "OK");
+            if (roles.Any())
+            {
+                RolePicker.ItemsSource = roles;
 
-            var selectedRole = roles.FirstOrDefault(r => r.Id == roleId);
-            RolePicker.SelectedItem = selectedRole;
+                if (roleId.HasValue)
+                {
+                    var selectedRole = roles.FirstOrDefault(r => r.Id == roleId.Value);
+                    RolePicker.SelectedItem = selectedRole;
+                }
+            }
+            else
+            {
+                await DisplayAlert("Error", "No roles found. Please check the API.", "OK");
+            }
         }
+
 
 
         private async void SaveButton_Clicked(object sender, EventArgs e)
@@ -95,7 +103,7 @@ namespace DentalApp.Pages
 
                 if (isCreated)
                 {
-                    await DisplayAlert("Success", "User created successfully!", "OK");
+                    await DisplayAlert("Success", "User created successfully!", "OK");                  
                     await Navigation.PushAsync(new UserPage());
                 }
                 else

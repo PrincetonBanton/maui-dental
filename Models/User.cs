@@ -41,5 +41,8 @@ namespace DentalApp.Models
                     : $"{FirstName} {MiddleName} {LastName}";
             }
         }
-    }
+        public string Initials => (!string.IsNullOrEmpty(FirstName) && !string.IsNullOrEmpty(LastName))
+            ? $"{FirstName[0]}{LastName[0]}".ToUpper()
+            : "??";
+            }
 }

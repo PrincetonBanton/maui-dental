@@ -5,8 +5,8 @@
              BackgroundColor="LightCyan">
 
     <ScrollView>
-        <VerticalStackLayout Padding="20" Spacing="10">
-            <Frame Padding="10" Margin="5" BackgroundColor="White"  CornerRadius="10" BorderColor="LightGray" HasShadow="False">
+        <VerticalStackLayout Padding="15" Spacing="10">
+            <Frame Padding="10" Margin="10,10,10,0" BackgroundColor="White"  CornerRadius="10" BorderColor="LightCyan" HasShadow="False">
                 <SearchBar x:Name="SearchBar" Placeholder="Search by name" TextChanged="OnSearchBarTextChanged" TextColor="Black"/>
             </Frame>
           
@@ -14,14 +14,34 @@
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <ViewCell>
-                            <Frame Padding="10" Margin="5" BackgroundColor="White"  CornerRadius="10" BorderColor="LightGray" HasShadow="False">
-                                <StackLayout Spacing="5">
-                                    <!--<Label Text="{Binding Id}" FontSize="10" TextColor="Black" />-->
-                                    <Label Text="{Binding FullName}" FontSize="18" TextColor="Black" />
-                                    <Label Text="{Binding RoleName}" FontSize="14" TextColor="Gray" />
-                                    <Label Text="{Binding Email}" FontSize="12" TextColor="Gray" />
-                                    <Label Text="{Binding Mobile}" FontSize="12" TextColor="Gray" />
-                                </StackLayout>
+                            <Frame Padding="10" Margin="10" BackgroundColor="white"  CornerRadius="10" BorderColor="LightCyan" HasShadow="False">
+                                <HorizontalStackLayout Spacing="10" VerticalOptions="Center">
+                                    <StackLayout Spacing="5">
+                                        <Frame WidthRequest="50" HeightRequest="50" CornerRadius="25" Padding="0" HasShadow="False">
+                                            <Frame.Triggers>
+                                                <DataTrigger TargetType="Frame" Binding="{Binding RoleName}" Value="Dentist">
+                                                    <Setter Property="BackgroundColor" Value="Turquoise"/>
+                                                </DataTrigger>
+                                                <DataTrigger TargetType="Frame" Binding="{Binding RoleName}" Value="Patient">
+                                                    <Setter Property="BackgroundColor" Value="LightGreen"/>
+                                                </DataTrigger>
+                                                <DataTrigger TargetType="Frame" Binding="{Binding RoleName}" Value="Staff">
+                                                    <Setter Property="BackgroundColor" Value="Pink"/>
+                                                </DataTrigger>
+                                            </Frame.Triggers>
+                                            <Label Text="{Binding Initials}" TextColor="White" FontSize="15" FontAttributes="Bold" 
+                                                   VerticalOptions="Center" HorizontalOptions="Center"/> 
+                                            <!--<Image Source="{Binding ProfilePicture}" Aspect="AspectFill" WidthRequest="50" HeightRequest="50" Clip="Circle"/>-->
+                                        </Frame>
+                                        <Label Text="{Binding RoleName}" FontSize="10" TextColor="Gray" HorizontalOptions="Center" />
+                                    </StackLayout>
+                                    <StackLayout Spacing="5">
+                                        <!--<Label Text="{Binding Id}" FontSize="10" TextColor="Black" />-->
+                                        <Label Text="{Binding FullName}" FontSize="18" TextColor="Black" />
+                                        <Label Text="{Binding Email}" FontSize="12" TextColor="Gray" />
+                                        <Label Text="{Binding Mobile}" FontSize="12" TextColor="Gray" />
+                                    </StackLayout>
+                                </HorizontalStackLayout>
                             </Frame>
                         </ViewCell>
                     </DataTemplate>
