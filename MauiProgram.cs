@@ -1,4 +1,5 @@
-﻿using DentalApp.Pages;
+﻿using CommunityToolkit.Maui;
+using DentalApp.Pages;
 using Microsoft.Extensions.Logging;
 
 namespace DentalApp
@@ -10,6 +11,7 @@ namespace DentalApp
             var builder = MauiApp.CreateBuilder();
             builder
                 .UseMauiApp<App>()
+                .UseMauiCommunityToolkit()  //For Toolkit
                 .ConfigureFonts(fonts =>
                 {
                     fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");

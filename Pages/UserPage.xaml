@@ -6,22 +6,40 @@
 
     <ScrollView>
         <VerticalStackLayout Padding="15" Spacing="10">
-            <Frame Padding="10" Margin="10,10,10,0" BackgroundColor="White" CornerRadius="10" 
-            BorderColor="LightCyan" HasShadow="False">
-                <HorizontalStackLayout>
-                    <Image Source="search.png" VerticalOptions="Center" Margin="5,0,10,0" HeightRequest="30"/>
-                    <SearchBar x:Name="SearchBar" Placeholder="Search by name"  TextChanged="OnSearchBarTextChanged" TextColor="Black"/>
-                </HorizontalStackLayout>
-            </Frame>
+            <Grid ColumnDefinitions="Auto, *">
+                <Image Source="search.png" VerticalOptions="Center" HeightRequest="15" Grid.Column="0">
+                    <Image.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnSearchImageTapped"/>
+                    </Image.GestureRecognizers>
+                </Image>
+                <Entry x:Name="SearchBar" Placeholder="Search by name" TextChanged="OnSearchBarTextChanged" TextColor="Black" Margin="10,0,0,0" Grid.Column="1"/>
+            </Grid>
+
+            <Grid ColumnDefinitions="Auto, *">
+                <Image Source="droplist.png" VerticalOptions="Center" HeightRequest="20" Grid.Column="0">
+                    <Image.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnDropListImageTapped"/>
+                    </Image.GestureRecognizers>
+                </Image>
+                <Picker x:Name="CategoryPicker" Title="Select User Type" TextColor="Black" Margin="10,0,0,0" Grid.Column="1">
+                    <Picker.ItemsSource>
+                        <x:Array Type="{x:Type x:String}">
+                            <x:String>Dentist</x:String>
+                            <x:String>Patient</x:String>
+                            <x:String>Staff</x:String>
+                        </x:Array>
+                    </Picker.ItemsSource>
+                </Picker>
+            </Grid>
 
             <ListView x:Name="UserListView" HasUnevenRows="True" ItemTapped="UserListView_ItemTapped">
                 <ListView.ItemTemplate>
-                    <DataTemplate>
+                    <DataTemplate >
                         <ViewCell>
-                            <Frame Padding="10" Margin="10" BackgroundColor="white"  CornerRadius="10" BorderColor="LightCyan" HasShadow="False">
+                            <StackLayout Margin="0,10,0,10">
                                 <HorizontalStackLayout Spacing="10" VerticalOptions="Center">
                                     <StackLayout Spacing="5">
-                                        <Frame WidthRequest="50" HeightRequest="50" CornerRadius="25" Padding="0" HasShadow="False">
+                                        <Frame WidthRequest="50" HeightRequest="50" CornerRadius="25" Padding="0" BorderColor="Transparent">
                                             <Frame.Triggers>
                                                 <DataTrigger TargetType="Frame" Binding="{Binding RoleName}" Value="Dentist">
                                                     <Setter Property="BackgroundColor" Value="Turquoise"/>
@@ -34,19 +52,19 @@
                                                 </DataTrigger>
                                             </Frame.Triggers>
                                             <Label Text="{Binding Initials}" TextColor="White" FontSize="15" FontAttributes="Bold" 
-                                                   VerticalOptions="Center" HorizontalOptions="Center"/> 
+                                                   VerticalOptions="Center" HorizontalOptions="Center"/>
                                             <!--<Image Source="{Binding ProfilePicture}" Aspect="AspectFill" WidthRequest="50" HeightRequest="50" Clip="Circle"/>-->
                                         </Frame>
                                         <Label Text="{Binding RoleName}" FontSize="10" TextColor="Gray" HorizontalOptions="Center" />
                                     </StackLayout>
                                     <StackLayout Spacing="5">
                                         <!--<Label Text="{Binding Id}" FontSize="10" TextColor="Black" />-->
-                                        <Label Text="{Binding FullName}" FontSize="18" TextColor="Black" />
+                                        <Label Text="{Binding FullName}" FontSize="15" TextColor="Black" FontAttributes="Bold" />
                                         <Label Text="{Binding Email}" FontSize="12" TextColor="Gray" />
                                         <Label Text="{Binding Mobile}" FontSize="12" TextColor="Gray" />
                                     </StackLayout>
                                 </HorizontalStackLayout>
-                            </Frame>
+                            </StackLayout>
                         </ViewCell>
                     </DataTemplate>
                 </ListView.ItemTemplate>

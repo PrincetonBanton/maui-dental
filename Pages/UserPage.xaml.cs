@@ -1,4 +1,5 @@
 using DentalApp.Models;
+using DentalApp.Data;
 using DentalApp.Services;
 
 namespace DentalApp.Pages
@@ -22,7 +23,15 @@ namespace DentalApp.Pages
         {
             try
             {
-                _allUsers = await _apiService.GetUsersAsync() ?? new List<User>();
+                if (Connectivity.NetworkAccess == NetworkAccess.Internet)
+                {
+                    _allUsers = await _apiService.GetUsersAsync() ?? new List<User>();
+                }
+                else
+                {
+                    _allUsers = SampleData.GetSampleUsers(); //Replace w offline data sync
+                }
+
                 UserListView.ItemsSource = _allUsers;
             }
             catch (Exception ex)
@@ -34,14 +43,9 @@ namespace DentalApp.Pages
         private async void UserListView_ItemTapped(object sender, ItemTappedEventArgs e)
         {
             if (e.Item is not User selectedUser) return;
-            string action = await DisplayActionSheet(" ", "Cancel", null, "Edit", "Delete");
+            string action = await DisplayActionSheet("What you wanna do? ", "Cancel", null, "Edit", "Delete");
             if (action == "Edit")
-            {
-                //string userDetails = $"ID: {selectedUser.Id}\n" +
-                //     $"Username: {selectedUser.Username}\n" +
-                //     $"Role ID: {selectedUser.RoleId}\n" +
-                //     $"Status: {selectedUser.Status}";
-                //await DisplayAlert("User Details", userDetails, "OK");
+            { 
                 await Navigation.PushAsync(new AccountPage(selectedUser));
             }
             else if (action == "Delete" && await DisplayAlert("Confirm", "Delete this user?", "Yes", "No"))
@@ -62,6 +66,9 @@ namespace DentalApp.Pages
                 : _allUsers.Where(user => user.FullName.ToLower().Contains(searchText)).ToList();
 
         }
+
+        private void OnSearchImageTapped(object sender, TappedEventArgs e) => SearchBar.Focus();
+        private void OnDropListImageTapped(object sender, TappedEventArgs e) => CategoryPicker.Focus();
 
     }
 }

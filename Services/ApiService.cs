@@ -57,6 +57,11 @@ namespace DentalApp.Services
             var users = await GetAsync<List<User>>("User/GetAll") ?? new List<User>();
             return users.OrderBy(u => u.FullName).ToList();
         }
+        public async Task<List<User>> GetPatientsAsync()
+        {
+            var users = await GetAsync<List<User>>("User/GetAll") ?? new List<User>();
+            return users.Where(u => u.RoleName == "Patient").OrderBy(u => u.FullName).ToList();
+        }
 
         public Task<User?> GetUserByIdAsync(int id)
             => GetAsync<User>($"User/Get/{id}");
@@ -72,5 +77,12 @@ namespace DentalApp.Services
         //Role
         public Task<List<Role>> GetRolesAsync()
             => GetAsync<List<Role>>("Role/GetAll") ?? Task.FromResult(new List<Role>());
+
+        // Product
+        public async Task<List<Product>> GetProductsAsync()
+        {
+            var products = await GetAsync<List<Product>>("Product/GetAll") ?? new List<Product>();
+            return products.OrderBy(p => p.Name).ToList();
+        }
     }
 }

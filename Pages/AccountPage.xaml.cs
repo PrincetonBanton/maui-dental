@@ -53,8 +53,6 @@ namespace DentalApp.Pages
             }
         }
 
-
-
         private async void SaveButton_Clicked(object sender, EventArgs e)
         {
             if (_user != null) 
