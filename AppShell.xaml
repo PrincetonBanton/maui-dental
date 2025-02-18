@@ -11,9 +11,9 @@
             <ShellContent ContentTemplate="{DataTemplate pages:ExpensePage}" Route="Expense" />
         </Tab>
     </FlyoutItem>
-    <FlyoutItem Title="Dashboard">
-        <Tab Title="Dasboard">
-            <ShellContent ContentTemplate="{DataTemplate pages:Dashboard}" Route="Dashboard" />
+    <FlyoutItem Title="Account">
+        <Tab Title="Account">
+            <ShellContent ContentTemplate="{DataTemplate pages:AccountPage}" Route="AccountPage" />
         </Tab>
     </FlyoutItem>
     <FlyoutItem Title="Patient">
@@ -31,9 +31,9 @@
             <ShellContent ContentTemplate="{DataTemplate pages:UserPage}" Route="UserPage" />
         </Tab>
     </FlyoutItem>
-    <!--<FlyoutItem Title="Account">
-        <Tab Title="Account">
-            <ShellContent ContentTemplate="{DataTemplate pages:AccountPage}" Route="AccountPage" />
+    <FlyoutItem Title="Dashboard">
+        <Tab Title="Dasboard">
+            <ShellContent ContentTemplate="{DataTemplate pages:Dashboard}" Route="Dashboard" />
         </Tab>
-    </FlyoutItem>-->
+    </FlyoutItem>
 </Shell>

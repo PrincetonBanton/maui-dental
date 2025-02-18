@@ -17,20 +17,45 @@
 
         <Button Text="Save" Clicked="OnSaveButtonClicked" Margin="0,0,0,20" BackgroundColor="LightBlue"  />
 
-        <ListView x:Name="expenseListView" HasUnevenRows="True" BackgroundColor="Grey" ItemTapped="ExpenseListView_ItemTapped">
-            <ListView.ItemTemplate>
-                <DataTemplate>
-                    <ViewCell>
-                        <StackLayout Padding="5">
-                            <!--<Label Text="{Binding EnteredBy}" FontAttributes="Bold" FontSize="10" TextColor="Black"/>-->
-                            <Label Text="{Binding Description}" FontAttributes="Bold" FontSize="18" TextColor="Black"/>
-                            <Label Text="{Binding Amount, StringFormat='{0:N2}'}" FontSize="14" TextColor="Black" />
-                            <Label Text="{Binding ExpenseDate, StringFormat='{0:MM/dd/yyyy}'}" FontSize="12" TextColor="Black" />
-                            <BoxView HeightRequest="1" BackgroundColor="White" Margin="0,5,0,0" />
-                        </StackLayout>
-                    </ViewCell>
-                </DataTemplate>
-            </ListView.ItemTemplate>
-        </ListView>
+        <VerticalStackLayout Padding="10">
+            <!-- Column Headers -->
+            <Grid BackgroundColor="DarkGray" Padding="5">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="2*" />
+                    <ColumnDefinition Width="4*" />
+                    <ColumnDefinition Width="2*" />
+                    <ColumnDefinition Width="2*" />
+                </Grid.ColumnDefinitions>
+
+                <Label Text="Date" FontAttributes="Bold" TextColor="White" Grid.Column="0"/>
+                <Label Text="Description" FontAttributes="Bold" TextColor="White" Grid.Column="1"/>
+                <Label Text="Amount" FontAttributes="Bold" TextColor="White" Grid.Column="2"/>
+                <Label Text="Entered By" FontAttributes="Bold" TextColor="White" Grid.Column="3"/>
+            </Grid>
+
+            <!-- ListView for Expenses -->
+            <ListView x:Name="expenseListView" HasUnevenRows="True" BackgroundColor="LightGray" ItemTapped="ExpenseListView_ItemTapped">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <ViewCell>
+                            <Grid Padding="5">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="2*" />
+                                    <ColumnDefinition Width="4*" />
+                                    <ColumnDefinition Width="2*" />
+                                    <ColumnDefinition Width="2*" />
+                                </Grid.ColumnDefinitions>
+
+                                <Label Text="{Binding ExpenseDate, StringFormat='{0:MM/dd/yyyy}'}" FontSize="12" TextColor="Black" Grid.Column="0"/>
+                                <Label Text="{Binding Description}" FontSize="12" TextColor="Black" Grid.Column="1"/>
+                                <Label Text="{Binding Amount, StringFormat='{0:N2}'}" FontSize="12" TextColor="Black" Grid.Column="2"/>
+                                <Label Text="{Binding EnteredByName}" FontSize="12" TextColor="Black" Grid.Column="3"/>
+                            </Grid>
+                        </ViewCell>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+        </VerticalStackLayout>
+
     </StackLayout>
 </ContentPage>

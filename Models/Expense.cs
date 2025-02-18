@@ -21,5 +21,8 @@ namespace DentalApp.Models
 
         [Ignore]
         public ExpenseCategory ExpenseCategory { get; set; }
+
+        [Ignore]
+        public string EnteredByName { get; set; }
     }
 }

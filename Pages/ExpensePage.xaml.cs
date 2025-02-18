@@ -43,9 +43,19 @@ namespace DentalApp.Pages
         private async void LoadExpenses()
         {
             var expenses = await _apiService.GetExpensesAsync();
+            var users = await _apiService.GetUsersAsync(); // Fetch users
+
+            // Map EnteredBy to the corresponding Full Name from User
+            foreach (var expense in expenses)
+            {
+                var user = users.FirstOrDefault(u => u.Id == expense.EnteredBy);
+                expense.EnteredByName = user?.FullName ?? "Unknown"; // Fallback to "Unknown" if no user is found
+            }
+
             expenseListView.ItemsSource = expenses;
             categoryPicker.ItemsSource = await _apiService.GetExpenseCategoryAsync();
         }
+
         private async void OnSaveButtonClicked(object sender, EventArgs e)
         {
             //if (!await ValidateExpenseInput())
