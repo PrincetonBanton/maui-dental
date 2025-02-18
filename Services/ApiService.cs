@@ -84,5 +84,24 @@ namespace DentalApp.Services
             var products = await GetAsync<List<Product>>("Product/GetAll") ?? new List<Product>();
             return products.OrderBy(p => p.Name).ToList();
         }
+
+        // Expense Category Methods
+        public Task<List<ExpenseCategory>> GetExpenseCategoryAsync()
+            => GetAsync<List<ExpenseCategory>>("Expense/GetCategories") ?? Task.FromResult(new List<ExpenseCategory>());
+
+        // Expense Methods
+        public async Task<List<Expense>> GetExpensesAsync()
+        {
+            var expenses = await GetAsync<List<Expense>>("Expense/GetAll") ?? new List<Expense>();
+            return expenses.OrderByDescending(e => e.Id).ToList();
+        }
+
+        public Task<bool> CreateExpenseAsync(Expense expense)
+           => PostAsync("Expense/Create", expense);
+        public Task<bool> UpdateExpenseAsync(Expense expense)
+             => PutAsync($"Expense/Update/{expense.Id}", expense);
+        public Task<bool> DeleteExpenseAsync(int id)
+            => DeleteAsync($"Expense/Delete/{id}");
+
     }
 }

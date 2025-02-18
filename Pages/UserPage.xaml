@@ -24,6 +24,7 @@
                 <Picker x:Name="CategoryPicker" Title="Select User Type" TextColor="Black" Margin="10,0,0,0" Grid.Column="1">
                     <Picker.ItemsSource>
                         <x:Array Type="{x:Type x:String}">
+                            <x:String>All</x:String>
                             <x:String>Dentist</x:String>
                             <x:String>Patient</x:String>
                             <x:String>Staff</x:String>

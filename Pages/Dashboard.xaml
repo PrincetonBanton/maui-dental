@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:microcharts="clr-namespace:Microcharts.Maui;assembly=Microcharts.Maui"
+             x:Class="DentalApp.Pages.Dashboard"
+             BackgroundColor="MintCream">
+
+    <VerticalStackLayout>
+        <Label Text="Revenue Chart" FontSize="24" HorizontalOptions="Center" Margin="10"/>
+        <Grid Padding="20" ColumnDefinitions="*,*" RowDefinitions="Auto,Auto,*">
+            <microcharts:ChartView x:Name="RevenueChart" HeightRequest="300" Grid.Column="0" Margin="10"/>
+            <BoxView Color="LightGray" HeightRequest="300" Grid.Column="1" Margin="10"/>
+        </Grid>
+    </VerticalStackLayout>
+
+</ContentPage>

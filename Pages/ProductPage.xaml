@@ -19,14 +19,17 @@
                         <TapGestureRecognizer Tapped="OnDropListImageTapped"/>
                     </Image.GestureRecognizers>
                 </Image>
-                <Picker x:Name="CategoryPicker" Title="Select Category" TextColor="Black" Margin="10,0,0,0" Grid.Column="1">
+                <Picker x:Name="CategoryPicker" Title="Select Category" TextColor="Black" Margin="10,0,0,0" Grid.Column="1"
+                    SelectedIndexChanged="OnCategoryChanged">
                     <Picker.ItemsSource>
                         <x:Array Type="{x:Type x:String}">
+                            <x:String>All</x:String>
                             <x:String>Products</x:String>
                             <x:String>Services</x:String>
                         </x:Array>
                     </Picker.ItemsSource>
                 </Picker>
+
             </Grid>
 
             <CollectionView x:Name="ProductCollectionView" ItemsSource="{Binding _allProducts}">

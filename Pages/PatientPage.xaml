@@ -6,8 +6,12 @@
     <ScrollView>
         <VerticalStackLayout Padding="15" Spacing="10">
             <Grid ColumnDefinitions="Auto, *">
-                <Image Source="search.png" VerticalOptions="Center" HeightRequest="15" Grid.Column="0"/>
-                <Entry x:Name="SearchBar" Placeholder="Search by name" TextColor="Black" Margin="10,0,0,0" Grid.Column="1"/>
+                <Image Source="search.png" VerticalOptions="Center" HeightRequest="15" Grid.Column="0">
+                    <Image.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnSearchImageTapped"/>
+                    </Image.GestureRecognizers>
+                </Image>
+                <Entry x:Name="SearchBar" Placeholder="Search by name" TextChanged="OnSearchBarTextChanged" TextColor="Black" Margin="10,0,0,0" Grid.Column="1"/>
             </Grid>
 
             <ListView x:Name="UserListView" HasUnevenRows="True" ItemTapped="UserListView_ItemTapped">
