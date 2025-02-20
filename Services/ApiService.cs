@@ -95,7 +95,6 @@ namespace DentalApp.Services
             var expenses = await GetAsync<List<Expense>>("Expense/GetAll") ?? new List<Expense>();
             return expenses.OrderByDescending(e => e.Id).ToList();
         }
-
         public Task<bool> CreateExpenseAsync(Expense expense)
            => PostAsync("Expense/Create", expense);
         public Task<bool> UpdateExpenseAsync(Expense expense)

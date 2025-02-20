@@ -78,6 +78,7 @@ namespace DentalApp.Pages
                 ? await _apiService.CreateExpenseAsync(_currentExpense)
                 : await _apiService.UpdateExpenseAsync(_currentExpense);
             LoadExpenses();
+            inputFrame.IsVisible = false;
 
             //if (_isInternetAvailable)
             //{
@@ -102,9 +103,14 @@ namespace DentalApp.Pages
         {
             if (e.Item is not Expense selectedExpense) return;
 
-            string action = await DisplayActionSheet("Action", "Cancel", null, "Edit", "Delete");
-            if (action == "Edit")
+            string action = await DisplayActionSheet("Action", "Cancel", null, "Add","Edit", "Delete");
+
+            if (action == "Add") { 
+                inputFrame.IsVisible = true;
+            }
+            else if (action == "Edit")
             {
+                inputFrame.IsVisible = true;
                 _currentExpense = selectedExpense;
                 BindExpenseToForm();
             }

@@ -16,14 +16,19 @@ namespace DentalApp
                 .UseMauiCommunityToolkit()  //For Toolkit
                 .UseMicrocharts()           //For Microchart
                 .UseSkiaSharp()            // <-- Add this line to register SkiaSharp
+
                 .ConfigureFonts(fonts =>
                 {
                     fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
                     fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
+                    fonts.AddFont("fa-solid-900.ttf", "FASolid");
+                    fonts.AddFont("fa-regular-400.ttf", "FARegular");
+                    fonts.AddFont("fa-brands-400.ttf", "FABrands");
                 });
+                
             builder.Services.AddTransient<ExpensePage>();
-            builder.Services.AddTransient<UserPage>();
-            builder.Services.AddTransient<AccountPage>();
+            builder.Services.AddTransient<UserListPage>();
+            builder.Services.AddTransient<UserDetailsPage>();
 
 #if DEBUG
             builder.Logging.AddDebug();

@@ -4,12 +4,12 @@ using DentalApp.Services;
 
 namespace DentalApp.Pages
 {
-    public partial class UserPage : ContentPage
+    public partial class UserListPage : ContentPage
     {
         private readonly ApiService _apiService = new();
         private List<User> _allUsers = new();
 
-        public UserPage()
+        public UserListPage()
         {
             InitializeComponent();
             LoadUserList();
@@ -19,6 +19,7 @@ namespace DentalApp.Pages
             base.OnAppearing();
             LoadUserList(); 
         }
+
         private async void LoadUserList()
         {
             try
@@ -46,7 +47,7 @@ namespace DentalApp.Pages
             string action = await DisplayActionSheet("What you wanna do? ", "Cancel", null, "Edit", "Delete");
             if (action == "Edit")
             { 
-                await Navigation.PushAsync(new AccountPage(selectedUser));
+                await Navigation.PushAsync(new UserDetailsPage(selectedUser));
             }
             else if (action == "Delete" && await DisplayAlert("Confirm", "Delete this user?", "Yes", "No"))
             {
@@ -69,6 +70,8 @@ namespace DentalApp.Pages
 
         private void OnSearchImageTapped(object sender, TappedEventArgs e) => SearchBar.Focus();
         private void OnDropListImageTapped(object sender, TappedEventArgs e) => CategoryPicker.Focus();
+        private async void OnCreateCustomerButtonClicked(object sender, EventArgs e) => await Navigation.PushAsync(new UserDetailsPage());
+
 
     }
 }

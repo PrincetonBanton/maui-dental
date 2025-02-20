@@ -6,18 +6,37 @@
     
     <StackLayout Margin="10" Padding="10" >
         <Label Text="Expense" HorizontalOptions="CenterAndExpand" FontSize="20" FontAttributes="Bold" TextColor="Black" />
-        <Label x:Name="internetStatusLabel" Text="Checking..." HorizontalOptions="Start" />
+        <Label x:Name="internetStatusLabel" Text="Checking..." HorizontalOptions="Start" Margin="0,0,0,10" />
 
-        <Entry x:Name="descriptionEntry" Placeholder="Description" TextColor="black" />
-        <Entry x:Name="amountEntry" Placeholder="Amount" TextColor="black" Keyboard="Numeric" />
-        <DatePicker x:Name="expenseDatePicker" Date="{Binding CurrentDate}" TextColor="Black" Format="MM/dd/yyyy"/>
+        <Frame BackgroundColor="Gray" Margin="0,0,0,20">
+            <StackLayout>
+                <Label Text="Filter Expense" FontSize="12" TextColor="Black"/>
+                <HorizontalStackLayout >
+                    <CheckBox IsChecked="False"/>
+                    <RadioButton x:Name="todayRadioButton" Content="Today" GroupName="DateFilter" Value="Today"/> <!--CheckedChanged="OnDateFilterChanged" />-->
+                    <RadioButton x:Name="thisWeekRadioButton" Content="This Week" GroupName="DateFilter" Value="ThisWeek" /> <!--CheckedChanged="OnDateFilterChanged" />-->
+                    <RadioButton x:Name="thisMonthRadioButton" Content="This Month" GroupName="DateFilter" Value="ThisMonth" /> 
+                    <RadioButton x:Name="thisYearRadioButton" Content="This Year" GroupName="DateFilter" Value="ThisYear"/>
+                </HorizontalStackLayout>
+                <HorizontalStackLayout>
+                    <CheckBox IsChecked="False" VerticalOptions="Center" />
+                    <DatePicker x:Name="expenseStartPicker" Date="{Binding CurrentDate}" TextColor="Black" Format="MM/dd/yyyy"/>
+                    <DatePicker x:Name="expenseEndPicker" Date="{Binding CurrentDate}" TextColor="Black" Format="MM/dd/yyyy"/>
+                </HorizontalStackLayout>
+            </StackLayout>
+        </Frame>
+            
+        <Frame x:Name="inputFrame" IsVisible="False" Padding="10" BorderColor="Black" BackgroundColor="LightGray">
+            <StackLayout>
+                <Entry x:Name="descriptionEntry" Placeholder="Description" TextColor="black" />
+                <Entry x:Name="amountEntry" Placeholder="Amount" TextColor="black" Keyboard="Numeric" />
+                <DatePicker x:Name="expenseDatePicker" Date="{Binding CurrentDate}" TextColor="Black" Format="MM/dd/yyyy"/>
+                <Picker x:Name="categoryPicker" ItemDisplayBinding="{Binding Name}" BackgroundColor="LightBlue" HorizontalOptions="FillAndExpand" />
+                <Button Text="Save" Clicked="OnSaveButtonClicked" Margin="0,0,0,20" BackgroundColor="LightBlue"  />
+            </StackLayout>
+        </Frame>
 
-        <Picker x:Name="categoryPicker" ItemDisplayBinding="{Binding Name}" BackgroundColor="LightBlue"
-                Grid.Row="0" Grid.Column="0" HorizontalOptions="FillAndExpand" />
-
-        <Button Text="Save" Clicked="OnSaveButtonClicked" Margin="0,0,0,20" BackgroundColor="LightBlue"  />
-
-        <VerticalStackLayout Padding="10">
+        <VerticalStackLayout >
             <!-- Column Headers -->
             <Grid BackgroundColor="DarkGray" Padding="5">
                 <Grid.ColumnDefinitions>
@@ -55,6 +74,7 @@
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>
+            <Label Text="Number of Expenses:" TextColor="Black" Margin="0,20,0,0"/>
         </VerticalStackLayout>
 
     </StackLayout>

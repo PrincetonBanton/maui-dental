@@ -1,39 +1,24 @@
-<?xml version="1.0" encoding="UTF-8" ?>
 <Shell
     x:Class="DentalApp.AppShell"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:pages="clr-namespace:DentalApp.Pages"
+    xmlns:static="clr-namespace:DentalApp.Pages.StaticPages"
     Shell.FlyoutBehavior="Flyout">
 
-    <FlyoutItem Title="Expense">
-        <Tab Title="Expense">
-            <ShellContent ContentTemplate="{DataTemplate pages:ExpensePage}" Route="Expense" />
-        </Tab>
+    <!-- Group "People" with "User" and "Patient" inside -->
+    <FlyoutItem Title="People" Icon="users.png">
+        <ShellContent Title="Users" Icon="user.png" ContentTemplate="{DataTemplate pages:UserListPage}" Route="UserListPage" />
+        <ShellContent Title="Patient" Icon="user.png" ContentTemplate="{DataTemplate pages:PatientPage}" Route="PatientPage" />
     </FlyoutItem>
-    <FlyoutItem Title="Account">
-        <Tab Title="Account">
-            <ShellContent ContentTemplate="{DataTemplate pages:AccountPage}" Route="AccountPage" />
-        </Tab>
+
+    <!-- Other Flyout Items -->
+    <FlyoutItem Title="Product" Icon="product.png">
+        <ShellContent Title="Product" ContentTemplate="{DataTemplate pages:ProductPage}" Route="ProductPage" />
     </FlyoutItem>
-    <FlyoutItem Title="Patient">
-        <Tab Title="Patient">
-            <ShellContent ContentTemplate="{DataTemplate pages:PatientPage}" Route="PatientPage" />
-        </Tab>
+
+    <FlyoutItem Title="Expense" Icon="expense.png">
+        <ShellContent Title="Expense" ContentTemplate="{DataTemplate pages:ExpensePage}" Route="ExpensePage" />
     </FlyoutItem>
-    <FlyoutItem Title="Product">
-        <Tab Title="Product">
-            <ShellContent ContentTemplate="{DataTemplate pages:ProductPage}" Route="ProductPage" />
-        </Tab>
-    </FlyoutItem>
-    <FlyoutItem Title="User">
-        <Tab Title="User">
-            <ShellContent ContentTemplate="{DataTemplate pages:UserPage}" Route="UserPage" />
-        </Tab>
-    </FlyoutItem>
-    <FlyoutItem Title="Dashboard">
-        <Tab Title="Dasboard">
-            <ShellContent ContentTemplate="{DataTemplate pages:Dashboard}" Route="Dashboard" />
-        </Tab>
-    </FlyoutItem>
+
 </Shell>

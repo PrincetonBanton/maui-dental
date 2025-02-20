@@ -46,7 +46,7 @@ namespace DentalApp.Pages
             string action = await DisplayActionSheet("What you wanna do? ", "Cancel", null, "Edit", "Delete");
             if (action == "Edit")
             {
-                await Navigation.PushAsync(new AccountPage(selectedUser));
+                await Navigation.PushAsync(new UserDetailsPage(selectedUser));
             }
             else if (action == "Delete" && await DisplayAlert("Confirm", "Delete this user?", "Yes", "No"))
             {
@@ -68,6 +68,7 @@ namespace DentalApp.Pages
         }
 
         private void OnSearchImageTapped(object sender, TappedEventArgs e) => SearchBar.Focus();
+        private async void OnCreatePatientButtonClicked(object sender, EventArgs e) => await Navigation.PushAsync(new PatientDetailsPage());
 
     }
 }
