@@ -62,20 +62,20 @@ namespace DentalApp.Services
             var users = await GetAsync<List<User>>("User/GetAll") ?? new List<User>();
             return users.Where(u => u.RoleName == "Patient").OrderBy(u => u.FullName).ToList();
         }
+        public async Task<List<User>> GetDentistsAsync()
+        {
+            var users = await GetAsync<List<User>>("User/GetAll") ?? new List<User>();
+            return users.Where(u => u.RoleName == "Dentist").OrderBy(u => u.FullName).ToList();
+        }
 
-        public Task<User?> GetUserByIdAsync(int id)
-            => GetAsync<User>($"User/Get/{id}");
-        public Task<bool> CreateUserAsync(User user)
-            => PostAsync("User/Create", user);
-        public Task<bool> UpdateUserAsync(User user)
-            => PutAsync($"User/Update/{user.Id}", user);
-        public Task<bool> DeleteUserAsync(int id)
-            => DeleteAsync($"User/Delete/{id}");
-        public Task<bool> RegisterUserAsync(User user)
-            => PostAsync("Account/Register", user);
+        public Task<User?> GetUserByIdAsync(int id) => GetAsync<User>($"User/Get/{id}");
+        public Task<bool> CreateUserAsync(User user) => PostAsync("User/Create", user);
+        public Task<bool> UpdateUserAsync(User user) => PutAsync($"User/Update/{user.Id}", user);
+        public Task<bool> DeleteUserAsync(int id) => DeleteAsync($"User/Delete/{id}");
+        public Task<bool> RegisterUserAsync(User user) => PostAsync("Account/Register", user);
 
         //Role
-        public Task<List<Role>> GetRolesAsync()
+        public Task<List<Role>> GetRolesAsync() 
             => GetAsync<List<Role>>("Role/GetAll") ?? Task.FromResult(new List<Role>());
 
         // Product
@@ -95,12 +95,8 @@ namespace DentalApp.Services
             var expenses = await GetAsync<List<Expense>>("Expense/GetAll") ?? new List<Expense>();
             return expenses.OrderByDescending(e => e.Id).ToList();
         }
-        public Task<bool> CreateExpenseAsync(Expense expense)
-           => PostAsync("Expense/Create", expense);
-        public Task<bool> UpdateExpenseAsync(Expense expense)
-             => PutAsync($"Expense/Update/{expense.Id}", expense);
-        public Task<bool> DeleteExpenseAsync(int id)
-            => DeleteAsync($"Expense/Delete/{id}");
-
+        public Task<bool> CreateExpenseAsync(Expense expense) => PostAsync("Expense/Create", expense);
+        public Task<bool> UpdateExpenseAsync(Expense expense) => PutAsync($"Expense/Update/{expense.Id}", expense);
+        public Task<bool> DeleteExpenseAsync(int id)=> DeleteAsync($"Expense/Delete/{id}");
     }
 }

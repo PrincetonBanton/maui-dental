@@ -2,9 +2,9 @@ using DentalApp.Models;
 
 namespace DentalApp.Pages.StaticPages
 {
-    public partial class PatientPage : ContentPage
+    public partial class PatientListPage : ContentPage
     {
-        public PatientPage()
+        public PatientListPage()
         {
             InitializeComponent();
             LoadSampleData();

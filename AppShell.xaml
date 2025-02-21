@@ -8,8 +8,9 @@
 
     <!-- Group "People" with "User" and "Patient" inside -->
     <FlyoutItem Title="People" Icon="users.png">
-        <ShellContent Title="Users" Icon="user.png" ContentTemplate="{DataTemplate pages:UserListPage}" Route="UserListPage" />
-        <ShellContent Title="Patient" Icon="user.png" ContentTemplate="{DataTemplate pages:PatientPage}" Route="PatientPage" />
+        <ShellContent Title="Users" Icon="users.png" ContentTemplate="{DataTemplate pages:UserListPage}" Route="UserListPage" />
+        <ShellContent Title="Patient" Icon="patient.png" ContentTemplate="{DataTemplate pages:PatientListPage}" Route="PatientListPage" />
+        <ShellContent Title="Dentist" Icon="dentist.png" ContentTemplate="{DataTemplate pages:DentistListPage}" Route="DentistListPage" />
     </FlyoutItem>
 
     <!-- Other Flyout Items -->

@@ -67,8 +67,11 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Compile Update="Pages\StaticPages\PatientPage.xaml.cs">
-	    <DependentUpon>PatientPage.xaml</DependentUpon>
+	  <Compile Update="Pages\PatientListPage.xaml.cs">
+	    <DependentUpon>PatientListPage.xaml</DependentUpon>
+	  </Compile>
+	  <Compile Update="Pages\StaticPages\PatientListPage.xaml.cs">
+	    <DependentUpon>PatientListPage.xaml</DependentUpon>
 	  </Compile>
 	  <Compile Update="Pages\UserDetailsPage.xaml.cs">
 	    <DependentUpon>UserDetailsPage.xaml</DependentUpon>
@@ -79,10 +82,13 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <MauiXaml Update="Pages\DentistListPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="Pages\PatientDetailsPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="Pages\StaticPages\PatientPage.xaml">
+	  <MauiXaml Update="Pages\StaticPages\PatientListPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Pages\UserDetailsPage.xaml">
@@ -94,7 +100,7 @@
 	  <MauiXaml Update="Pages\ExpensePage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="Pages\PatientPage.xaml">
+	  <MauiXaml Update="Pages\PatientListPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Pages\ProductPage.xaml">

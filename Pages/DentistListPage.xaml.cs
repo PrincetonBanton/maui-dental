@@ -4,12 +4,12 @@ using DentalApp.Services;
 
 namespace DentalApp.Pages
 {
-    public partial class PatientPage : ContentPage
+    public partial class DentistListPage : ContentPage
     {
         private readonly ApiService _apiService = new();
         private List<User> _allUsers = new();
 
-        public PatientPage()
+        public DentistListPage()
         {
             InitializeComponent();
             LoadUserList();
@@ -25,7 +25,7 @@ namespace DentalApp.Pages
             {
                 if (Connectivity.NetworkAccess == NetworkAccess.Internet)
                 {
-                    _allUsers = await _apiService.GetPatientsAsync() ?? new List<User>();
+                    _allUsers = await _apiService.GetDentistsAsync() ?? new List<User>();
                 }
                 else
                 {
@@ -68,7 +68,7 @@ namespace DentalApp.Pages
         }
 
         private void OnSearchImageTapped(object sender, TappedEventArgs e) => SearchBar.Focus();
-        private async void OnCreatePatientButtonClicked(object sender, EventArgs e) => await Navigation.PushAsync(new PatientDetailsPage());
+        private async void OnCreateDentistButtonClicked(object sender, EventArgs e) => await Navigation.PushAsync(new UserDetailsPage());
 
     }
 }
