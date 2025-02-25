@@ -67,6 +67,11 @@ namespace DentalApp.Services
             var users = await GetAsync<List<User>>("User/GetAll") ?? new List<User>();
             return users.Where(u => u.RoleName == "Dentist").OrderBy(u => u.FullName).ToList();
         }
+        public async Task<List<User>> GetStaffAsync()
+        {
+            var users = await GetAsync<List<User>>("User/GetAll") ?? new List<User>();
+            return users.Where(u => u.RoleName == "Staff").OrderBy(u => u.FullName).ToList();
+        }
 
         public Task<User?> GetUserByIdAsync(int id) => GetAsync<User>($"User/Get/{id}");
         public Task<bool> CreateUserAsync(User user) => PostAsync("User/Create", user);

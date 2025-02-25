@@ -4,12 +4,12 @@ using DentalApp.Services;
 
 namespace DentalApp.Pages
 {
-    public partial class UserListPage : ContentPage
+    public partial class StaffListPage : ContentPage
     {
         private readonly ApiService _apiService = new();
         private List<User> _allUsers = new();
 
-        public UserListPage()
+        public StaffListPage()
         {
             InitializeComponent();
             LoadUserList();
@@ -17,16 +17,15 @@ namespace DentalApp.Pages
         protected override void OnAppearing()
         {
             base.OnAppearing();
-            LoadUserList(); 
+            LoadUserList();
         }
-
         private async void LoadUserList()
         {
             try
             {
                 if (Connectivity.NetworkAccess == NetworkAccess.Internet)
                 {
-                    _allUsers = await _apiService.GetUsersAsync() ?? new List<User>();
+                    _allUsers = await _apiService.GetStaffAsync() ?? new List<User>();
                 }
                 else
                 {
@@ -40,24 +39,35 @@ namespace DentalApp.Pages
                 await DisplayAlert("Error", "Failed to load users. Please try again.", "OK");
             }
         }
+        private async void OnEditButtonClicked(object sender, EventArgs e)
+        {
+            if (sender is ImageButton button && button.BindingContext is User selectedUser)
+            {
+                selectedUser.RoleId = 3;
+                await Navigation.PushAsync(new UserDetailsPage(selectedUser));
+            }
+        }
+
+        private async void OnDeleteButtonClicked(object sender, EventArgs e)
+        {
+            if (sender is ImageButton button && button.BindingContext is User selectedUser)
+            {
+                bool confirmDelete = await DisplayAlert("Confirm", "Delete this user?", "Yes", "No");
+                if (!confirmDelete) return;
+
+                var success = await _apiService.DeleteUserAsync(selectedUser.Id);
+                LoadUserList();
+                await DisplayAlert(success ? "Success" : "Error", success ? "User deleted." : "Failed to delete user.", "OK");
+            }
+        }
+
         private async void UserListView_ItemTapped(object sender, ItemTappedEventArgs e)
         {
             if (e.Item is User selectedUser)
             {
-                Page detailPage = selectedUser.RoleId switch
-                {
-                    1 => new DentistDetailsPage(selectedUser),
-                    2 => new PatientDetailsPage(selectedUser),
-                    3 => new StaffDetailsPage(selectedUser),
-                    _ => null
-                };
-
-                await (detailPage != null
-                  ? Navigation.PushAsync(detailPage)
-                  : DisplayAlert("Error", "Unknown role. Cannot navigate to detail page.", "OK"));
+                await Navigation.PushAsync(new StaffDetailsPage(selectedUser));
             }
-
-            ((ListView)sender).SelectedItem = null; // Deselect the item
+            ((ListView)sender).SelectedItem = null;
         }
 
 
@@ -72,9 +82,11 @@ namespace DentalApp.Pages
         }
 
         private void OnSearchImageTapped(object sender, TappedEventArgs e) => SearchBar.Focus();
-        private void OnDropListImageTapped(object sender, TappedEventArgs e) => CategoryPicker.Focus();
-        private async void OnCreateCustomerButtonClicked(object sender, EventArgs e) => await Navigation.PushAsync(new UserDetailsPage());
-
+        private async void OnCreatePatientButtonClicked(object sender, EventArgs e)
+        {
+            var newStaff = new User { RoleId = 3 };
+            await Navigation.PushAsync(new UserDetailsPage(newStaff));
+        }
 
     }
 }

@@ -43,20 +43,6 @@ namespace DentalApp.Pages
         {
             if (sender is ImageButton button && button.BindingContext is User selectedUser)
             {
-                string userDetails = $"Username: {selectedUser.Username}\n" +
-                      $"First Name: {selectedUser.FirstName}\n" +
-                      $"Middle Name: {selectedUser.MiddleName}\n" +
-                      $"Last Name: {selectedUser.LastName}\n" +
-                      $"Birth Date: {selectedUser.BirthDate.ToShortDateString()}\n" +
-                      $"Mobile: {selectedUser.Mobile}\n" +
-                      $"Email: {selectedUser.Email}\n" +
-                      $"Address: {selectedUser.Address}\n" +
-                      $"Note: {selectedUser.Note}\n" +
-                      $"RoleId: {selectedUser.RoleId}";
-
-                // Display the alert with user details
-                await DisplayAlert("User Details", userDetails, "OK");
-
                 selectedUser.RoleId = 1;
                 await Navigation.PushAsync(new UserDetailsPage(selectedUser));
             }

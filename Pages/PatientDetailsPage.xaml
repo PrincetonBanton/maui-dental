@@ -5,8 +5,6 @@
              BackgroundColor="MintCream">
     <ScrollView>
         <VerticalStackLayout Padding="20" Spacing="10">
-
-            <!-- Patient Information -->
             <Frame Padding="10" Margin="5" BackgroundColor="White" CornerRadius="10" BorderColor="LightGray" HasShadow="False">
                 <VerticalStackLayout Spacing="5">
                     <Label Text="Patient Information" FontSize="16" FontAttributes="Bold" TextColor="Black"/>

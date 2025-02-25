@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="DentalApp.Pages.StaffListPage"
+             BackgroundColor="MintCream">
+    <ScrollView>
+        <VerticalStackLayout Padding="15" Spacing="10">
+            <Button Text="Create Staff" CornerRadius="0" Clicked="OnCreatePatientButtonClicked" BackgroundColor="pink"/>
+
+            <Grid ColumnDefinitions="Auto, *">
+                <Image Source="search.png" VerticalOptions="Center" HeightRequest="15" Grid.Column="0">
+                    <Image.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnSearchImageTapped"/>
+                    </Image.GestureRecognizers>
+                </Image>
+                <Entry x:Name="SearchBar" Placeholder="Search by name" TextChanged="OnSearchBarTextChanged" TextColor="Black" Margin="10,0,0,0" Grid.Column="1"/>
+            </Grid>
+
+            <ListView x:Name="UserListView" HasUnevenRows="True" ItemTapped="UserListView_ItemTapped">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <ViewCell>
+                            <Frame Padding="10" Margin="0,5,0,5" BackgroundColor="Transparent" BorderColor="Transparent">
+                                <VerticalStackLayout Spacing="5">
+                                    <Grid ColumnDefinitions="*,Auto,Auto">
+                                        <Label Text="{Binding FullName}" FontSize="23" TextColor="Black" FontAttributes="Bold" VerticalOptions="Center" Grid.Column="0"/>
+                                        <ImageButton Source="edit.png" VerticalOptions="Center" HeightRequest="30" Grid.Column="1" Margin="0,0,15,0" Clicked="OnEditButtonClicked"/>
+                                        <ImageButton Source="delete.png" VerticalOptions="Center" HeightRequest="30" Grid.Column="2" Margin="0,0,15,0" Clicked="OnDeleteButtonClicked"/>
+                                    </Grid>
+                                    <Label Text="Date of Birth" FontSize="15" TextColor="Black" FontAttributes="Bold" />
+                                    <Label Text="{Binding BirthDate, StringFormat='{0:MM/dd/yyyy}'}" FontSize="13" TextColor="Gray" />
+                                    <Label Text="Contact No." FontSize="15" TextColor="Black" FontAttributes="Bold" />
+                                    <Label Text="{Binding Mobile}" FontSize="13" TextColor="Gray" />
+                                    <Label Text="E-mail" FontSize="15" TextColor="Black" FontAttributes="Bold" />
+                                    <Label Text="{Binding Email}" FontSize="13" TextColor="Gray" />
+                                </VerticalStackLayout>
+                            </Frame>
+                        </ViewCell>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>
