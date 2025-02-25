@@ -63,10 +63,11 @@ namespace DentalApp.Pages
 
         private async void UserListView_ItemTapped(object sender, ItemTappedEventArgs e)
         {
-            if (e.Item is not User selectedUser) return;
-            await Navigation.PushAsync(new UserDetailsPage(selectedUser));
-
-            ((ListView)sender).SelectedItem = null; // Deselect the item after navigation
+            if (e.Item is User selectedUser)
+            {
+                await Navigation.PushAsync(new PatientDetailsPage(selectedUser));
+            }
+            ((ListView)sender).SelectedItem = null;
         }
 
 

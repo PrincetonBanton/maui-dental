@@ -55,40 +55,23 @@ namespace DentalApp.Pages
                 _user.Username = $"{FirstNameEntry.Text}{LastNameEntry.Text}";
                 _user.Password = "123456";
                 ConfirmPasswordEntry.Text = _user.Password;
-                _user.Email = "patient@email.com";
             }
             else
             {
                 _user.Username = EmailEntry.Text;
                 _user.Password = PasswordEntry.Text;
-                _user.Email = EmailEntry.Text;
             }
-
-            // Update other _user properties
             _user.FirstName = FirstNameEntry.Text;
             _user.MiddleName = MiddleNameEntry.Text;
             _user.LastName = LastNameEntry.Text;
             _user.BirthDate = BirthDatePicker.Date;
+            _user.Email = EmailEntry.Text;
             _user.Mobile = MobileEntry.Text;
             _user.Address = AddressEntry.Text;
             _user.Note = NoteEditor.Text;
             _user.RoleId = RolePicker.SelectedIndex + 1;
 
             string confirmPassword = ConfirmPasswordEntry.Text;
-
-            // Display user details for debugging
-            string userDetails = $"Username: {_user.Username}\n" +
-                                 $"Password: {_user.Password}\n" +
-                                 $"First Name: {_user.FirstName}\n" +
-                                 $"Middle Name: {_user.MiddleName}\n" +
-                                 $"Last Name: {_user.LastName}\n" +
-                                 $"Birth Date: {_user.BirthDate.ToShortDateString()}\n" +
-                                 $"Mobile: {_user.Mobile}\n" +
-                                 $"Email: {_user.Email}\n" +
-                                 $"Address: {_user.Address}\n" +
-                                 $"Note: {_user.Note}\n" +
-                                 $"RoleId: {_user.RoleId}";
-            await DisplayAlert("User Debug Info", userDetails, "OK");
 
             // Validate user data including confirm password
             var validation = UserValidationService.ValidateUser(_user, confirmPassword);

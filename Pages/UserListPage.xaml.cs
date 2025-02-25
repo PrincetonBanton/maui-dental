@@ -40,23 +40,25 @@ namespace DentalApp.Pages
                 await DisplayAlert("Error", "Failed to load users. Please try again.", "OK");
             }
         }
-
         private async void UserListView_ItemTapped(object sender, ItemTappedEventArgs e)
         {
-            if (e.Item is not User selectedUser) return;
-            string action = await DisplayActionSheet("What you wanna do? ", "Cancel", null, "Edit", "Delete");
-            if (action == "Edit")
-            { 
-                await Navigation.PushAsync(new UserDetailsPage(selectedUser));
-            }
-            else if (action == "Delete" && await DisplayAlert("Confirm", "Delete this user?", "Yes", "No"))
+            if (e.Item is User selectedUser)
             {
-                var success = await _apiService.DeleteUserAsync(selectedUser.Id);
-                LoadUserList();
-                await DisplayAlert(success ? "Success" : "Error", success ? "User deleted." : "Failed to delete user.", "OK");
+                Page detailPage = selectedUser.RoleId switch
+                {
+                    1 => new DentistDetailsPage(selectedUser),
+                    2 => new PatientDetailsPage(selectedUser),
+                    _ => null
+                };
+
+                await (detailPage != null
+                  ? Navigation.PushAsync(detailPage)
+                  : DisplayAlert("Error", "Unknown role. Cannot navigate to detail page.", "OK"));
             }
-            ((ListView)sender).SelectedItem = null;                         // Deselect the item
+
+            ((ListView)sender).SelectedItem = null; // Deselect the item
         }
+
 
         private void OnSearchBarTextChanged(object sender, TextChangedEventArgs e)
         {

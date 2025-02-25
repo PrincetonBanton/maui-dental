@@ -6,7 +6,7 @@
 
     <ScrollView>
         <VerticalStackLayout Padding="15" Spacing="10">
-            <Button Text="Create User" BackgroundColor="LightBlue" CornerRadius="0" Clicked="OnCreateCustomerButtonClicked"/>
+            <!--<Button Text="Create User" BackgroundColor="LightBlue" CornerRadius="0" Clicked="OnCreateCustomerButtonClicked"/>-->
             <Grid ColumnDefinitions="Auto, *">
                 <Image Source="search.png" VerticalOptions="Center" HeightRequest="15" Grid.Column="0">
                     <Image.GestureRecognizers>

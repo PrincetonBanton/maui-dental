@@ -5,7 +5,7 @@
              BackgroundColor="MintCream">
     <ScrollView>
         <VerticalStackLayout Padding="15" Spacing="10">
-            <Button Text="Create Dentist" BackgroundColor="LightBlue" CornerRadius="0" Clicked="OnCreateDentistButtonClicked"/>
+            <Button Text="Create Dentist" CornerRadius="0" Clicked="OnCreateDentistButtonClicked" BackgroundColor="PaleTurquoise"/>
 
             <Grid ColumnDefinitions="Auto, *">
                 <Image Source="search.png" VerticalOptions="Center" HeightRequest="15" Grid.Column="0">

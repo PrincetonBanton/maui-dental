@@ -15,10 +15,6 @@
                         <Entry x:Name   ="UsernameEntry" Placeholder="Enter username" TextColor="Black" WidthRequest="200" VerticalOptions="Center"/>
                     </HorizontalStackLayout>
                     <HorizontalStackLayout Spacing="10">
-                        <Label Text="Email Address" WidthRequest="120" TextColor="Black" VerticalOptions="Center"/>
-                        <Entry x:Name="EmailEntry" Placeholder="ex. dentist@dental.com" Keyboard="Email" TextColor="Black" WidthRequest="200" VerticalOptions="Center"/>
-                    </HorizontalStackLayout>
-                    <HorizontalStackLayout Spacing="10">
                         <Label Text="Role" WidthRequest="120" TextColor="Black" VerticalOptions="Center"/>
                         <Picker x:Name="RolePicker" ItemDisplayBinding="{Binding Description}" Title="Choose Role" TextColor="Black"
                             WidthRequest="200" VerticalOptions="Center" SelectedIndexChanged="RolePicker_SelectedIndexChanged" />
@@ -57,6 +53,10 @@
                     <HorizontalStackLayout Spacing="10">
                         <Label Text="Birth Date" WidthRequest="120" TextColor="Black" VerticalOptions="Center"/>
                         <DatePicker x:Name="BirthDatePicker" TextColor="Black" WidthRequest="200" VerticalOptions="Center"/>
+                    </HorizontalStackLayout>
+                    <HorizontalStackLayout Spacing="10">
+                        <Label Text="Email Address" WidthRequest="120" TextColor="Black" VerticalOptions="Center"/>
+                        <Entry x:Name="EmailEntry" Placeholder="ex. dentist@dental.com" Keyboard="Email" TextColor="Black" WidthRequest="200" VerticalOptions="Center"/>
                     </HorizontalStackLayout>
                     <HorizontalStackLayout Spacing="10">
                         <Label Text="Mobile Number" WidthRequest="120" TextColor="Black" VerticalOptions="Center"/>
