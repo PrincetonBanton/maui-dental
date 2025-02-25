@@ -2,11 +2,11 @@
     x:Class="DentalApp.AppShell"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    xmlns:pages="clr-namespace:DentalApp.Pages"
     xmlns:static="clr-namespace:DentalApp.Pages.StaticPages"
+    xmlns:pages="clr-namespace:DentalApp.Pages"
     Shell.FlyoutBehavior="Flyout">
 
-    <!-- Group "People" with "User" and "Patient" inside -->
+    <!-- Group "People" with "User", "Patient", and "Dentist" inside -->
     <FlyoutItem Title="People" Icon="users.png">
         <ShellContent Title="Users" Icon="users.png" ContentTemplate="{DataTemplate pages:UserListPage}" Route="UserListPage" />
         <ShellContent Title="Patient" Icon="patient.png" ContentTemplate="{DataTemplate pages:PatientListPage}" Route="PatientListPage" />

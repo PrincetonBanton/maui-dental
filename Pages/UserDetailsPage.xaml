@@ -7,12 +7,12 @@
         <VerticalStackLayout Padding="20" Spacing="10">
 
             <!-- Login Information -->
-            <Frame Padding="10" Margin="5" BackgroundColor="White" CornerRadius="10" BorderColor="LightGray" HasShadow="False">
+            <Frame x:Name="LoginFrame" Padding="10" Margin="5" BackgroundColor="White" CornerRadius="10" BorderColor="LightGray" HasShadow="False">
                 <VerticalStackLayout Spacing="5">
                     <Label Text="Login Information" FontSize="16" FontAttributes="Bold" TextColor="Black"/>
                     <HorizontalStackLayout Spacing="10" IsVisible="False">
                         <Label Text="Username" WidthRequest="120" TextColor="Black" VerticalOptions="Center"/>
-                        <Entry x:Name="UsernameEntry" Placeholder="Enter username" TextColor="Black" WidthRequest="200" VerticalOptions="Center"/>
+                        <Entry x:Name   ="UsernameEntry" Placeholder="Enter username" TextColor="Black" WidthRequest="200" VerticalOptions="Center"/>
                     </HorizontalStackLayout>
                     <HorizontalStackLayout Spacing="10">
                         <Label Text="Email Address" WidthRequest="120" TextColor="Black" VerticalOptions="Center"/>
@@ -20,7 +20,8 @@
                     </HorizontalStackLayout>
                     <HorizontalStackLayout Spacing="10">
                         <Label Text="Role" WidthRequest="120" TextColor="Black" VerticalOptions="Center"/>
-                        <Picker x:Name="RolePicker" ItemDisplayBinding="{Binding Description}" Title="Choose Role" TextColor="Black" WidthRequest="200" VerticalOptions="Center"/>
+                        <Picker x:Name="RolePicker" ItemDisplayBinding="{Binding Description}" Title="Choose Role" TextColor="Black"
+                            WidthRequest="200" VerticalOptions="Center" SelectedIndexChanged="RolePicker_SelectedIndexChanged" />
                     </HorizontalStackLayout>
                     <HorizontalStackLayout Spacing="10">
                         <Label Text="Password" WidthRequest="120" TextColor="Black" VerticalOptions="Center"/>

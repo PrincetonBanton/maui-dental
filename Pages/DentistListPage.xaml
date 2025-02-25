@@ -20,9 +20,13 @@
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <ViewCell>
-                            <HorizontalStackLayout Margin="0,10,0,10" Spacing="10" VerticalOptions="Center">
+                            <Frame Padding="10" Margin="0,5,0,5" BackgroundColor="Transparent" BorderColor="Transparent">
                                 <VerticalStackLayout Spacing="5">
-                                    <Label Text="{Binding FullName}" FontSize="23" TextColor="Black" FontAttributes="Bold" />
+                                    <Grid ColumnDefinitions="*,Auto,Auto">
+                                        <Label Text="{Binding FullName}" FontSize="23" TextColor="Black" FontAttributes="Bold" VerticalOptions="Center" Grid.Column="0"/>
+                                        <ImageButton Source="edit.png" VerticalOptions="Center" HeightRequest="30" Grid.Column="1" Margin="0,0,15,0" Clicked="OnEditButtonClicked"/>
+                                        <ImageButton Source="delete.png" VerticalOptions="Center" HeightRequest="30" Grid.Column="2" Margin="0,0,15,0" Clicked="OnDeleteButtonClicked"/>
+                                    </Grid>
                                     <Label Text="Date of Birth" FontSize="15" TextColor="Black" FontAttributes="Bold" />
                                     <Label Text="{Binding BirthDate, StringFormat='{0:MM/dd/yyyy}'}" FontSize="13" TextColor="Gray" />
                                     <Label Text="Contact No." FontSize="15" TextColor="Black" FontAttributes="Bold" />
@@ -30,11 +34,12 @@
                                     <Label Text="E-mail" FontSize="15" TextColor="Black" FontAttributes="Bold" />
                                     <Label Text="{Binding Email}" FontSize="13" TextColor="Gray" />
                                 </VerticalStackLayout>
-                            </HorizontalStackLayout>
+                            </Frame>
                         </ViewCell>
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>
+
         </VerticalStackLayout>
     </ScrollView>
 </ContentPage>

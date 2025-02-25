@@ -39,27 +39,52 @@ namespace DentalApp.Pages
                 await DisplayAlert("Error", "Failed to load users. Please try again.", "OK");
             }
         }
-
-        private async void UserListView_ItemTapped(object sender, ItemTappedEventArgs e)
+        private async void OnEditButtonClicked(object sender, EventArgs e)
         {
-            if (e.Item is not User selectedUser) return;
-            string action = await DisplayActionSheet("What you wanna do? ", "Cancel", null, "Edit", "Delete");
-            if (action == "Edit")
+            if (sender is ImageButton button && button.BindingContext is User selectedUser)
             {
+                string userDetails = $"Username: {selectedUser.Username}\n" +
+                      $"First Name: {selectedUser.FirstName}\n" +
+                      $"Middle Name: {selectedUser.MiddleName}\n" +
+                      $"Last Name: {selectedUser.LastName}\n" +
+                      $"Birth Date: {selectedUser.BirthDate.ToShortDateString()}\n" +
+                      $"Mobile: {selectedUser.Mobile}\n" +
+                      $"Email: {selectedUser.Email}\n" +
+                      $"Address: {selectedUser.Address}\n" +
+                      $"Note: {selectedUser.Note}\n" +
+                      $"RoleId: {selectedUser.RoleId}";
+
+                // Display the alert with user details
+                await DisplayAlert("User Details", userDetails, "OK");
+
+                selectedUser.RoleId = 1;
                 await Navigation.PushAsync(new UserDetailsPage(selectedUser));
             }
-            else if (action == "Delete" && await DisplayAlert("Confirm", "Delete this user?", "Yes", "No"))
+        }
+
+        private async void OnDeleteButtonClicked(object sender, EventArgs e)
+        {
+            if (sender is ImageButton button && button.BindingContext is User selectedUser)
             {
+                bool confirmDelete = await DisplayAlert("Confirm", "Delete this user?", "Yes", "No");
+                if (!confirmDelete) return;
+
                 var success = await _apiService.DeleteUserAsync(selectedUser.Id);
                 LoadUserList();
                 await DisplayAlert(success ? "Success" : "Error", success ? "User deleted." : "Failed to delete user.", "OK");
             }
-            ((ListView)sender).SelectedItem = null;                         // Deselect the item
+        }
+        private async void UserListView_ItemTapped(object sender, ItemTappedEventArgs e)
+        {
+            if (e.Item is not User selectedUser) return;
+            await Navigation.PushAsync(new UserDetailsPage(selectedUser));
+
+            ((ListView)sender).SelectedItem = null; // Deselect the item after navigation
         }
 
         private void OnSearchBarTextChanged(object sender, TextChangedEventArgs e)
         {
-            var searchText = e.NewTextValue.ToLower();
+            var searchText = e.NewTextValue.ToLower();  
 
             UserListView.ItemsSource = string.IsNullOrWhiteSpace(searchText)
                 ? _allUsers
@@ -68,7 +93,11 @@ namespace DentalApp.Pages
         }
 
         private void OnSearchImageTapped(object sender, TappedEventArgs e) => SearchBar.Focus();
-        private async void OnCreateDentistButtonClicked(object sender, EventArgs e) => await Navigation.PushAsync(new UserDetailsPage());
+        private async void OnCreateDentistButtonClicked(object sender, EventArgs e)
+        {
+            var newDentist = new User { RoleId = 1 };
+            await Navigation.PushAsync(new UserDetailsPage(newDentist));
+        }
 
     }
 }

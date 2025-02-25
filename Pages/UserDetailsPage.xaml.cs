@@ -43,46 +43,82 @@ namespace DentalApp.Pages
 
         private async void SaveButton_Clicked(object sender, EventArgs e)
         {
-            var user = _user ?? new User
+            if (_user == null)
             {
-                Username = EmailEntry.Text,
-                Password = PasswordEntry.Text,
-                FirstName = FirstNameEntry.Text,
-                MiddleName = MiddleNameEntry.Text,
-                LastName = LastNameEntry.Text,
-                BirthDate = BirthDatePicker.Date,
-                Mobile = MobileEntry.Text,
-                Email = EmailEntry.Text,
-                Address = AddressEntry.Text,
-                Note = NoteEditor.Text,
-                RoleId = RolePicker.SelectedIndex + 1
-            };
+                // Create a new User object if _user is null
+                _user = new User();
+            }
+
+            if (RolePicker.SelectedItem is Role selectedRole && selectedRole.Id == 2)
+            {
+                // Auto-fill login information for patients
+                _user.Username = $"{FirstNameEntry.Text}{LastNameEntry.Text}";
+                _user.Password = "123456";
+                ConfirmPasswordEntry.Text = _user.Password;
+                _user.Email = "patient@email.com";
+            }
+            else
+            {
+                _user.Username = EmailEntry.Text;
+                _user.Password = PasswordEntry.Text;
+                _user.Email = EmailEntry.Text;
+            }
+
+            // Update other _user properties
+            _user.FirstName = FirstNameEntry.Text;
+            _user.MiddleName = MiddleNameEntry.Text;
+            _user.LastName = LastNameEntry.Text;
+            _user.BirthDate = BirthDatePicker.Date;
+            _user.Mobile = MobileEntry.Text;
+            _user.Address = AddressEntry.Text;
+            _user.Note = NoteEditor.Text;
+            _user.RoleId = RolePicker.SelectedIndex + 1;
 
             string confirmPassword = ConfirmPasswordEntry.Text;
 
+            // Display user details for debugging
+            string userDetails = $"Username: {_user.Username}\n" +
+                                 $"Password: {_user.Password}\n" +
+                                 $"First Name: {_user.FirstName}\n" +
+                                 $"Middle Name: {_user.MiddleName}\n" +
+                                 $"Last Name: {_user.LastName}\n" +
+                                 $"Birth Date: {_user.BirthDate.ToShortDateString()}\n" +
+                                 $"Mobile: {_user.Mobile}\n" +
+                                 $"Email: {_user.Email}\n" +
+                                 $"Address: {_user.Address}\n" +
+                                 $"Note: {_user.Note}\n" +
+                                 $"RoleId: {_user.RoleId}";
+            await DisplayAlert("User Debug Info", userDetails, "OK");
+
             // Validate user data including confirm password
-            var validation = UserValidationService.ValidateUser(user, confirmPassword);
+            var validation = UserValidationService.ValidateUser(_user, confirmPassword);
             if (!validation.IsValid)
             {
                 await DisplayAlert("Validation Error", validation.ErrorMessage, "OK");
                 return;
             }
 
-            bool success = _user != null
-                ? await _apiService.UpdateUserAsync(user)
-                : await _apiService.RegisterUserAsync(user);
+            // Save or update user
+            bool success = _user.Id != 0
+                ? await _apiService.UpdateUserAsync(_user)
+                : await _apiService.RegisterUserAsync(_user);
 
             string message = success
-                ? (_user != null ? "User updated successfully!" : "User created successfully!")
+                ? (_user.Id != 0 ? "User updated successfully!" : "User created successfully!")
                 : "Failed to save user. Please try again.";
 
             await DisplayAlert(success ? "Success" : "Error", message, "OK");
 
             if (success)
-                await Navigation.PushAsync(new UserListPage());
+                await Navigation.PopAsync();
         }
-
-
-
+        private void RolePicker_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (RolePicker.SelectedItem is Role selectedRole)
+            {
+                // Assuming RoleId 2 corresponds to "Patient"
+                LoginFrame.IsVisible = selectedRole.Id != 2;
+            }
+        }
     }
 }
