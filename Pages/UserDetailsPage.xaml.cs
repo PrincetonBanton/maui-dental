@@ -43,11 +43,7 @@ namespace DentalApp.Pages
 
         private async void SaveButton_Clicked(object sender, EventArgs e)
         {
-            if (_user == null)
-            {
-                // Create a new User object if _user is null
-                _user = new User();
-            }
+            _user ??= new User();
 
             if (RolePicker.SelectedItem is Role selectedRole && selectedRole.Id == 2)
             {
@@ -61,6 +57,7 @@ namespace DentalApp.Pages
                 _user.Username = EmailEntry.Text;
                 _user.Password = PasswordEntry.Text;
             }
+
             _user.FirstName = FirstNameEntry.Text;
             _user.MiddleName = MiddleNameEntry.Text;
             _user.LastName = LastNameEntry.Text;

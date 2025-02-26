@@ -5,13 +5,13 @@ using System.Collections.ObjectModel;
 
 namespace DentalApp.Pages
 {
-    public partial class ProductPage : ContentPage
+    public partial class ProductListPage : ContentPage
     {
         private readonly ApiService _apiService = new();
         private List<Product> _allProducts = new();
         private ObservableCollection<Product> _filteredProducts = new();
 
-        public ProductPage()
+        public ProductListPage()
         {
             InitializeComponent();
             ProductCollectionView.ItemsSource = _filteredProducts;
@@ -66,10 +66,13 @@ namespace DentalApp.Pages
             }
         }
 
-
         private void OnCategoryChanged(object sender, EventArgs e) => FilterProducts();
-
         private void OnSearchImageTapped(object sender, TappedEventArgs e) => SearchBar.Focus();
         private void OnDropListImageTapped(object sender, TappedEventArgs e) => CategoryPicker.Focus();
+
+        private async void OnCreateProductButtonClicked(object sender, EventArgs e)
+        {
+            await Navigation.PushAsync(new ProductDetailsPage());
+        }
     }
 }

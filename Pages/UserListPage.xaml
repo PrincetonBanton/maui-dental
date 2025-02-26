@@ -22,7 +22,8 @@
                         <TapGestureRecognizer Tapped="OnDropListImageTapped"/>
                     </Image.GestureRecognizers>
                 </Image>
-                <Picker x:Name="CategoryPicker" Title="Select User Type" TextColor="Black" Margin="10,0,0,0" Grid.Column="1">
+                <Picker x:Name="CategoryPicker" Title="Select User Type" TextColor="Black" Margin="10,0,0,0" Grid.Column="1" 
+                        SelectedIndexChanged="OnCategoryPickerSelectedIndexChanged">
                     <Picker.ItemsSource>
                         <x:Array Type="{x:Type x:String}">
                             <x:String>All</x:String>

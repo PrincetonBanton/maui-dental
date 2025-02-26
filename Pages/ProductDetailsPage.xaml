@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="DentalApp.Pages.ProductDetailsPage"
+             BackgroundColor="MintCream"
+             Title="Product Details">
+    <ScrollView>
+        <VerticalStackLayout Padding="20" Spacing="15">
+            <HorizontalStackLayout Spacing="10">
+                <Label Text="Product Name" WidthRequest="120" TextColor="Black" VerticalOptions="Center"/>
+                <Entry x:Name="NameEntry" Placeholder="Enter product name" TextColor="Black" WidthRequest="200" VerticalOptions="Center"/>
+            </HorizontalStackLayout>
+            <HorizontalStackLayout Spacing="10">
+                <Label Text="Description" WidthRequest="120" TextColor="Black" VerticalOptions="Start"/>
+                <Editor x:Name="DescriptionEditor" Placeholder="Enter product description" AutoSize="TextChanges" TextColor="Black" WidthRequest="200" HeightRequest="100"/>
+            </HorizontalStackLayout>
+            <HorizontalStackLayout Spacing="10">
+                <Label Text="Amount" WidthRequest="120" TextColor="Black" VerticalOptions="Center"/>
+                <Entry x:Name="AmountEntry" Placeholder="Enter amount" Keyboard="Numeric" TextColor="Black" WidthRequest="200" VerticalOptions="Center"/>
+            </HorizontalStackLayout>
+            <HorizontalStackLayout Spacing="10">
+                <Label Text="Product Type" WidthRequest="120" TextColor="Black" VerticalOptions="Center"/>
+                <Picker x:Name="ProductTypePicker" Title="Select product type" TextColor="Black" WidthRequest="200" VerticalOptions="Center">
+                    <Picker.ItemsSource>
+                        <x:Array Type="{x:Type x:String}">
+                            <x:String>Product</x:String>
+                            <x:String>Service</x:String>
+                        </x:Array>
+                    </Picker.ItemsSource>
+                </Picker>
+            </HorizontalStackLayout>
+            <HorizontalStackLayout Spacing="10">
+                <Label Text="Product Code" WidthRequest="120" TextColor="Black" VerticalOptions="Center"/>
+                <Entry x:Name="ProductCodeEntry" Placeholder="Enter product code" TextColor="Black" WidthRequest="200" VerticalOptions="Center"/>
+            </HorizontalStackLayout>
+            <HorizontalStackLayout Spacing="10">
+                <Label Text="Min Price" WidthRequest="120" TextColor="Black" VerticalOptions="Center"/>
+                <Entry x:Name="MinPriceEntry" Placeholder="Enter minimum price" Keyboard="Numeric" TextColor="Black" WidthRequest="200" VerticalOptions="Center"/>
+            </HorizontalStackLayout>
+            <HorizontalStackLayout Spacing="10">
+                <Label Text="Max Price" WidthRequest="120" TextColor="Black" VerticalOptions="Center"/>
+                <Entry x:Name="MaxPriceEntry" Placeholder="Enter maximum price" Keyboard="Numeric" TextColor="Black" WidthRequest="200" VerticalOptions="Center"/>
+            </HorizontalStackLayout>
+
+            <Button Text="Save" x:Name="SaveButton"/>
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

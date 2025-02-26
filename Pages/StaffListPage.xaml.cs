@@ -23,14 +23,9 @@ namespace DentalApp.Pages
         {
             try
             {
-                if (Connectivity.NetworkAccess == NetworkAccess.Internet)
-                {
-                    _allUsers = await _apiService.GetStaffAsync() ?? new List<User>();
-                }
-                else
-                {
-                    _allUsers = SampleData.GetSampleUsers(); //Replace w offline data sync
-                }
+                _allUsers = await (Connectivity.NetworkAccess == NetworkAccess.Internet
+                    ? _apiService.GetStaffAsync()
+                    : Task.FromResult(SampleData.GetSampleUsers()));
 
                 UserListView.ItemsSource = _allUsers;
             }

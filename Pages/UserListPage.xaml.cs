@@ -70,11 +70,17 @@ namespace DentalApp.Pages
                 : _allUsers.Where(user => user.FullName.ToLower().Contains(searchText)).ToList();
 
         }
+        private void OnCategoryPickerSelectedIndexChanged(object sender, EventArgs e)
+        {
+            var selectedRole = CategoryPicker.SelectedItem as string;
+            UserListView.ItemsSource = string.IsNullOrEmpty(selectedRole) || selectedRole == "All"
+                ? _allUsers
+                : _allUsers.Where(user => user.RoleName.Equals(selectedRole, StringComparison.OrdinalIgnoreCase)).ToList();
+
+        }
 
         private void OnSearchImageTapped(object sender, TappedEventArgs e) => SearchBar.Focus();
         private void OnDropListImageTapped(object sender, TappedEventArgs e) => CategoryPicker.Focus();
         private async void OnCreateCustomerButtonClicked(object sender, EventArgs e) => await Navigation.PushAsync(new UserDetailsPage());
-
-
     }
 }

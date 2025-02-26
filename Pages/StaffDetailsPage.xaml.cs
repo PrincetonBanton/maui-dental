@@ -12,6 +12,7 @@ public partial class StaffDetailsPage : ContentPage
     {
         InitializeComponent();
         _staff = staff;
+
         if (_staff != null)
         {
             BindStaffDetails();
