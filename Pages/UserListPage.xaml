@@ -35,7 +35,7 @@
                 </Picker>
             </Grid>
 
-            <ListView x:Name="UserListView" HasUnevenRows="True" ItemTapped="UserListView_ItemTapped">
+            <ListView x:Name="UserListView" HasUnevenRows="True" ItemTapped="PatientListView_ItemTapped">
                 <ListView.ItemTemplate>
                     <DataTemplate >
                         <ViewCell>

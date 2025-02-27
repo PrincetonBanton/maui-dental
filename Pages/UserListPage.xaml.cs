@@ -40,24 +40,24 @@ namespace DentalApp.Pages
                 await DisplayAlert("Error", "Failed to load users. Please try again.", "OK");
             }
         }
-        private async void UserListView_ItemTapped(object sender, ItemTappedEventArgs e)
+        private async void PatientListView_ItemTapped(object sender, ItemTappedEventArgs e)
         {
-            if (e.Item is User selectedUser)
-            {
-                Page detailPage = selectedUser.RoleId switch
-                {
-                    1 => new DentistDetailsPage(selectedUser),
-                    2 => new PatientDetailsPage(selectedUser),
-                    3 => new StaffDetailsPage(selectedUser),
-                    _ => null
-                };
+            //if (e.Item is User selectedUser)
+            //{
+            //    Page detailPage = selectedUser.RoleId switch
+            //    {
+            //        1 => new DentistDetailsPage(selectedUser),
+            //        2 => new PatientDetailsPage(selectedUser),
+            //        3 => new StaffDetailsPage(selectedUser),
+            //        _ => null
+            //    };
 
-                await (detailPage != null
-                  ? Navigation.PushAsync(detailPage)
-                  : DisplayAlert("Error", "Unknown role. Cannot navigate to detail page.", "OK"));
-            }
+            //    await (detailPage != null
+            //      ? Navigation.PushAsync(detailPage)
+            //      : DisplayAlert("Error", "Unknown role. Cannot navigate to detail page.", "OK"));
+            //}
 
-            ((ListView)sender).SelectedItem = null; // Deselect the item
+            //((ListView)sender).SelectedItem = null; // Deselect the item
         }
 
 

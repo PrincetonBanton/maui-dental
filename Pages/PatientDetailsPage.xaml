@@ -2,6 +2,7 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="DentalApp.Pages.PatientDetailsPage"
+             Title="Patient Details"
              BackgroundColor="MintCream">
     <ScrollView>
         <VerticalStackLayout Padding="20" Spacing="10">
@@ -13,16 +14,12 @@
                         <Entry x:Name="FirstNameEntry" Placeholder="First Name" TextColor="Black" WidthRequest="200" VerticalOptions="Center"/>
                     </HorizontalStackLayout>
                     <HorizontalStackLayout Spacing="10">
-                        <Label Text="Last Name" WidthRequest="120" TextColor="Black" VerticalOptions="Center"/>
-                        <Entry x:Name="LastNameEntry" Placeholder="Last Name" TextColor="Black" WidthRequest="200" VerticalOptions="Center"/>
-                    </HorizontalStackLayout>
-                    <HorizontalStackLayout Spacing="10">
                         <Label Text="Middle Name" WidthRequest="120" TextColor="Black" VerticalOptions="Center"/>
                         <Entry x:Name="MiddleNameEntry" Placeholder="Middle Name" TextColor="Black" WidthRequest="200" VerticalOptions="Center"/>
                     </HorizontalStackLayout>
                     <HorizontalStackLayout Spacing="10">
-                        <Label Text="Address" WidthRequest="120" TextColor="Black" VerticalOptions="Center"/>
-                        <Entry x:Name="AddressEntry" Placeholder="e.g., 18-7 Street Place, City" TextColor="Black" WidthRequest="200" VerticalOptions="Center"/>
+                        <Label Text="Last Name" WidthRequest="120" TextColor="Black" VerticalOptions="Center"/>
+                        <Entry x:Name="LastNameEntry" Placeholder="Last Name" TextColor="Black" WidthRequest="200" VerticalOptions="Center"/>
                     </HorizontalStackLayout>
                     <HorizontalStackLayout Spacing="10">
                         <Label Text="Birth Date" WidthRequest="120" TextColor="Black" VerticalOptions="Center"/>
@@ -33,6 +30,10 @@
                         <Entry x:Name="EmailEntry" Placeholder="e.g., patient@example.com" Keyboard="Email" TextColor="Black" WidthRequest="200" VerticalOptions="Center"/>
                     </HorizontalStackLayout>
                     <HorizontalStackLayout Spacing="10">
+                        <Label Text="Address" WidthRequest="120" TextColor="Black" VerticalOptions="Center"/>
+                        <Entry x:Name="AddressEntry" Placeholder="e.g., 18-7 Street Place, City" TextColor="Black" WidthRequest="200" VerticalOptions="Center"/>
+                    </HorizontalStackLayout>
+                    <HorizontalStackLayout Spacing="10">
                         <Label Text="Mobile Number" WidthRequest="120" TextColor="Black" VerticalOptions="Center"/>
                         <Entry x:Name="MobileEntry" Placeholder="e.g., 0913456789" Keyboard="Telephone" TextColor="Black" WidthRequest="200" VerticalOptions="Center"/>
                     </HorizontalStackLayout>
@@ -40,9 +41,13 @@
                         <Label Text="Note" WidthRequest="120" TextColor="Black" VerticalOptions="Start"/>
                         <Editor x:Name="NoteEditor" Placeholder="Additional notes..." AutoSize="TextChanges" TextColor="Black" WidthRequest="200" HeightRequest="50"/>
                     </HorizontalStackLayout>
+                    <HorizontalStackLayout Spacing="10">
+                        <Label Text="Patient No." WidthRequest="120" TextColor="Black" VerticalOptions="Start"/>
+                        <Entry x:Name="PatientNoEntry" Placeholder="Patient No" TextColor="Black" WidthRequest="200" VerticalOptions="Center"/>
+                    </HorizontalStackLayout>
                 </VerticalStackLayout>
             </Frame>
-
+            <Button Text="Save" x:Name="SaveButton" BackgroundColor="LightGreen" Clicked="SaveButton_Clicked" />
         </VerticalStackLayout>
     </ScrollView>
 </ContentPage>

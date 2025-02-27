@@ -57,11 +57,6 @@ namespace DentalApp.Services
             var users = await GetAsync<List<User>>("User/GetAll") ?? new List<User>();
             return users.OrderBy(u => u.FullName).ToList();
         }
-        public async Task<List<User>> GetPatientsAsync()
-        {
-            var users = await GetAsync<List<User>>("User/GetAll") ?? new List<User>();
-            return users.Where(u => u.RoleName == "Patient").OrderBy(u => u.FullName).ToList();
-        }
         public async Task<List<User>> GetDentistsAsync()
         {
             var users = await GetAsync<List<User>>("User/GetAll") ?? new List<User>();
@@ -78,6 +73,18 @@ namespace DentalApp.Services
         public Task<bool> UpdateUserAsync(User user) => PutAsync($"User/Update/{user.Id}", user);
         public Task<bool> DeleteUserAsync(int id) => DeleteAsync($"User/Delete/{id}");
         public Task<bool> RegisterUserAsync(User user) => PostAsync("Account/Register", user);
+
+        //Patients
+        public async Task<List<PatientVM>> GetPatientsAsync()
+        {
+            var patients = await GetAsync<List<PatientVM>>("Patient/GetAll") ?? new List<PatientVM>();
+            return patients;
+        }
+        public Task<bool> CreatePatientAsync(PatientVM patient) => PostAsync("Patient/Create", patient);
+        public Task<bool> UpdatePatientAsync(PatientVM patient) => PutAsync($"Patient/Update/{patient.Id}", patient);
+        public Task<bool> DeletePatientAsync(int id) => DeleteAsync($"Patient/Delete/{id}");
+
+
 
         //Role
         public Task<List<Role>> GetRolesAsync() 

@@ -1,20 +1,22 @@
-﻿using SQLite;
+﻿using DentalApp.Models.Enum;
+using DentalApp.Models;
+using System.Collections.Generic;
+using SQLite;
 
 namespace DentalApp.Models
 {
-    public class Patient 
+    public partial class Patient : BaseModel
     {
-        [PrimaryKey, AutoIncrement]
-        public int Id { get; set; }
         public string? Occupation { get; set; }
-        public int? UserId { get; set; }
+        public int UserId { get; set; }
         public string? PatientNo { get; set; }
-        public int Status { get; set; }
-        public double? AmountOwing { get; set; }
+        public UserStatus Status { get; set; } = UserStatus.Active;
+        public decimal? AmountOwing { get; set; }
 
-        [Ignore]
-        public User User { get; set; }
+        public virtual User? User { get; set; }
 
+        //public virtual ICollection<Sale> Sales { get; set; } = new HashSet<Sale>();
 
+        //public virtual ICollection<Note> Notes { get; set; } = new HashSet<Note>();
     }
 }

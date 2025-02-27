@@ -16,7 +16,7 @@
                 <Entry x:Name="SearchBar" Placeholder="Search by name" TextChanged="OnSearchBarTextChanged" TextColor="Black" Margin="10,0,0,0" Grid.Column="1"/>
             </Grid>
 
-            <ListView x:Name="UserListView" HasUnevenRows="True" ItemTapped="UserListView_ItemTapped">
+            <ListView x:Name="PatientListView" HasUnevenRows="True" ItemTapped="PatientListView_ItemTapped">
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <ViewCell>
@@ -39,7 +39,7 @@
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>
-
+            
         </VerticalStackLayout>
     </ScrollView>
 </ContentPage>
