@@ -47,7 +47,7 @@
                     </HorizontalStackLayout>
                 </VerticalStackLayout>
             </Frame>
-            <Button Text="Save" x:Name="SaveButton" BackgroundColor="LightGreen" Clicked="SaveButton_Clicked" />
+            <Button Text="Save" x:Name="SaveButton" Clicked="SaveButton_Clicked" />
         </VerticalStackLayout>
     </ScrollView>
 </ContentPage>

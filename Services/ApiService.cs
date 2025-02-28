@@ -57,8 +57,8 @@ namespace DentalApp.Services
             var users = await GetAsync<List<UserVM>>("User/GetAll") ?? new List<UserVM>();
             return users;
         }
-
-        public Task<bool> UpdateUserAsync(User user) => PutAsync($"User/Update/{user.Id}", user);
+        public Task<bool> CreateUserAsync(UserVM user) => PostAsync("Account/Register", user);
+        public Task<bool> UpdateUserAsync(UserVM user) => PutAsync($"User/Update/{user.Id}", user);
         public Task<bool> DeleteUserAsync(int id) => DeleteAsync($"User/Delete/{id}");
 
 
@@ -82,12 +82,17 @@ namespace DentalApp.Services
         public Task<bool> UpdateDentistAsync(DentistVM dentist) => PutAsync($"Dentist/Update/{dentist.Id}", dentist);
         public Task<bool> DeleteDentistAsync(int id) => DeleteAsync($"Dentist/Delete/{id}");
 
+        // Expense Category Methods
+        public Task<List<Role>> GetRolesAsync()
+            => GetAsync<List<Role>>("Role/GetAll") ?? Task.FromResult(new List<Role>());
         // Product
+
         public async Task<List<Product>> GetProductsAsync()
         {
             var products = await GetAsync<List<Product>>("Product/GetAll") ?? new List<Product>();
             return products.OrderBy(p => p.Name).ToList();
         }
+
 
         // Expense Category Methods
         public Task<List<ExpenseCategory>> GetExpenseCategoryAsync()
