@@ -73,14 +73,14 @@
 	  <Compile Update="Pages\ProductListPage.xaml.cs">
 	    <DependentUpon>ProductListPage.xaml</DependentUpon>
 	  </Compile>
-	  <Compile Update="Pages\StaticPages\PatientListPage.xaml.cs">
-	    <DependentUpon>PatientListPage.xaml</DependentUpon>
-	  </Compile>
 	  <Compile Update="Pages\UserDetailsPage.xaml.cs">
 	    <DependentUpon>UserDetailsPage.xaml</DependentUpon>
 	  </Compile>
 	  <Compile Update="Pages\UserListPage.xaml.cs">
 	    <DependentUpon>UserListPage.xaml</DependentUpon>
+	  </Compile>
+	  <Compile Update="Pages\StaticPages\PatientListPage.xaml.cs">
+	    <DependentUpon>PatientListPage.xaml</DependentUpon>
 	  </Compile>
 	</ItemGroup>
 
@@ -97,19 +97,16 @@
 	  <MauiXaml Update="Pages\ProductDetailsPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="Pages\StaffDetailsPage.xaml">
+	  <MauiXaml Update="Pages\UserDetailsPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="Pages\StaffListPage.xaml">
+	  <MauiXaml Update="Pages\UserListPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Pages\StaticPages\PatientListPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Pages\StaticPages\ProductPage.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Pages\UserDetailsPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Pages\Dashboard.xaml">
@@ -122,9 +119,6 @@
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Pages\ProductListPage.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Pages\UserListPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	</ItemGroup>

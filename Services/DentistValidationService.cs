@@ -3,33 +3,29 @@ using System.Text.RegularExpressions;
 
 namespace DentalApp.Services
 {
-    public static class PatientValidationService
+    public static class DentistValidationService
     {
-        public static (bool IsValid, string ErrorMessage) ValidatePatient(PatientVM patient)
+        public static (bool IsValid, string ErrorMessage) ValidateDentist(DentistVM dentist)
         {
-            if (string.IsNullOrWhiteSpace(patient.FirstName))
+            if (string.IsNullOrWhiteSpace(dentist.FirstName))
                 return (false, "First name is required.");
-            if (string.IsNullOrWhiteSpace(patient.MiddleName))
+            if (string.IsNullOrWhiteSpace(dentist.MiddleName))
                 //return (false, "Middle Name is required.");
-                patient.MiddleName = "-";
-            if (string.IsNullOrWhiteSpace(patient.LastName))
+                dentist.MiddleName = "-";
+            if (string.IsNullOrWhiteSpace(dentist.LastName))
                 return (false, "Last name is required.");
 
-            if (string.IsNullOrWhiteSpace(patient.Address))
+            if (string.IsNullOrWhiteSpace(dentist.Address))
                 return (false, "Address is required.");
 
-            if (patient.BirthDate == default)
+            if (dentist.BirthDate == default)
                 return (false, "A valid birth date is required.");
 
-            if (!IsValidEmail(patient.Email))
+            if (!IsValidEmail(dentist.Email))
                 return (false, "Invalid email format.");
 
-            if (!IsValidMobileNumber(patient.Mobile))
+            if (!IsValidMobileNumber(dentist.Mobile))
                 return (false, "Invalid mobile number format.");
-
-            if (string.IsNullOrWhiteSpace(patient.PatientNo))
-                //return (false, "Patient number is required.");
-                patient.PatientNo = "-";
 
             return (true, string.Empty);
         }

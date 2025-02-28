@@ -2,7 +2,7 @@
 
 namespace DentalApp.Models
 {
-    public class PatientVM : BaseModel
+    public class DentistVM : BaseModel
     {
         public string? FirstName { get; set; }
         public string? MiddleName { get; set; }
@@ -13,7 +13,6 @@ namespace DentalApp.Models
         public string? Email { get; set; }
         public string? Address { get; set; }
         public string? Note { get; set; }
-        public string? PatientNo { get; set; }
         public DateTime? LastLogin { get; set; }
         public UserStatus Status { get; set; }
     }

@@ -52,27 +52,15 @@ namespace DentalApp.Services
 
 
         // User Methods
-        public async Task<List<User>> GetUsersAsync()
+        public async Task<List<UserVM>> GetUsersAsync()
         {
-            var users = await GetAsync<List<User>>("User/GetAll") ?? new List<User>();
-            return users.OrderBy(u => u.FullName).ToList();
-        }
-        public async Task<List<User>> GetDentistsAsync()
-        {
-            var users = await GetAsync<List<User>>("User/GetAll") ?? new List<User>();
-            return users.Where(u => u.RoleName == "Dentist").OrderBy(u => u.FullName).ToList();
-        }
-        public async Task<List<User>> GetStaffAsync()
-        {
-            var users = await GetAsync<List<User>>("User/GetAll") ?? new List<User>();
-            return users.Where(u => u.RoleName == "Staff").OrderBy(u => u.FullName).ToList();
+            var users = await GetAsync<List<UserVM>>("User/GetAll") ?? new List<UserVM>();
+            return users;
         }
 
-        public Task<User?> GetUserByIdAsync(int id) => GetAsync<User>($"User/Get/{id}");
-        public Task<bool> CreateUserAsync(User user) => PostAsync("User/Create", user);
         public Task<bool> UpdateUserAsync(User user) => PutAsync($"User/Update/{user.Id}", user);
         public Task<bool> DeleteUserAsync(int id) => DeleteAsync($"User/Delete/{id}");
-        public Task<bool> RegisterUserAsync(User user) => PostAsync("Account/Register", user);
+
 
         //Patients
         public async Task<List<PatientVM>> GetPatientsAsync()
@@ -84,11 +72,15 @@ namespace DentalApp.Services
         public Task<bool> UpdatePatientAsync(PatientVM patient) => PutAsync($"Patient/Update/{patient.Id}", patient);
         public Task<bool> DeletePatientAsync(int id) => DeleteAsync($"Patient/Delete/{id}");
 
-
-
-        //Role
-        public Task<List<Role>> GetRolesAsync() 
-            => GetAsync<List<Role>>("Role/GetAll") ?? Task.FromResult(new List<Role>());
+        //Dentist
+        public async Task<List<DentistVM>> GetDentistsAsync()
+        {
+            var dentists = await GetAsync<List<DentistVM>>("Dentist/GetAll") ?? new List<DentistVM>();
+            return dentists;    
+        }
+        public Task<bool> CreateDentistAsync(DentistVM dentist) => PostAsync("Dentist/Create", dentist);
+        public Task<bool> UpdateDentistAsync(DentistVM dentist) => PutAsync($"Dentist/Update/{dentist.Id}", dentist);
+        public Task<bool> DeleteDentistAsync(int id) => DeleteAsync($"Dentist/Delete/{id}");
 
         // Product
         public async Task<List<Product>> GetProductsAsync()

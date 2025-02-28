@@ -74,10 +74,9 @@ namespace DentalApp.Pages
         private void OnSearchBarTextChanged(object sender, TextChangedEventArgs e)
         {
             var searchText = e.NewTextValue.ToLower();
-
-            //UserListView.ItemsSource = string.IsNullOrWhiteSpace(searchText)
-            //    ? _allPatients
-            //    : _allPatients.Where(user => user.FullName.ToLower().Contains(searchText)).ToList();
+            PatientListView.ItemsSource = string.IsNullOrWhiteSpace(searchText)
+                ? _allPatients
+                : _allPatients.Where(patient => patient.FullName.ToLower().Contains(searchText)).ToList();
 
         }
 

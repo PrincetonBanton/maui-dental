@@ -7,32 +7,33 @@ namespace DentalApp.Pages
     public partial class DentistListPage : ContentPage
     {
         private readonly ApiService _apiService = new();
-        private List<User> _allUsers = new();
+        private List<DentistVM> _allDentists= new();
 
         public DentistListPage()
         {
             InitializeComponent();
-            LoadUserList();
+            BindingContext = this;
+            LoadDentistList();
         }
         protected override void OnAppearing()
         {
             base.OnAppearing();
-            LoadUserList();
+            LoadDentistList();
         }
-        private async void LoadUserList()
+        private async void LoadDentistList()
         {
             try
             {
                 if (Connectivity.NetworkAccess == NetworkAccess.Internet)
                 {
-                    _allUsers = await _apiService.GetDentistsAsync() ?? new List<User>();
+                    _allDentists = await _apiService.GetDentistsAsync() ?? new List<DentistVM>();
                 }
                 else
                 {
-                    _allUsers = SampleData.GetSampleUsers(); //Replace w offline data sync
+                    //_allPatients = SampleData.GetSampleUsers(); //Replace w offline data sync
                 }
 
-                UserListView.ItemsSource = _allUsers;
+                DentistListView.ItemsSource = _allDentists;
             }
             catch (Exception ex)
             {
@@ -41,49 +42,49 @@ namespace DentalApp.Pages
         }
         private async void OnEditButtonClicked(object sender, EventArgs e)
         {
-            if (sender is ImageButton button && button.BindingContext is User selectedUser)
+            if (sender is ImageButton button && button.BindingContext is DentistVM selectedDentist)
             {
-                selectedUser.RoleId = 1;
-                await Navigation.PushAsync(new UserDetailsPage(selectedUser));
+                await Navigation.PushAsync(new DentistDetailsPage(selectedDentist));
             }
         }
 
         private async void OnDeleteButtonClicked(object sender, EventArgs e)
         {
-            if (sender is ImageButton button && button.BindingContext is User selectedUser)
+            if (sender is ImageButton button && button.BindingContext is DentistVM selectedDentist)
             {
-                bool confirmDelete = await DisplayAlert("Confirm", "Delete this user?", "Yes", "No");
+                bool confirmDelete = await DisplayAlert("Confirm", "Delete this dentist?", "Yes", "No");
                 if (!confirmDelete) return;
 
-                var success = await _apiService.DeleteUserAsync(selectedUser.Id);
-                LoadUserList();
-                await DisplayAlert(success ? "Success" : "Error", success ? "User deleted." : "Failed to delete user.", "OK");
+                var success = await _apiService.DeleteDentistAsync(selectedDentist.Id);
+                LoadDentistList();
+                await DisplayAlert(success ? "Success" : "Error", success ? "Dentist deleted." : "Failed to delete dentist.", "OK");
             }
         }
-        private async void UserListView_ItemTapped(object sender, ItemTappedEventArgs e)
+
+        private async void DentistListView_ItemTapped(object sender, ItemTappedEventArgs e)
         {
-            if (e.Item is User selectedUser)
+            if (e.Item is DentistVM selectedDentist)
             {
-                await Navigation.PushAsync(new DentistDetailsPage(selectedUser));
+                await Navigation.PushAsync(new DentistDetailsPage(selectedDentist));
             }
             ((ListView)sender).SelectedItem = null;
         }
 
+
         private void OnSearchBarTextChanged(object sender, TextChangedEventArgs e)
         {
-            var searchText = e.NewTextValue.ToLower();  
-
-            UserListView.ItemsSource = string.IsNullOrWhiteSpace(searchText)
-                ? _allUsers
-                : _allUsers.Where(user => user.FullName.ToLower().Contains(searchText)).ToList();
+            var searchText = e.NewTextValue.ToLower();
+            DentistListView.ItemsSource = string.IsNullOrWhiteSpace(searchText)
+                ? _allDentists
+                : _allDentists.Where(dentist => dentist.FullName.ToLower().Contains(searchText)).ToList();
 
         }
 
         private void OnSearchImageTapped(object sender, TappedEventArgs e) => SearchBar.Focus();
         private async void OnCreateDentistButtonClicked(object sender, EventArgs e)
         {
-            var newDentist = new User { RoleId = 1 };
-            await Navigation.PushAsync(new UserDetailsPage(newDentist));
+
+            await Navigation.PushAsync(new DentistDetailsPage());
         }
 
     }

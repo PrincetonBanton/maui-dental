@@ -2,11 +2,9 @@
 
 namespace DentalApp.Models
 {
-    public class Role
+    public class Role : BaseModel
     {
-        [PrimaryKey, AutoIncrement]
-        public int Id { get; set; }
-
         public string Description { get; set; }
+        public virtual ICollection<User> Users { get; set; } = new HashSet<User>();
     }
 }
