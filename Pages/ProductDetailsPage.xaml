@@ -5,44 +5,55 @@
              BackgroundColor="MintCream"
              Title="Product Details">
     <ScrollView>
-        <VerticalStackLayout Padding="20" Spacing="15">
-            <HorizontalStackLayout Spacing="10">
-                <Label Text="Product Name" WidthRequest="120" TextColor="Black" VerticalOptions="Center"/>
-                <Entry x:Name="NameEntry" Placeholder="Enter product name" TextColor="Black" WidthRequest="200" VerticalOptions="Center"/>
-            </HorizontalStackLayout>
-            <HorizontalStackLayout Spacing="10">
-                <Label Text="Description" WidthRequest="120" TextColor="Black" VerticalOptions="Start"/>
-                <Editor x:Name="DescriptionEditor" Placeholder="Enter product description" AutoSize="TextChanges" TextColor="Black" WidthRequest="200" HeightRequest="100"/>
-            </HorizontalStackLayout>
-            <HorizontalStackLayout Spacing="10">
-                <Label Text="Amount" WidthRequest="120" TextColor="Black" VerticalOptions="Center"/>
-                <Entry x:Name="AmountEntry" Placeholder="Enter amount" Keyboard="Numeric" TextColor="Black" WidthRequest="200" VerticalOptions="Center"/>
-            </HorizontalStackLayout>
-            <HorizontalStackLayout Spacing="10">
-                <Label Text="Product Type" WidthRequest="120" TextColor="Black" VerticalOptions="Center"/>
-                <Picker x:Name="ProductTypePicker" Title="Select product type" TextColor="Black" WidthRequest="200" VerticalOptions="Center">
-                    <Picker.ItemsSource>
-                        <x:Array Type="{x:Type x:String}">
-                            <x:String>Product</x:String>
-                            <x:String>Service</x:String>
-                        </x:Array>
-                    </Picker.ItemsSource>
-                </Picker>
-            </HorizontalStackLayout>
-            <HorizontalStackLayout Spacing="10">
-                <Label Text="Product Code" WidthRequest="120" TextColor="Black" VerticalOptions="Center"/>
-                <Entry x:Name="ProductCodeEntry" Placeholder="Enter product code" TextColor="Black" WidthRequest="200" VerticalOptions="Center"/>
-            </HorizontalStackLayout>
-            <HorizontalStackLayout Spacing="10">
-                <Label Text="Min Price" WidthRequest="120" TextColor="Black" VerticalOptions="Center"/>
-                <Entry x:Name="MinPriceEntry" Placeholder="Enter minimum price" Keyboard="Numeric" TextColor="Black" WidthRequest="200" VerticalOptions="Center"/>
-            </HorizontalStackLayout>
-            <HorizontalStackLayout Spacing="10">
-                <Label Text="Max Price" WidthRequest="120" TextColor="Black" VerticalOptions="Center"/>
-                <Entry x:Name="MaxPriceEntry" Placeholder="Enter maximum price" Keyboard="Numeric" TextColor="Black" WidthRequest="200" VerticalOptions="Center"/>
-            </HorizontalStackLayout>
+        <VerticalStackLayout Padding="20" Spacing="10">
+            <Frame Padding="10" Margin="5" BackgroundColor="White" CornerRadius="10" BorderColor="LightGray" HasShadow="False">
+                <VerticalStackLayout Spacing="5">
+                    <Label Text="Product Details" FontAttributes="Bold" FontSize="16" TextColor="Black"/>
+                    <HorizontalStackLayout Spacing="10">
+                        <Label Text="Product Name" WidthRequest="120" TextColor="Black" VerticalOptions="Center"/>
+                        <Entry x:Name="NameEntry" Placeholder="Product Name" TextColor="Black" WidthRequest="200" VerticalOptions="Center"/>
+                    </HorizontalStackLayout>
+                    <HorizontalStackLayout Spacing="10">
+                        <Label Text="Product Code" WidthRequest="120" TextColor="Black" VerticalOptions="Center"/>
+                        <Entry x:Name="ProductCodeEntry" Placeholder="Product Code" TextColor="Black" WidthRequest="200" VerticalOptions="Center"/>
+                    </HorizontalStackLayout>
+                    <HorizontalStackLayout Spacing="10">
+                        <Label Text="Description" WidthRequest="120" TextColor="Black" VerticalOptions="Start"/>
+                        <Editor x:Name="DescriptionEditor" Placeholder="Description" AutoSize="TextChanges" TextColor="Black" WidthRequest="200" HeightRequest="100"/>
+                    </HorizontalStackLayout>
+                    <HorizontalStackLayout Spacing="10">
+                        <Label Text="Product Type" WidthRequest="120" TextColor="Black" VerticalOptions="Center"/>
+                        <Picker x:Name="ProductTypePicker" Title="Product Type" TextColor="Black" WidthRequest="200" VerticalOptions="Center">
+                            <Picker.ItemsSource>
+                                <x:Array Type="{x:Type x:String}">
+                                    <x:String>Product</x:String>
+                                    <x:String>Service</x:String>
+                                </x:Array>
+                            </Picker.ItemsSource>
+                        </Picker>
+                    </HorizontalStackLayout>
 
-            <Button Text="Save" x:Name="SaveButton"/>
+                </VerticalStackLayout>
+            </Frame>
+
+            <Frame Padding="10" Margin="5" BackgroundColor="White" CornerRadius="10" BorderColor="LightGray" HasShadow="False">
+                <VerticalStackLayout Spacing="10">
+                    <Label Text="Pricing" FontAttributes="Bold" FontSize="16" TextColor="Black"/>
+                    <HorizontalStackLayout Spacing="10">
+                        <Label Text="Amount" WidthRequest="120" TextColor="Black" VerticalOptions="Center"/>
+                        <Entry x:Name="AmountEntry" Placeholder="Price" Keyboard="Numeric" TextColor="Black" WidthRequest="200" VerticalOptions="Center"/>
+                    </HorizontalStackLayout>
+                    <HorizontalStackLayout Spacing="10">
+                        <Label Text="Min Price" WidthRequest="120" TextColor="Black" VerticalOptions="Center"/>
+                        <Entry x:Name="MinPriceEntry" Placeholder="Min Price" Keyboard="Numeric" TextColor="Black" WidthRequest="200" VerticalOptions="Center"/>
+                    </HorizontalStackLayout>
+                    <HorizontalStackLayout Spacing="10">
+                        <Label Text="Max Price" WidthRequest="120" TextColor="Black" VerticalOptions="Center"/>
+                        <Entry x:Name="MaxPriceEntry" Placeholder="Max Price" Keyboard="Numeric" TextColor="Black" WidthRequest="200" VerticalOptions="Center"/>
+                    </HorizontalStackLayout>
+                </VerticalStackLayout>
+            </Frame>
+            <Button Text="Save" x:Name="SaveButton" Clicked="SaveButton_Clicked" />
         </VerticalStackLayout>
     </ScrollView>
 </ContentPage>

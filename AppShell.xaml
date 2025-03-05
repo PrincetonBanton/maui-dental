@@ -5,14 +5,14 @@
     xmlns:static="clr-namespace:DentalApp.Pages.StaticPages"
     xmlns:pages="clr-namespace:DentalApp.Pages"
     Shell.FlyoutBehavior="Flyout">
-
+    
+    <FlyoutItem Title="Product" Icon="product.png">
+        <ShellContent Title="Product" ContentTemplate="{DataTemplate pages:ProductListPage}" Route="ProductListPage" />
+    </FlyoutItem>
     <FlyoutItem Title="People" Icon="users.png">
         <ShellContent Title="User" Icon="user.png" ContentTemplate="{DataTemplate pages:UserListPage}" Route="UserListPage" />
         <ShellContent Title="Patient" Icon="patient.png" ContentTemplate="{DataTemplate pages:PatientListPage}" Route="PatientListPage" />
         <ShellContent Title="Dentist" Icon="dentist.png" ContentTemplate="{DataTemplate pages:DentistListPage}" Route="DentistListPage" />
-    </FlyoutItem>
-    <FlyoutItem Title="Product" Icon="product.png">
-        <ShellContent Title="Product" ContentTemplate="{DataTemplate pages:ProductListPage}" Route="ProductListPage" />
     </FlyoutItem>
     <FlyoutItem Title="Expense" Icon="expense.png">
         <ShellContent Title="Expense" ContentTemplate="{DataTemplate pages:ExpensePage}" Route="ExpensePage" />

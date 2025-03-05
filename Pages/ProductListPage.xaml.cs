@@ -1,6 +1,7 @@
 using DentalApp.Models;
 using DentalApp.Services;
 using DentalApp.Data;
+using DentalApp.Models.Enum;
 using System.Collections.ObjectModel;
 
 namespace DentalApp.Pages
@@ -8,13 +9,13 @@ namespace DentalApp.Pages
     public partial class ProductListPage : ContentPage
     {
         private readonly ApiService _apiService = new();
-        private List<Product> _allProducts = new();
-        private ObservableCollection<Product> _filteredProducts = new();
+        private List<ProductVM> _allProducts = new();
+        private ObservableCollection<ProductVM> _filteredProducts = new();
 
         public ProductListPage()
         {
             InitializeComponent();
-            ProductCollectionView.ItemsSource = _filteredProducts;
+            ProductListView.ItemsSource = _filteredProducts;
             LoadProductList();
         }
 
@@ -30,7 +31,7 @@ namespace DentalApp.Pages
             {
                 if (Connectivity.NetworkAccess == NetworkAccess.Internet)
                 {
-                    _allProducts = await _apiService.GetProductsAsync() ?? new List<Product>();
+                    _allProducts = await _apiService.GetProductsAsync() ?? new List<ProductVM>();
                 }
                 else
                 {
@@ -57,13 +58,48 @@ namespace DentalApp.Pages
                 _filteredProducts.Clear();
                 var filtered = selectedCategory == "All"
                     ? _allProducts
-                    : _allProducts.Where(p => p.ProductType == (selectedCategory == "Products" ? 1 : 2));
+                    : _allProducts.Where(p => p.ProductType == (selectedCategory == "Products" ? ProductType.Goods : ProductType.Services));
 
                 foreach (var product in filtered)
                 {
                     _filteredProducts.Add(product);
                 }
             }
+        }
+
+        private async void ProductListView_ItemTapped(object sender, ItemTappedEventArgs e)
+        {
+            //if (e.Item is not Expense selectedExpense) return;
+
+            //string action = await DisplayActionSheet("Action", "Cancel", null, "Add", "Edit", "Delete");
+
+            //if (action == "Add")
+            //{
+            //    inputFrame.IsVisible = true;
+            //}
+            //else if (action == "Edit")
+            //{
+            //    inputFrame.IsVisible = true;
+            //    _currentExpense = selectedExpense;
+            //    BindExpenseToForm();
+            //}
+            //else if (action == "Delete" && await DisplayAlert("Confirm", "Delete this expense?", "Yes", "No"))
+            //{
+            //    if (_isInternetAvailable)
+            //    {
+            //        var success = await _apiService.DeleteExpenseAsync(selectedExpense.Id);
+            //        await DisplayAlert(success ? "Success" : "Error", success ? "Expense deleted." : "Failed to delete expense.", "OK");
+            //        LoadExpenses();
+            //        //LoadOnlineData();
+            //    }
+            //    else
+            //    {
+            //        //var success = await _databaseService.DeleteExpenseAsync(selectedExpense.ExpenseId) > 0;
+            //        //LoadOfflineData();
+            //        //await DisplayAlert(success ? "Success" : "Error", success ? "Expense deleted offline." : "Failed to delete expense offline.", "OK");
+            //    }
+            //}
+            //((ListView)sender).SelectedItem = null;
         }
 
         private void OnCategoryChanged(object sender, EventArgs e) => FilterProducts();
@@ -73,6 +109,18 @@ namespace DentalApp.Pages
         private async void OnCreateProductButtonClicked(object sender, EventArgs e)
         {
             await Navigation.PushAsync(new ProductDetailsPage());
+        }
+        private async void OnDeleteButtonClicked(object sender, EventArgs e)
+        {
+            if (sender is ImageButton button && button.BindingContext is ProductVM selectedProduct)
+            {
+                bool confirmDelete = await DisplayAlert("Confirm", "Delete this patient?", "Yes", "No");
+                if (!confirmDelete) return;
+
+                var success = await _apiService.DeleteProductAsync(selectedProduct.Id);
+                LoadProductList();
+                await DisplayAlert(success ? "Success" : "Error", success ? "Patient deleted." : "Failed to delete patient.", "OK");
+            }
         }
     }
 }

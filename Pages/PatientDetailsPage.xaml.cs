@@ -1,6 +1,5 @@
 using DentalApp.Models;
 using DentalApp.Services;
-using System.Xml;
 
 namespace DentalApp.Pages;
 
@@ -19,7 +18,6 @@ public partial class PatientDetailsPage : ContentPage
             BindPatientDetails();
         }
     }
-
     private void BindPatientDetails()
     {
         FirstNameEntry.Text = _patient.FirstName;

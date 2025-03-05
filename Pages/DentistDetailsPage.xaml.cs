@@ -19,7 +19,6 @@ public partial class DentistDetailsPage : ContentPage
             BindPatientDetails();
         }
     }
-
     private void BindPatientDetails()
     {
         FirstNameEntry.Text = _dentist.FirstName;

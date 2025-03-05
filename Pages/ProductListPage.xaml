@@ -33,28 +33,52 @@
                 </Picker>
 
             </Grid>
+            <VerticalStackLayout >
+                <!-- Column Headers -->
+                <Grid BackgroundColor="DarkGray" Padding="5">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="2.5*" />
+                        <ColumnDefinition Width="2.5*" />
+                        <ColumnDefinition Width="1.5*" />
+                        <ColumnDefinition Width="1.5*" />
+                        <ColumnDefinition Width="1.5*" />
+                        <ColumnDefinition Width=".5*" />
+                    </Grid.ColumnDefinitions>
 
-            <CollectionView x:Name="ProductCollectionView" ItemsSource="{Binding _allProducts}">
-                <CollectionView.ItemsLayout>
-                    <GridItemsLayout Span="2" Orientation="Vertical" HorizontalItemSpacing="10" VerticalItemSpacing="10"/>
-                </CollectionView.ItemsLayout>
-                <CollectionView.ItemTemplate >
-                    <DataTemplate>
-                        <StackLayout Margin="0,10,0,10">
-                            <Frame CornerRadius="40"  BorderColor="Transparent" BackgroundColor="Transparent" WidthRequest="80" HeightRequest="80" Padding="0">
-                                <Image Source="{Binding ProductImage}" WidthRequest="45" HeightRequest="45"
-                                    VerticalOptions="Center" HorizontalOptions="Center">
-                                </Image>
-                            </Frame>
-                            <Label Text="{Binding Name}" FontSize="16" TextColor="Black" FontAttributes="Bold" Margin="0,5,0,0"
-                                        HorizontalOptions="Center" HorizontalTextAlignment="Center"/>
-                            <Label Text="{Binding Description}" FontSize="12" TextColor="Gray" 
-                                        HorizontalOptions="Center" HorizontalTextAlignment="Center"/>
-                            <!--<Label Text="{Binding Amount, StringFormat='₱{0:N2}'}" FontSize="12" TextColor="Gray" />-->
-                        </StackLayout>
-                    </DataTemplate>
-                </CollectionView.ItemTemplate>  
-            </CollectionView>
+                    <Label Text="Name" FontAttributes="Bold" TextColor="White" Grid.Column="0"/>
+                    <Label Text="Description" FontAttributes="Bold" TextColor="White" Grid.Column="1"/>
+                    <Label Text="Price" FontAttributes="Bold" TextColor="White" Grid.Column="2"/>
+                    <Label Text="Min Price" FontAttributes="Bold" TextColor="White" Grid.Column="3"/>
+                    <Label Text="Max Price" FontAttributes="Bold" TextColor="White" Grid.Column="4"/>
+                </Grid>
+
+                <ListView x:Name="ProductListView" HasUnevenRows="True" BackgroundColor="LightGray" ItemTapped="ProductListView_ItemTapped">
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <ViewCell>
+                                <Grid Padding="5">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="2.5*" />
+                                        <ColumnDefinition Width="2.5*" />
+                                        <ColumnDefinition Width="1.5*" />
+                                        <ColumnDefinition Width="1.5*" />
+                                        <ColumnDefinition Width="1.5*" />
+                                        <ColumnDefinition Width="1.5*" />
+                                    </Grid.ColumnDefinitions>
+
+                                    <Label Text="{Binding Name}" FontSize="12" TextColor="Black" Grid.Column="0"/>
+                                    <Label Text="{Binding Description}" FontSize="12" TextColor="Black" Grid.Column="1"/>
+                                    <Label Text="{Binding Amount, StringFormat='{0:N2}'}" HorizontalTextAlignment="End" FontSize="12" TextColor="Black" Grid.Column="2"/>
+                                    <Label Text="{Binding MinPrice, StringFormat='{0:N2}'}" HorizontalTextAlignment="End" FontSize="12" TextColor="Black" Grid.Column="3"/>
+                                    <Label Text="{Binding MaxPrice, StringFormat='{0:N2}'}" HorizontalTextAlignment="End" FontSize="12" TextColor="Black" Grid.Column="4"/>
+                                    <ImageButton Source="delete.png" VerticalOptions="Center" HeightRequest="5" WidthRequest="5" Padding="0" 
+                                                 Aspect="AspectFit"  Grid.Column="5" Clicked="OnDeleteButtonClicked" />
+                                </Grid>
+                            </ViewCell>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+            </VerticalStackLayout>
         </VerticalStackLayout>
     </ScrollView>
 </ContentPage>

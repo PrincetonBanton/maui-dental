@@ -17,17 +17,17 @@
                     </HorizontalStackLayout>
 
                     <HorizontalStackLayout Spacing="10">
-                        <Label Text="Password" WidthRequest="120" TextColor="Black" VerticalOptions="Center"/>
+                        <Label x:Name="PasswordLabel" Text="Password" WidthRequest="120" TextColor="Black" VerticalOptions="Center"/>
                         <Entry x:Name="PasswordEntry" Placeholder="Password" IsPassword="True" TextColor="Black" WidthRequest="200" VerticalOptions="Center"/>
                     </HorizontalStackLayout>
 
                     <HorizontalStackLayout Spacing="10">
-                        <Label Text="Confirm Password" WidthRequest="120" TextColor="Black" VerticalOptions="Center"/>
+                        <Label x:Name="ConfirmPasswordLabel" Text="Confirm Password" WidthRequest="120" TextColor="Black" VerticalOptions="Center"/>
                         <Entry x:Name="ConfirmPasswordEntry" Placeholder="Confirm Password" IsPassword="True" TextColor="Black" WidthRequest="200" VerticalOptions="Center"/>
                     </HorizontalStackLayout>
 
                     <HorizontalStackLayout Spacing="10">
-                        <Label Text="Role" WidthRequest="120" TextColor="Black" VerticalOptions="Center"/>
+                        <Label x:Name="RoleLabel" Text="Role" WidthRequest="120" TextColor="Black" VerticalOptions="Center"/>
                         <Picker x:Name="RolePicker" ItemDisplayBinding="{Binding Description}" TextColor="Black"/>
                     </HorizontalStackLayout>
                 </VerticalStackLayout>
@@ -76,7 +76,7 @@
                     <HorizontalStackLayout Spacing="10">
                         <Label Text="Note" WidthRequest="120" TextColor="Black" VerticalOptions="Start"/>
                         <Editor x:Name="NoteEditor" Placeholder="Additional notes..." AutoSize="TextChanges" TextColor="Black" WidthRequest="200" HeightRequest="50"/>
-                    </HorizontalStackLayout>
+                    </HorizontalStackLayout> 
                 </VerticalStackLayout>
             </Frame>
 

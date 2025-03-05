@@ -1,4 +1,6 @@
-﻿namespace DentalApp
+﻿using System.Diagnostics;
+
+namespace DentalApp
 {
     public partial class AppShell : Shell
     {
@@ -6,5 +8,6 @@
         {
             InitializeComponent();
         }
+
     }
 }

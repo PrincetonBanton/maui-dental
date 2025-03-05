@@ -43,9 +43,19 @@ namespace DentalApp.Pages
         {
             if (sender is ImageButton button && button.BindingContext is UserVM selectedUser)
             {
-                await Navigation.PushAsync(new UserDetailsPage(selectedUser));
+                var user = await _apiService.GetUserByIdAsync(selectedUser.Id);
+
+                if (user != null)
+                {
+                    await Navigation.PushAsync(new UserDetailsPage(user));
+                }
+                else
+                {
+                    await DisplayAlert("Error", "Failed to fetch user details.", "OK");
+                }
             }
         }
+
 
         private async void OnDeleteButtonClicked(object sender, EventArgs e)
         {
