@@ -13,10 +13,12 @@ public partial class PatientDetailsPage : ContentPage
     {
         InitializeComponent();
         _patient = patient;
-        if (_patient != null)
-        {
-            BindPatientDetails();
-        }
+        if (_patient != null) BindPatientDetails();
+    }
+    protected override async void OnAppearing()
+    {
+        base.OnAppearing();
+        if (App.Instance.PatientNavigated == "patientlist") await Navigation.PopAsync();
     }
     private void BindPatientDetails()
     {
@@ -43,17 +45,6 @@ public partial class PatientDetailsPage : ContentPage
         _patient.Address = AddressEntry.Text;
         _patient.Note = NoteEditor.Text;
         _patient.PatientNo = PatientNoEntry.Text;
-
-        //string patientInfo = $"FirstName: {_patient.FirstName} " +
-        //                     $"MiddleName: {_patient.MiddleName} " +
-        //                     $"LastName: {_patient.LastName} " +
-        //                     $"BirthDate: {_patient.BirthDate} " +
-        //                     $"Email: {_patient.Email} " +
-        //                     $"Mobile: {_patient.Mobile} " +
-        //                     $"Address: {_patient.Address} " +
-        //                     $"Note: {_patient.Note} " +
-        //                     $"PatientNo: {_patient.PatientNo}";
-        //await DisplayAlert("Patient Information", patientInfo, "OK");
 
         var (isValid, errorMessage) = PatientValidationService.ValidatePatient(_patient);
 

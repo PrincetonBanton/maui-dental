@@ -67,59 +67,32 @@ namespace DentalApp.Pages
             }
         }
 
-        private async void ProductListView_ItemTapped(object sender, ItemTappedEventArgs e)
-        {
-            //if (e.Item is not Expense selectedExpense) return;
-
-            //string action = await DisplayActionSheet("Action", "Cancel", null, "Add", "Edit", "Delete");
-
-            //if (action == "Add")
-            //{
-            //    inputFrame.IsVisible = true;
-            //}
-            //else if (action == "Edit")
-            //{
-            //    inputFrame.IsVisible = true;
-            //    _currentExpense = selectedExpense;
-            //    BindExpenseToForm();
-            //}
-            //else if (action == "Delete" && await DisplayAlert("Confirm", "Delete this expense?", "Yes", "No"))
-            //{
-            //    if (_isInternetAvailable)
-            //    {
-            //        var success = await _apiService.DeleteExpenseAsync(selectedExpense.Id);
-            //        await DisplayAlert(success ? "Success" : "Error", success ? "Expense deleted." : "Failed to delete expense.", "OK");
-            //        LoadExpenses();
-            //        //LoadOnlineData();
-            //    }
-            //    else
-            //    {
-            //        //var success = await _databaseService.DeleteExpenseAsync(selectedExpense.ExpenseId) > 0;
-            //        //LoadOfflineData();
-            //        //await DisplayAlert(success ? "Success" : "Error", success ? "Expense deleted offline." : "Failed to delete expense offline.", "OK");
-            //    }
-            //}
-            //((ListView)sender).SelectedItem = null;
-        }
-
         private void OnCategoryChanged(object sender, EventArgs e) => FilterProducts();
         private void OnSearchImageTapped(object sender, TappedEventArgs e) => SearchBar.Focus();
         private void OnDropListImageTapped(object sender, TappedEventArgs e) => CategoryPicker.Focus();
+
 
         private async void OnCreateProductButtonClicked(object sender, EventArgs e)
         {
             await Navigation.PushAsync(new ProductDetailsPage());
         }
+        private async void OnEditButtonClicked(object sender, EventArgs e)
+        {
+            if (sender is ImageButton button && button.BindingContext is ProductVM selectedProduct)
+            {
+                await Navigation.PushAsync(new ProductDetailsPage(selectedProduct));
+            }
+        }
         private async void OnDeleteButtonClicked(object sender, EventArgs e)
         {
             if (sender is ImageButton button && button.BindingContext is ProductVM selectedProduct)
             {
-                bool confirmDelete = await DisplayAlert("Confirm", "Delete this patient?", "Yes", "No");
+                bool confirmDelete = await DisplayAlert("Confirm", "Delete this product?", "Yes", "No");
                 if (!confirmDelete) return;
 
                 var success = await _apiService.DeleteProductAsync(selectedProduct.Id);
                 LoadProductList();
-                await DisplayAlert(success ? "Success" : "Error", success ? "Patient deleted." : "Failed to delete patient.", "OK");
+                await DisplayAlert(success ? "Success" : "Error", success ? "Product deleted." : "Failed to delete product.", "OK");
             }
         }
     }

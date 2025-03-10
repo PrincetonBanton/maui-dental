@@ -1,28 +1,19 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="DentalApp.Pages.ProductListPage"
+             x:Class="DentalApp.Pages.StaticPages.ProductListPage"
              BackgroundColor="MintCream">
     <ScrollView>
         <VerticalStackLayout Padding="15" Spacing="10">
-            <Button Text="Create Product" CornerRadius="0" Clicked="OnCreateProductButtonClicked" />
+            <Button Text="Create Product" CornerRadius="0"/>
             
             <Grid ColumnDefinitions="Auto, *">
-                <Image Source="search.png" VerticalOptions="Center" HeightRequest="15" Grid.Column="0">
-                    <Image.GestureRecognizers>
-                        <TapGestureRecognizer Tapped="OnSearchImageTapped"/>
-                    </Image.GestureRecognizers>
-                </Image>
+                <Image Source="search.png" VerticalOptions="Center" HeightRequest="15" Grid.Column="0"/>
                 <Entry x:Name="SearchBar" Placeholder="Search by name" TextColor="Black" Margin="10,0,0,0" Grid.Column="1"/>
             </Grid>
 
             <Grid ColumnDefinitions="Auto, *">
-                <Image Source="droplist.png" VerticalOptions="Center" HeightRequest="20" Grid.Column="0">
-                    <Image.GestureRecognizers>
-                        <TapGestureRecognizer Tapped="OnDropListImageTapped"/>
-                    </Image.GestureRecognizers>
-                </Image>
-                <Picker x:Name="CategoryPicker" Title="Select Category" TextColor="Black" Margin="10,0,0,0" Grid.Column="1"
-                    SelectedIndexChanged="OnCategoryChanged">
+                <Image Source="droplist.png" VerticalOptions="Center" HeightRequest="20" Grid.Column="0"/>
+                <Picker x:Name="CategoryPicker" Title="Select Category" TextColor="Black" Margin="10,0,0,0" Grid.Column="1">
                     <Picker.ItemsSource>
                         <x:Array Type="{x:Type x:String}">
                             <x:String>All</x:String>
@@ -33,6 +24,7 @@
                 </Picker>
 
             </Grid>
+            
             <VerticalStackLayout >
                 <Grid BackgroundColor="DarkGray" Padding="5">
                     <Grid.ColumnDefinitions>
@@ -42,7 +34,7 @@
                         <ColumnDefinition Width="1.5*" />
                         <ColumnDefinition Width="1.5*" />
                     </Grid.ColumnDefinitions>
-
+                    
                     <Label Text="Name" FontAttributes="Bold" TextColor="White" Grid.Column="0"/>
                     <Label Text="Price" FontAttributes="Bold" TextColor="White" Grid.Column="1"/>
                     <Label Text="Min" FontAttributes="Bold" TextColor="White" Grid.Column="2"/>
@@ -62,13 +54,13 @@
                                         <ColumnDefinition Width="1.5*" />
                                     </Grid.ColumnDefinitions>
 
-                                    <Label Text="{Binding Name}" FontSize="13" VerticalOptions="Center" TextColor="Black" Grid.Column="0"/>
-                                    <Label Text="{Binding Amount, StringFormat='{0:N2}'}" FontSize="13" VerticalOptions="Center" HorizontalTextAlignment="End" TextColor="Black" Grid.Column="1"/>
-                                    <Label Text="{Binding MinPrice, StringFormat='{0:N2}'}" FontSize="13" VerticalOptions="Center" HorizontalTextAlignment="End" TextColor="Black" Grid.Column="2"/>
-                                    <Label Text="{Binding MaxPrice, StringFormat='{0:N2}'}" FontSize="13" VerticalOptions="Center" HorizontalTextAlignment="End" TextColor="Black" Grid.Column="3"/>
+                                    <Label Text="ProductName" FontSize="13" VerticalOptions="Center" TextColor="Black" Grid.Column="0"/>
+                                    <Label Text="8,888.88" FontSize="13" VerticalOptions="Center" HorizontalTextAlignment="End" TextColor="Black" Grid.Column="1"/>
+                                    <Label Text="8,888.88" FontSize="13" VerticalOptions="Center" HorizontalTextAlignment="End" TextColor="Black" Grid.Column="2"/>
+                                    <Label Text="8,888.88" FontSize="13" VerticalOptions="Center" HorizontalTextAlignment="End" TextColor="Black" Grid.Column="3"/>
                                     <HorizontalStackLayout Margin="10,0,10,0" Grid.Column="4">
-                                        <ImageButton Source="edit.png" VerticalOptions="Center" HeightRequest="25" WidthRequest="25" Clicked="OnEditButtonClicked" />
-                                        <ImageButton Source="delete.png" VerticalOptions="Center" HeightRequest="25" WidthRequest="25" Clicked="OnDeleteButtonClicked" />
+                                        <ImageButton Source="edit.png" VerticalOptions="Center" HeightRequest="25" WidthRequest="25" />
+                                        <ImageButton Source="delete.png" VerticalOptions="Center" HeightRequest="25" WidthRequest="25" />
                                     </HorizontalStackLayout>
                                 </Grid>
                             </ViewCell>

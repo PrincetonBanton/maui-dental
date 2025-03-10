@@ -6,7 +6,7 @@
              BackgroundColor="MintCream">
     <ScrollView>
         <VerticalStackLayout Padding="15" Spacing="10">
-            <Button Text="Create Patient" BackgroundColor="LightBlue" CornerRadius="0"/>
+            <Button Text="Create Patient" CornerRadius="0"/>
 
             <Grid ColumnDefinitions="Auto, *">
                 <Image Source="search.png" VerticalOptions="Center" HeightRequest="15" Grid.Column="0">
@@ -18,25 +18,26 @@
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <ViewCell>
-                            <Frame Padding="10" Margin="0,5,0,5" BackgroundColor="Transparent" BorderColor="Transparent" >
+                            <Frame Padding="10" Margin="0,5,0,5" BackgroundColor="Transparent" BorderColor="Transparent">
                                 <VerticalStackLayout Spacing="5">
                                     <Grid ColumnDefinitions="*,Auto,Auto">
-                                        <Label Text="Juan dela Cruz" FontSize="23" TextColor="Black" FontAttributes="Bold" VerticalOptions="Center" Grid.Column="0"/>
+                                        <Label Text="{Binding FullName}" FontSize="23" TextColor="Black" FontAttributes="Bold" VerticalOptions="Center" Grid.Column="0"/>
                                         <Image Source="edit.png" VerticalOptions="Center" HeightRequest="30" Grid.Column="1" Margin="0,0,15,0"/>
                                         <Image Source="delete.png" VerticalOptions="Center" HeightRequest="30" Grid.Column="2" Margin="0,0,15,0"/>
                                     </Grid>
                                     <Label Text="Date of Birth" FontSize="15" TextColor="Black" FontAttributes="Bold" />
-                                    <Label Text="01/01/2025" FontSize="13" TextColor="Gray" />
+                                    <Label Text="{Binding FormattedBirthDate}" FontSize="13" TextColor="Gray" />
                                     <Label Text="Contact No." FontSize="15" TextColor="Black" FontAttributes="Bold" />
-                                    <Label Text="09514652627" FontSize="13" TextColor="Gray" />
+                                    <Label Text="{Binding Mobile}" FontSize="13" TextColor="Gray" />
                                     <Label Text="E-mail" FontSize="15" TextColor="Black" FontAttributes="Bold" />
-                                    <Label Text="trial@email.com" FontSize="13" TextColor="Gray" />
+                                    <Label Text="{Binding Email}" FontSize="13" TextColor="Gray" />
                                 </VerticalStackLayout>
                             </Frame>
                         </ViewCell>
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>
+
 
         </VerticalStackLayout>
     </ScrollView>

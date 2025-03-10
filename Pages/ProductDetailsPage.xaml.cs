@@ -63,4 +63,24 @@ public partial class ProductDetailsPage : ContentPage
         if (success)
             await Navigation.PopAsync();
     }
+
+    protected override async void OnAppearing()
+    {
+        base.OnAppearing();
+
+        if (_product != null)
+        {
+            // Display the product details alert
+            await DisplayAlert("Product Details",
+                $"Name: {_product.Name}\n" +
+                $"Code: {_product.ProductCode}\n" +
+                $"Description: {_product.Description}\n" +
+                $"Type: {_product.ProductType}\n" +
+                $"Amount: {_product.Amount}\n" +
+                $"Min Price: {_product.MinPrice}\n" +
+                $"Max Price: {_product.MaxPrice}",
+                "OK");
+        }
+    }
+
 }

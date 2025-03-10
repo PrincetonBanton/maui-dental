@@ -14,7 +14,24 @@ namespace DentalApp.Data
                 new UserVM { Id = 3, FirstName = "Mark", MiddleName = "F", LastName = "Johnson", Email = "mark@example.com", Mobile = "555-666-7777", RoleName = "Staff" }
             };
         }
-
+        public static List<PatientVM> GetSamplePatients()
+        {
+            return new List<PatientVM>
+            {
+                new PatientVM { Id = 1, FirstName = "John", MiddleName = "D", LastName = "Offline", Email = "john@example.com", Mobile = "123-456-7890" },
+                new PatientVM { Id = 2, FirstName = "Jane", MiddleName = "E", LastName = "Smith", Email = "jane@example.com", Mobile = "987-654-3210" },
+                new PatientVM { Id = 3, FirstName = "Mark", MiddleName = "F", LastName = "Johnson", Email = "mark@example.com", Mobile = "555-666-7777" }
+            };
+        }
+        public static List<DentistVM> GetSampleDentists()
+        {
+            return new List<DentistVM>
+            {
+                new DentistVM { Id = 1, FirstName = "John", MiddleName = "D", LastName = "Offline", Email = "john@example.com", Mobile = "123-456-7890" },
+                new DentistVM { Id = 2, FirstName = "Jane", MiddleName = "E", LastName = "Smith", Email = "jane@example.com", Mobile = "987-654-3210" },
+                new DentistVM { Id = 3, FirstName = "Mark", MiddleName = "F", LastName = "Johnson", Email = "mark@example.com", Mobile = "555-666-7777" }
+            };
+        }
         public static List<ProductVM> GetSampleProducts()
         {
             return new List<ProductVM>

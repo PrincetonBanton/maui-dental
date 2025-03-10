@@ -23,14 +23,7 @@
                     </HorizontalStackLayout>
                     <HorizontalStackLayout Spacing="10">
                         <Label Text="Product Type" WidthRequest="120" TextColor="Black" VerticalOptions="Center"/>
-                        <Picker x:Name="ProductTypePicker" Title="Product Type" TextColor="Black" WidthRequest="200" VerticalOptions="Center">
-                            <Picker.ItemsSource>
-                                <x:Array Type="{x:Type x:String}">
-                                    <x:String>Product</x:String>
-                                    <x:String>Service</x:String>
-                                </x:Array>
-                            </Picker.ItemsSource>
-                        </Picker>
+                        <Picker x:Name="ProductTypePicker" Title="Product Type" TextColor="Black" WidthRequest="200" VerticalOptions="Center"/>
                     </HorizontalStackLayout>
 
                 </VerticalStackLayout>

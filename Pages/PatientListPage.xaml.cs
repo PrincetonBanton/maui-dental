@@ -15,23 +15,20 @@ namespace DentalApp.Pages
             BindingContext = this;
             LoadPatientList();
         }
-        protected override void OnAppearing()
+        protected override async void OnAppearing()
         {
             base.OnAppearing();
             LoadPatientList();
+            if (App.Instance.UserNavigated == "userdetails") App.Instance.UserNavigated = "userlist";
+            if (App.Instance.DentistNavigated == "dentistdetails") App.Instance.DentistNavigated = "dentistlist";
         }
         private async void LoadPatientList()
         {
             try
             {
-                if (Connectivity.NetworkAccess == NetworkAccess.Internet)
-                {
-                    _allPatients= await _apiService.GetPatientsAsync() ?? new List<PatientVM>();
-                }
-                else
-                {
-                    //_allPatients = SampleData.GetSampleUsers(); //Replace w offline data sync
-                }
+                _allPatients = Connectivity.NetworkAccess == NetworkAccess.Internet
+                    ? await _apiService.GetPatientsAsync() ?? new List<PatientVM>()
+                    : SampleData.GetSamplePatients(); //Replace w offline data sync
 
                 PatientListView.ItemsSource = _allPatients;
             }
@@ -40,14 +37,20 @@ namespace DentalApp.Pages
                 await DisplayAlert("Error", "Failed to load users. Please try again.", "OK");
             }
         }
+
+        private async void OnCreatePatientButtonClicked(object sender, EventArgs e)
+        {
+            App.Instance.PatientNavigated = "patientdetails";
+            await Navigation.PushAsync(new PatientDetailsPage());
+        }
         private async void OnEditButtonClicked(object sender, EventArgs e)
         {
             if (sender is ImageButton button && button.BindingContext is PatientVM selectedPatient)
             {
+                App.Instance.PatientNavigated = "patientdetails";
                 await Navigation.PushAsync(new PatientDetailsPage(selectedPatient));
             }
         }
-
         private async void OnDeleteButtonClicked(object sender, EventArgs e)
         {
             if (sender is ImageButton button && button.BindingContext is PatientVM selectedPatient)
@@ -65,12 +68,11 @@ namespace DentalApp.Pages
         {
             if (e.Item is PatientVM selectedPatient)
             {
+                App.Instance.PatientNavigated = "patientdetails";
                 await Navigation.PushAsync(new PatientDetailsPage(selectedPatient));
             }
             ((ListView)sender).SelectedItem = null;
         }
-
-
         private void OnSearchBarTextChanged(object sender, TextChangedEventArgs e)
         {
             var searchText = e.NewTextValue.ToLower();
@@ -79,13 +81,6 @@ namespace DentalApp.Pages
                 : _allPatients.Where(patient => patient.FullName.ToLower().Contains(searchText)).ToList();
 
         }
-
         private void OnSearchImageTapped(object sender, TappedEventArgs e) => SearchBar.Focus();
-        private async void OnCreatePatientButtonClicked(object sender, EventArgs e)
-        {
-
-            await Navigation.PushAsync(new PatientDetailsPage());
-        }
-
     }
 }

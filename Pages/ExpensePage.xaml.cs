@@ -29,7 +29,7 @@ namespace DentalApp.Pages
             {
                 //var localExpenses = await _databaseService.GetExpensesAsync();
                 //if (localExpenses.Any()) await MigrateLocalDataToApi(localExpenses);
-  
+                await DisplayAlert("Connectivity", "You are currently online", "Ok");
                 LoadExpenses();
                 //LoadOnlineData();
             }

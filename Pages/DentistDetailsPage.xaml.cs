@@ -14,10 +14,12 @@ public partial class DentistDetailsPage : ContentPage
     {
         InitializeComponent();
         _dentist = dentist;
-        if (_dentist != null)
-        {
-            BindPatientDetails();
-        }
+        if (_dentist != null) BindPatientDetails();
+    }
+    protected override async void OnAppearing()
+    {
+        base.OnAppearing();
+        if (App.Instance.DentistNavigated == "dentistlist") await Navigation.PopAsync();
     }
     private void BindPatientDetails()
     {
@@ -42,17 +44,6 @@ public partial class DentistDetailsPage : ContentPage
         _dentist.Mobile = MobileEntry.Text;
         _dentist.Address = AddressEntry.Text;
         _dentist.Note = NoteEditor.Text;
-
-        //string patientInfo = $"FirstName: {_patient.FirstName} " +
-        //                     $"MiddleName: {_patient.MiddleName} " +
-        //                     $"LastName: {_patient.LastName} " +
-        //                     $"BirthDate: {_patient.BirthDate} " +
-        //                     $"Email: {_patient.Email} " +
-        //                     $"Mobile: {_patient.Mobile} " +
-        //                     $"Address: {_patient.Address} " +
-        //                     $"Note: {_patient.Note} " +
-        //                     $"PatientNo: {_patient.PatientNo}";
-        //await DisplayAlert("Patient Information", patientInfo, "OK");
 
         var (isValid, errorMessage) = DentistValidationService.ValidateDentist(_dentist);
 

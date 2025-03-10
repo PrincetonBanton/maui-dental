@@ -17,15 +17,15 @@ public partial class UserDetailsPage : ContentPage
         _isEditMode = _user != null;
 
         if (_isEditMode) BindUserDetails();
-        
         LoadRoles();
         ToggleFieldsVisibility();
     }
-    private async void LoadRoles()
+    protected override async void OnAppearing()
     {
-        RolePicker.ItemsSource = await _apiService.GetRolesAsync();
+        base.OnAppearing();
+        if (App.Instance.UserNavigated == "userlist") await Navigation.PopAsync(); 
     }
-
+    private async void LoadRoles() => RolePicker.ItemsSource = await _apiService.GetRolesAsync();
     private void BindUserDetails()
     {
         FirstNameEntry.Text = _user.FirstName;
@@ -38,15 +38,12 @@ public partial class UserDetailsPage : ContentPage
         NoteEditor.Text = _user.Note;
     }
 
-    private void ToggleFieldsVisibility()
+    private void ToggleFieldsVisibility()  //Replace this with proper standard
     {
-        // Toggle visibility for Password and Confirm Password fields and their labels
         PasswordLabel.IsVisible = !_isEditMode;
         PasswordEntry.IsVisible = !_isEditMode;
         ConfirmPasswordLabel.IsVisible = !_isEditMode;
         ConfirmPasswordEntry.IsVisible = !_isEditMode;
-
-        // Toggle visibility for Role Picker and its label
         RoleLabel.IsVisible = !_isEditMode;
         RolePicker.IsVisible = !_isEditMode;
     }
@@ -65,30 +62,7 @@ public partial class UserDetailsPage : ContentPage
         _user.Email = EmailEntry.Text;
         _user.Mobile = MobileEntry.Text;
         _user.Note = NoteEditor.Text;
-
-        // Ensure RolePicker has a valid selection
-        if (RolePicker.SelectedItem is Role selectedRole)
-        {
-            _user.RoleId = selectedRole.Id;
-        }
-        else
-        {
-            _user.RoleId = 0; // Default or invalid role
-        }
-
-        string userInfo = $"Username: {_user.Username} " +
-                          $"Password: {_user.Password} " +
-                          $"FirstName: {_user.FirstName} " +
-                          $"MiddleName: {_user.MiddleName} " +
-                          $"LastName: {_user.LastName} " +
-                          $"BirthDate: {_user.BirthDate:d} " +
-                          $"Email: {_user.Email} " +
-                          $"Mobile: {_user.Mobile} " +
-                          $"Address: {_user.Address} " +
-                          $"Note: {_user.Note} " +
-                          $"Role: {(_user.RoleId > 0 ? _user.RoleId.ToString() : "Not Assigned")}";
-
-        await DisplayAlert("User Information", userInfo, "OK");
+        _user.RoleId = RolePicker.SelectedItem is Role selectedRole ? selectedRole.Id : 0;
 
         var (isValid, errorMessage) = UserValidationService.ValidateUser(_user, ConfirmPasswordEntry.Text);
 
