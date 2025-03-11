@@ -34,15 +34,15 @@
                     <Label Text="Pricing" FontAttributes="Bold" FontSize="16" TextColor="Black"/>
                     <HorizontalStackLayout Spacing="10">
                         <Label Text="Amount" WidthRequest="120" TextColor="Black" VerticalOptions="Center"/>
-                        <Entry x:Name="AmountEntry" Placeholder="Price" Keyboard="Numeric" TextColor="Black" WidthRequest="200" VerticalOptions="Center"/>
+                        <Entry x:Name="AmountEntry" Placeholder="0.00" Keyboard="Numeric" TextColor="Black" WidthRequest="200" VerticalOptions="Center" TextChanged="OnNumericEntryChanged"/>
                     </HorizontalStackLayout>
                     <HorizontalStackLayout Spacing="10">
                         <Label Text="Min Price" WidthRequest="120" TextColor="Black" VerticalOptions="Center"/>
-                        <Entry x:Name="MinPriceEntry" Placeholder="Min Price" Keyboard="Numeric" TextColor="Black" WidthRequest="200" VerticalOptions="Center"/>
+                        <Entry x:Name="MinPriceEntry" Placeholder="0.00" Keyboard="Numeric" TextColor="Black" WidthRequest="200" VerticalOptions="Center" TextChanged="OnNumericEntryChanged"/>
                     </HorizontalStackLayout>
                     <HorizontalStackLayout Spacing="10">
                         <Label Text="Max Price" WidthRequest="120" TextColor="Black" VerticalOptions="Center"/>
-                        <Entry x:Name="MaxPriceEntry" Placeholder="Max Price" Keyboard="Numeric" TextColor="Black" WidthRequest="200" VerticalOptions="Center"/>
+                        <Entry x:Name="MaxPriceEntry" Placeholder="0.00" Keyboard="Numeric" TextColor="Black" WidthRequest="200" VerticalOptions="Center" TextChanged="OnNumericEntryChanged" />
                     </HorizontalStackLayout>
                 </VerticalStackLayout>
             </Frame>

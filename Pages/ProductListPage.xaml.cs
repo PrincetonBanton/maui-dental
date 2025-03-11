@@ -29,14 +29,9 @@ namespace DentalApp.Pages
         {
             try
             {
-                if (Connectivity.NetworkAccess == NetworkAccess.Internet)
-                {
-                    _allProducts = await _apiService.GetProductsAsync() ?? new List<ProductVM>();
-                }
-                else
-                {
-                    _allProducts = SampleData.GetSampleProducts();
-                }
+                _allProducts = Connectivity.NetworkAccess == NetworkAccess.Internet
+                    ? await _apiService.GetProductsAsync() ?? new List<ProductVM>()
+                    : SampleData.GetSampleProducts(); //Replace w offline data sync
 
                 // Display all products initially (unfiltered)
                 _filteredProducts.Clear();

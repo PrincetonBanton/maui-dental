@@ -81,7 +81,6 @@ public partial class UserDetailsPage : ContentPage
 
         await DisplayAlert(success ? "Success" : "Error", message, "OK");
 
-        if (success)
-            await Navigation.PopAsync();
+        if (success) await Navigation.PopAsync();
     }
 }

@@ -10,14 +10,6 @@ namespace DentalApp
         {
             InitializeComponent();
             this.Loaded += OnShellLoaded; // Triggered when Shell is fully loaded
-
-            Routing.RegisterRoute(nameof(ProductListPage), typeof(ProductListPage));
-            Routing.RegisterRoute(nameof(UserListPage), typeof(UserListPage));
-            Routing.RegisterRoute(nameof(PatientListPage), typeof(PatientListPage));
-            Routing.RegisterRoute(nameof(DentistListPage), typeof(DentistListPage));
-            Routing.RegisterRoute(nameof(ExpensePage), typeof(ExpensePage));
-
-            RegisterNavigationEvents();
         }
 
 
@@ -44,16 +36,5 @@ namespace DentalApp
                 await DisplayAlert("API Unreachable", "You are online, but cannot connect to the API.", "OK");
             }
         }
-        private void RegisterNavigationEvents()
-        {
-            this.Navigating += async (s, e) =>
-            {
-                if (e.Target.Location.OriginalString.Contains("UserListPage"))
-                {
-                    await DisplayAlert("Navigation", $"UserNavigated: {App.Instance.UserNavigated}", "OK");
-                }
-            };
-        }
-
     }
 }

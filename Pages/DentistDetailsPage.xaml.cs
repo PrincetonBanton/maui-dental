@@ -9,7 +9,6 @@ public partial class DentistDetailsPage : ContentPage
     private DentistVM _dentist;
     private readonly ApiService _apiService = new();
 
-
     public DentistDetailsPage(DentistVM dentist = null)
     {
         InitializeComponent();
@@ -61,7 +60,6 @@ public partial class DentistDetailsPage : ContentPage
 
         await DisplayAlert(success ? "Success" : "Error", message, "OK");
 
-        if (success)
-            await Navigation.PopAsync();
+        if (success) await Navigation.PopAsync();
     }
 }

@@ -8,7 +8,6 @@ public partial class PatientDetailsPage : ContentPage
     private PatientVM _patient;
     private readonly ApiService _apiService = new();
 
-
     public PatientDetailsPage(PatientVM patient = null)
     {
         InitializeComponent();
@@ -62,7 +61,6 @@ public partial class PatientDetailsPage : ContentPage
 
         await DisplayAlert(success ? "Success" : "Error", message, "OK");
 
-        if (success)
-            await Navigation.PopAsync();
+        if (success) await Navigation.PopAsync();
     }
 }

@@ -1,6 +1,7 @@
 using DentalApp.Models;
 using DentalApp.Services;
 using DentalApp.Models.Enum;
+using System.Text.RegularExpressions;
 
 namespace DentalApp.Pages;
 
@@ -13,21 +14,20 @@ public partial class ProductDetailsPage : ContentPage
     {
         InitializeComponent();
         _product = product;
-        if (_product != null)
-        {
-            BindProductDetails();
-        }
+        if (_product != null) BindProductDetails();
+        ProductTypePicker.ItemsSource = Enum.GetValues<ProductType>().ToList();
     }
 
     private void BindProductDetails()
     {
+        ProductTypePicker.ItemsSource = Enum.GetValues<ProductType>().ToList();
         NameEntry.Text = _product.Name;
         ProductCodeEntry.Text = _product.ProductCode;
         DescriptionEditor.Text = _product.Description;
         ProductTypePicker.SelectedItem = _product.ProductType;
-        AmountEntry.Text = _product.Amount.ToString();
-        MinPriceEntry.Text = _product.MinPrice.ToString();
-        MaxPriceEntry.Text = _product.MaxPrice.ToString();
+        AmountEntry.Text = _product.Amount.ToString("N2");
+        MinPriceEntry.Text = _product.MinPrice.ToString("N2");
+        MaxPriceEntry.Text = _product.MaxPrice.ToString("N2");
     }
 
     private async void SaveButton_Clicked(object sender, EventArgs e)
@@ -37,18 +37,18 @@ public partial class ProductDetailsPage : ContentPage
         _product.Name = NameEntry.Text;
         _product.ProductCode = ProductCodeEntry.Text;
         _product.Description = DescriptionEditor.Text;
-        _product.Amount = double.TryParse(AmountEntry.Text, out var amount) ? amount : 0;
-        _product.MinPrice = double.TryParse(MinPriceEntry.Text, out var minPrice) ? minPrice : null;
-        _product.MaxPrice = double.TryParse(MaxPriceEntry.Text, out var maxPrice) ? maxPrice : null;
+        _product.ProductType = (ProductType)ProductTypePicker.SelectedItem;
+        _product.Amount = ParseDouble(AmountEntry.Text);
+        _product.MinPrice = ParseDouble(MinPriceEntry.Text);
+        _product.MaxPrice = ParseDouble(MaxPriceEntry.Text);
+        double ParseDouble(string text) => double.TryParse(text, out var value) ? value : 0.00;
 
-
-        //var (isValid, errorMessage) = ProductValidationService.ValidateProduct(_product);
-
-        //if (!isValid)
-        //{
-        //    await DisplayAlert("Validation Error", errorMessage, "OK");
-        //    return;
-        //}
+        var (isValid, errorMessage) = ProductValidationService.ValidateProduct(_product);
+        if (!isValid)
+        {
+            await DisplayAlert("Validation Error", errorMessage, "OK");
+            return;
+        }
 
         bool success = _product.Id != 0
             ? await _apiService.UpdateProductAsync(_product)
@@ -60,27 +60,22 @@ public partial class ProductDetailsPage : ContentPage
 
         await DisplayAlert(success ? "Success" : "Error", message, "OK");
 
-        if (success)
-            await Navigation.PopAsync();
+        if (success) await Navigation.PopAsync();
     }
 
-    protected override async void OnAppearing()
+    private void OnNumericEntryChanged(object sender, TextChangedEventArgs e)
     {
-        base.OnAppearing();
-
-        if (_product != null)
+        if (sender is Entry entry)
         {
-            // Display the product details alert
-            await DisplayAlert("Product Details",
-                $"Name: {_product.Name}\n" +
-                $"Code: {_product.ProductCode}\n" +
-                $"Description: {_product.Description}\n" +
-                $"Type: {_product.ProductType}\n" +
-                $"Amount: {_product.Amount}\n" +
-                $"Min Price: {_product.MinPrice}\n" +
-                $"Max Price: {_product.MaxPrice}",
-                "OK");
+            string newText = entry.Text;
+            if (!IsValidNumericInput(newText)) entry.Text = e.OldTextValue;
+
         }
+    }
+    private bool IsValidNumericInput(string text)
+    {
+        if (string.IsNullOrEmpty(text)) return true; 
+        return Regex.IsMatch(text, @"^\d*\.?\d*$");
     }
 
 }
