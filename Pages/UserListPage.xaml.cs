@@ -23,9 +23,11 @@ namespace DentalApp.Pages
         }
         private async void LoadUserList()
         {
+            await ApiConnectivityService.Instance.CheckApiConnectivityAsync();
+            bool isApiAvailable = ApiConnectivityService.Instance.IsApiAvailable;
             try
             {
-                _allUsers = Connectivity.NetworkAccess == NetworkAccess.Internet
+                _allUsers = isApiAvailable
                     ? await _apiService.GetUsersAsync() ?? new List<UserVM>()
                     : SampleData.GetSampleUsers(); //Replace w offline data sync
                 UserListView.ItemsSource = _allUsers;

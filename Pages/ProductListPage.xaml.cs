@@ -27,11 +27,13 @@ namespace DentalApp.Pages
 
         private async void LoadProductList()
         {
+            await ApiConnectivityService.Instance.CheckApiConnectivityAsync();
+            bool isApiAvailable = ApiConnectivityService.Instance.IsApiAvailable;
             try
             {
-                _allProducts = Connectivity.NetworkAccess == NetworkAccess.Internet
+                _allProducts = isApiAvailable
                     ? await _apiService.GetProductsAsync() ?? new List<ProductVM>()
-                    : SampleData.GetSampleProducts(); //Replace w offline data sync
+                    : SampleData.GetSampleProducts();               //Replace w offline data sync
 
                 // Display all products initially (unfiltered)
                 _filteredProducts.Clear();
@@ -53,7 +55,7 @@ namespace DentalApp.Pages
                 _filteredProducts.Clear();
                 var filtered = selectedCategory == "All"
                     ? _allProducts
-                    : _allProducts.Where(p => p.ProductType == (selectedCategory == "Products" ? ProductType.Goods : ProductType.Services));
+                    : _allProducts.Where(p => p.ProductType == (selectedCategory == "Goods" ? ProductType.Goods : ProductType.Services));
 
                 foreach (var product in filtered)
                 {

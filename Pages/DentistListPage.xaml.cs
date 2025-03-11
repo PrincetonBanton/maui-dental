@@ -23,9 +23,11 @@ namespace DentalApp.Pages
         }
         private async void LoadDentistList()
         {
+            await ApiConnectivityService.Instance.CheckApiConnectivityAsync();
+            bool isApiAvailable = ApiConnectivityService.Instance.IsApiAvailable;
             try
             {
-                _allDentists = Connectivity.NetworkAccess == NetworkAccess.Internet
+                _allDentists = isApiAvailable
                     ? await _apiService.GetDentistsAsync() ?? new List<DentistVM>()
                     : SampleData.GetSampleDentists(); //Replace w offline data sync
 

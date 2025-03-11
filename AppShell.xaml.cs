@@ -1,6 +1,4 @@
 ﻿using DentalApp.Services;
-using DentalApp.Pages;
-using Microsoft.Maui.Controls;
 
 namespace DentalApp
 {
@@ -15,7 +13,7 @@ namespace DentalApp
 
         private async void OnShellLoaded(object sender, EventArgs e)
         {
-            await Task.Delay(500); // Small delay to ensure UI is ready
+            await Task.Delay(50); // Small delay to ensure UI is ready
 
             await ConnectivityService.Instance.CheckAndUpdateConnectivityAsync();
             bool isInternetAvailable = ConnectivityService.Instance.IsInternetAvailable;
@@ -25,16 +23,25 @@ namespace DentalApp
 
             if (!isInternetAvailable && !isApiAvailable)
             {
-                await DisplayAlert("No Connection", "You are offline and cannot reach the API.", "OK"); 
-            }
-            else if (!isInternetAvailable && isApiAvailable)
-            {
-                await DisplayAlert("Limited Access", "You have no internet, but can still reach the API.", "OK");
+                App.Instance.IsConnected = false;
+                await DisplayAlert("No Connection", "No Internet and API connection", "OK"); 
             }
             else if (isInternetAvailable && !isApiAvailable)
             {
-                await DisplayAlert("API Unreachable", "You are online, but cannot connect to the API.", "OK");
+                App.Instance.IsConnected = false;
+                await DisplayAlert("API Unreachable", "Internet Connected but API unreachable", "OK");
             }
+            else if (!isInternetAvailable && isApiAvailable)
+            {
+                App.Instance.IsConnected = true;
+                await DisplayAlert("Limited Access", "API connected but no Internet connection", "OK");
+            }
+            //else if (isInternetAvailable && isApiAvailable)
+            //{
+            //    App.Instance.IsConnected = true;
+            //    await DisplayAlert("Fully online", $"Value: {App.Instance.IsConnected}", "OK");
+            //}
+
         }
     }
 }

@@ -8,6 +8,7 @@
         public string UserNavigated { get; set; } = "start";
         public string PatientNavigated { get; set; } = "start";
         public string DentistNavigated { get; set; } = "start";
+        public bool IsConnected { get; set; } = true;
 
         public App()
         {

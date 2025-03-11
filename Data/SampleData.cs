@@ -36,7 +36,7 @@ namespace DentalApp.Data
         {
             return new List<ProductVM>
             {
-                new ProductVM { Id = 1, Name = "Mouthwash", Description = "Offline", Amount = 150, ProductType = ProductType.Goods },
+                new ProductVM { Id = 1, Name = "Offline Name", Description = "Offline", Amount = 150, ProductType = ProductType.Goods },
                 new ProductVM { Id = 2, Name = "Teeth Cleaning", Description = "Professional dental cleaning", Amount = 500, ProductType = ProductType.Goods },  
                 new ProductVM { Id = 3, Name = "Tooth Extraction", Description = "Painless tooth extraction", Amount = 500,  ProductType = ProductType.Goods },
                 new ProductVM { Id = 4, Name = "Toothpaste", Description = "Fluoride toothpaste", Amount = 100, ProductType = ProductType.Goods },

@@ -12,7 +12,6 @@ namespace DentalApp.Pages
         public PatientListPage()
         {
             InitializeComponent();
-            BindingContext = this;
             LoadPatientList();
         }
         protected override async void OnAppearing()
@@ -24,9 +23,11 @@ namespace DentalApp.Pages
         }
         private async void LoadPatientList()
         {
+            await ApiConnectivityService.Instance.CheckApiConnectivityAsync();
+            bool isApiAvailable = ApiConnectivityService.Instance.IsApiAvailable;
             try
             {
-                _allPatients = Connectivity.NetworkAccess == NetworkAccess.Internet
+                _allPatients = isApiAvailable
                     ? await _apiService.GetPatientsAsync() ?? new List<PatientVM>()
                     : SampleData.GetSamplePatients(); //Replace w offline data sync
 
