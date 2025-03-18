@@ -1,154 +1,248 @@
+using DentalApp.Data;
 using DentalApp.Models;
 using DentalApp.Services;
+using System.Collections.ObjectModel;
 
 namespace DentalApp.Pages
 {
     public partial class ExpensePage : ContentPage
     {
-        private Expense _currentExpense = new();
-        private bool _isInternetAvailable;
         private readonly ApiService _apiService = new();
+        private Expense _expense;
+        private List<Expense> _allExpenses = new();
+        private ObservableCollection<Expense> _expenses = new();
 
         public ExpensePage(Expense expense = null)
         {
             InitializeComponent();
-            CheckConnectivity();
-           
-            _currentExpense = expense ?? new Expense();
-            BindExpenseToForm();
+            //categoryPicker.ItemsSource = Pages.GetValues<ExpenseCategory>().ToList();
+            ExpenseListView.ItemsSource = _expenses;
+            _expense = expense ?? new Expense();
+            BindExpenseDetails();
+            LoadExpenseCategories();
+            LoadExpenseList();
+        }
+        private async void LoadExpenseCategories()
+        {
+            try
+            {
+                List<ExpenseCategory> categories = await _apiService.GetExpenseCategoryAsync(); // Fetch from API
+                ExpenseCategoryPicker.ItemsSource = categories;
+            }
+            catch (Exception ex)
+            {
+                await DisplayAlert("Error", "Failed to load categories. Please try again.", "OK");
+            }
         }
 
-        private async void CheckConnectivity()
+        private void BindExpenseDetails()
         {
-            await ConnectivityService.Instance.CheckAndUpdateConnectivityAsync();
-            _isInternetAvailable = ConnectivityService.Instance.IsInternetAvailable;
-            internetStatusLabel.Text = _isInternetAvailable ? "Online" : "Offline";
-            internetStatusLabel.TextColor = _isInternetAvailable ? Colors.Green : Colors.Red;
+            descriptionEntry.Text = _expense.Description;
+            amountEntry.Text = _expense.Amount > 0 ? _expense.Amount.ToString() : string.Empty;
+            expenseDatePicker.Date = _expense.ExpenseDate != default ? _expense.ExpenseDate : DateTime.Now;
+            ExpenseCategoryPicker.SelectedItem = (ExpenseCategoryPicker.ItemsSource as List<ExpenseCategory>)?
+                .FirstOrDefault(c => c.Id == _expense.ExpenseCategoryId);
+        }
 
-            if (_isInternetAvailable)
+        private async void LoadExpenseList()
+        {
+            await ApiConnectivityService.Instance.CheckApiConnectivityAsync();
+            bool isApiAvailable = ApiConnectivityService.Instance.IsApiAvailable;
+            try
             {
-                //var localExpenses = await _databaseService.GetExpensesAsync();
-                //if (localExpenses.Any()) await MigrateLocalDataToApi(localExpenses);
-                await DisplayAlert("Connectivity", "You are currently online", "Ok");
-                LoadExpenses();
-                //LoadOnlineData();
+                _allExpenses = isApiAvailable
+                    ? await _apiService.GetExpensesAsync() ?? new List<Expense>()
+                    : SampleData.GetSampleExpenses(); 
+
+                _expenses.Clear();
+                foreach (var expense in _allExpenses)
+                    _expenses.Add(expense);
+
+                UpdateExpenseCount();
+            }
+            catch (Exception ex)
+            {
+                await DisplayAlert("Error", "Failed to load expenses. Please try again.", "OK");
+            }
+            ExpenseListView.ItemsSource = _allExpenses; 
+        }
+        private void UpdateExpenseCount()
+        {
+            ExpenseCountLabel.Text = $"{_expenses.Count}";
+        }
+        private async void OnAddExpenseClicked(object sender, EventArgs e)
+        {
+            //await Navigation.PushAsync(new ExpenseDetailsPage());
+            if (!inputFrame.IsVisible)
+            {
+                inputFrame.TranslationY = -500; // Start above the screen
+                inputFrame.IsVisible = true;
+                await inputFrame.TranslateTo(0, 0, 250, Easing.SinInOut); // Animate down
             }
             else
             {
-                await DisplayAlert("Connectivity", "You are currently offline", "Ok");
-                //LoadOfflineData();
+                await inputFrame.TranslateTo(0, -500, 250, Easing.SinInOut); // Animate back up
+                inputFrame.IsVisible = false;
             }
         }
 
-        private async void LoadExpenses()
+        private async void SaveButton_Clicked(object sender, EventArgs e)
         {
-            var expenses = await _apiService.GetExpensesAsync();
-            var users = await _apiService.GetUsersAsync(); // Fetch users
+            _expense ??= new Expense();
 
-            // Map EnteredBy to the corresponding Full Name from User
-            foreach (var expense in expenses)
-            {
-                var user = users.FirstOrDefault(u => u.Id == expense.EnteredBy);
-                expense.EnteredByName = user?.FullName ?? "Unknown"; // Fallback to "Unknown" if no user is found
-            }
 
-            expenseListView.ItemsSource = expenses;
-            categoryPicker.ItemsSource = await _apiService.GetExpenseCategoryAsync();
-        }
+            _expense.Description = descriptionEntry.Text;
+            _expense.Amount = decimal.Parse(amountEntry.Text);
+            _expense.ExpenseDate = expenseDatePicker.Date;
+            _expense.EnteredBy = 1;  //Temporary
+            _expense.ExpenseCategoryId = ((ExpenseCategory)ExpenseCategoryPicker.SelectedItem).Id;
 
-        private async void OnSaveButtonClicked(object sender, EventArgs e)
-        {
-            //if (!await ValidateExpenseInput())
+            //decimal ParseDecimal(string text) => decimal.TryParse(text, out var value) ? value : 0.00m;
+
+            //var (isValid, errorMessage) = ProductValidationService.ValidateProduct(_product);
+            //if (!isValid)
+            //{
+            //    await DisplayAlert("Validation Error", errorMessage, "OK");
             //    return;
-
-            _currentExpense.Description = descriptionEntry.Text;
-            _currentExpense.Amount = decimal.Parse(amountEntry.Text);
-            _currentExpense.ExpenseDate = expenseDatePicker.Date;
-            _currentExpense.EnteredBy = 1;  //Temporary
-            _currentExpense.ExpenseCategoryId = ((ExpenseCategory)categoryPicker.SelectedItem).Id;
+            //}
 
             await DisplayAlert("Confirm Expense",
-                $"Description: {_currentExpense.Description}\n" +
-                $"Amount: {_currentExpense.Amount:C}\n" +
-                $"Date: {_currentExpense.ExpenseDate:MM/dd/yyyy}\n" +
-                $"Category ID: {_currentExpense.ExpenseCategoryId}",
-            "OK");
+                $"Description: {_expense.Description}\n" +
+                $"Amount: {_expense.Amount:C}\n" +
+                $"Date: {_expense.ExpenseDate:MM/dd/yyyy}\n" +
+                $"Category ID: {_expense.ExpenseCategoryId}",
+                "OK");
+            var success = _expense.Id == 0
+                          ? await _apiService.CreateExpenseAsync(_expense)
+                          : await _apiService.UpdateExpenseAsync(_expense);
 
-            var result = _currentExpense.Id == 0
-                ? await _apiService.CreateExpenseAsync(_currentExpense)
-                : await _apiService.UpdateExpenseAsync(_currentExpense);
-            LoadExpenses();
-            inputFrame.IsVisible = false;
+            LoadExpenseList();
 
-            //if (_isInternetAvailable)
-            //{
-            //    var result = _currentExpense.ExpenseId == 0
-            //        ? await _apiService.CreateExpenseAsync(_currentExpense)
-            //        : await _apiService.UpdateExpenseAsync(_currentExpense);
-            //    LoadOnlineData();
-            //}
-            //else
-            //{
-            //    var result = _currentExpense.ExpenseId == 0
-            //        ? await _databaseService.SaveExpenseAsync(_currentExpense)
-            //        : await _databaseService.UpdateExpenseAsync(_currentExpense);
-            //    LoadOfflineData();
-            //}
+            string message = success
+                ? (_expense.Id != 0 ? "Product updated successfully!" : "Product created successfully!")
+                : "Failed to save product. Please try again.";
 
-            await DisplayAlert("Success", "Expense saved.", "OK");
-            ClearForm();
+            await DisplayAlert(success ? "Success" : "Error", message, "OK");
         }
 
-        private async void ExpenseListView_ItemTapped(object sender, ItemTappedEventArgs e)
+        private async void OnEditButtonClicked(object sender, EventArgs e)
         {
-            if (e.Item is not Expense selectedExpense) return;
+        }
 
-            string action = await DisplayActionSheet("Action", "Cancel", null, "Add","Edit", "Delete");
+        private async void OnDeleteButtonClicked(object sender, EventArgs e)
+        {
+        }
 
-            if (action == "Add") { 
-                inputFrame.IsVisible = true;
-            }
-            else if (action == "Edit")
+        private void OnQuickFilterCheckedChanged(object sender, CheckedChangedEventArgs e)
+        {
+            bool isChecked = quickFilterCheckBox.IsChecked;
+            todayRadioButton.IsEnabled = isChecked;
+            thisWeekRadioButton.IsEnabled = isChecked;
+            thisMonthRadioButton.IsEnabled = isChecked;
+            thisYearRadioButton.IsEnabled = isChecked;
+            // Disable Custom Date Group if Quick Filter is checked
+            customDateCheckBox.IsChecked = !isChecked;
+            expenseStartPicker.IsEnabled = !isChecked;
+            expenseEndPicker.IsEnabled = !isChecked;
+        }
+
+        private void OnCustomDateCheckedChanged(object sender, CheckedChangedEventArgs e)
+        {
+            bool isChecked = customDateCheckBox.IsChecked;
+            expenseStartPicker.IsEnabled = isChecked;
+            expenseEndPicker.IsEnabled = isChecked;
+            // Disable Quick Filter Group if Custom Date is checked
+            quickFilterCheckBox.IsChecked = !isChecked;
+            todayRadioButton.IsEnabled = !isChecked;
+            thisWeekRadioButton.IsEnabled = !isChecked;
+            thisMonthRadioButton.IsEnabled = !isChecked;
+            thisYearRadioButton.IsEnabled = !isChecked;
+        }
+
+        private void OnQuickFilterRadioButtonChanged(object sender, CheckedChangedEventArgs e)
+        {
+            if (quickFilterCheckBox.IsChecked)
             {
-                inputFrame.IsVisible = true;
-                _currentExpense = selectedExpense;
-                BindExpenseToForm();
-            }
-            else if (action == "Delete" && await DisplayAlert("Confirm", "Delete this expense?", "Yes", "No"))
-            {
-                if (_isInternetAvailable)
+                if (todayRadioButton.IsChecked)
                 {
-                    var success = await _apiService.DeleteExpenseAsync(selectedExpense.Id);
-                    await DisplayAlert(success ? "Success" : "Error", success ? "Expense deleted." : "Failed to delete expense.", "OK");
-                    LoadExpenses();
-                    //LoadOnlineData();
+                    ApplyTodayFilter();
                 }
-                else
+                else if (thisWeekRadioButton.IsChecked)
                 {
-                    //var success = await _databaseService.DeleteExpenseAsync(selectedExpense.ExpenseId) > 0;
-                    //LoadOfflineData();
-                    //await DisplayAlert(success ? "Success" : "Error", success ? "Expense deleted offline." : "Failed to delete expense offline.", "OK");
+                    ApplyWeekFilter();
+                }
+                else if (thisMonthRadioButton.IsChecked)
+                {
+                    ApplyMonthFilter();
+                }
+                else if (thisYearRadioButton.IsChecked)
+                {
+                    ApplyYearFilter();
                 }
             }
-             ((ListView)sender).SelectedItem = null;
         }
 
-        private void BindExpenseToForm()
+        private void ApplyTodayFilter()
         {
-            descriptionEntry.Text = _currentExpense.Description;
-            amountEntry.Text = _currentExpense.Amount > 0 ? _currentExpense.Amount.ToString() : string.Empty;
-            expenseDatePicker.Date = _currentExpense.ExpenseDate != default ? _currentExpense.ExpenseDate : DateTime.Now;
-            categoryPicker.SelectedItem = (categoryPicker.ItemsSource as List<ExpenseCategory>)?
-                .FirstOrDefault(c => c.Id == _currentExpense.ExpenseCategoryId);
+            DateTime today = DateTime.Today;
+
+            var todayExpenses = _allExpenses
+                .Where(expense => expense.ExpenseDate.Date == today)
+                .OrderByDescending(expense => expense.ExpenseDate)
+                .ToList();
+
+            UpdateExpenseList(todayExpenses);
         }
-        private void ClearForm()
+
+        private void ApplyWeekFilter()
         {
-            _currentExpense = new Expense();
-            descriptionEntry.Text = string.Empty;
-            amountEntry.Text = string.Empty;
-            expenseDatePicker.Date = DateTime.Now;
-            categoryPicker.SelectedItem = null;
+            DateTime today = DateTime.Today;
+            DateTime startOfWeek = today.AddDays(-(int)today.DayOfWeek); // Start of the current week (Sunday)
+
+            var weekExpenses = _allExpenses
+                .Where(expense => expense.ExpenseDate.Date >= startOfWeek)
+                .OrderByDescending(expense => expense.ExpenseDate)
+                .ToList();
+
+            UpdateExpenseList(weekExpenses);
         }
+
+        private void ApplyMonthFilter()
+        {
+            DateTime today = DateTime.Today;
+            DateTime startOfMonth = new DateTime(today.Year, today.Month, 1); // First day of the current month
+
+            var monthExpenses = _allExpenses
+                .Where(expense => expense.ExpenseDate.Date >= startOfMonth)
+                .OrderByDescending(expense => expense.ExpenseDate)
+                .ToList();
+
+            UpdateExpenseList(monthExpenses);
+        }
+
+        private void ApplyYearFilter()
+        {
+            int currentYear = DateTime.Today.Year;
+
+            var yearExpenses = _allExpenses
+                .Where(expense => expense.ExpenseDate.Year == currentYear)
+                .OrderByDescending(expense => expense.ExpenseDate)
+                .ToList();
+
+            UpdateExpenseList(yearExpenses);
+        }
+
+        // Helper function to update the ListView and UI
+        private void UpdateExpenseList(List<Expense> filteredExpenses)
+        {
+            _expenses.Clear(); // Clears the current list
+            foreach (var expense in filteredExpenses)
+                _expenses.Add(expense); // Automatically updates the UI
+
+            ExpenseListView.ItemsSource = _expenses;
+            UpdateExpenseCount();
+        }
+
+
     }
 }
-

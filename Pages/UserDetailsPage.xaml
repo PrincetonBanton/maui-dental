@@ -1,85 +1,72 @@
-<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8"?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="DentalApp.Pages.UserDetailsPage"
-             BackgroundColor="MintCream">
+             BackgroundColor="White">
     <ScrollView>
         <VerticalStackLayout Padding="20" Spacing="10">
-
-            <!-- Login Information -->
             <Frame Padding="10" Margin="5" BackgroundColor="White" CornerRadius="10" BorderColor="LightGray" HasShadow="False">
                 <VerticalStackLayout Spacing="5">
-                    <Label Text="Login Information" FontSize="16" FontAttributes="Bold" TextColor="Black"/>
-
+                    <Label Text="Login Information" FontSize="16" FontAttributes="Bold"/>
                     <HorizontalStackLayout Spacing="10">
-                        <Label Text="Username" WidthRequest="120" TextColor="Black" VerticalOptions="Center"/>
-                        <Entry x:Name="UsernameEntry" Placeholder="Username" TextColor="Black" WidthRequest="200" VerticalOptions="Center"/>
+                        <Label Text="Username" WidthRequest="120" VerticalOptions="Center"/>
+                        <Entry x:Name="UsernameEntry" Placeholder="Username" VerticalOptions="Center"/>
                     </HorizontalStackLayout>
-
                     <HorizontalStackLayout Spacing="10">
-                        <Label x:Name="PasswordLabel" Text="Password" WidthRequest="120" TextColor="Black" VerticalOptions="Center"/>
-                        <Entry x:Name="PasswordEntry" Placeholder="Password" IsPassword="True" TextColor="Black" WidthRequest="200" VerticalOptions="Center"/>
+                        <Label x:Name="PasswordLabel" Text="Password" WidthRequest="120" VerticalOptions="Center"/>
+                        <Entry x:Name="PasswordEntry" Placeholder="Password" IsPassword="True" VerticalOptions="Center"/>
                     </HorizontalStackLayout>
-
                     <HorizontalStackLayout Spacing="10">
-                        <Label x:Name="ConfirmPasswordLabel" Text="Confirm Password" WidthRequest="120" TextColor="Black" VerticalOptions="Center"/>
-                        <Entry x:Name="ConfirmPasswordEntry" Placeholder="Confirm Password" IsPassword="True" TextColor="Black" WidthRequest="200" VerticalOptions="Center"/>
+                        <Label x:Name="ConfirmPasswordLabel" Text="Confirm Password" WidthRequest="120" VerticalOptions="Center"/>
+                        <Entry x:Name="ConfirmPasswordEntry" Placeholder="Confirm Password" IsPassword="True" VerticalOptions="Center"/>
                     </HorizontalStackLayout>
-
                     <HorizontalStackLayout Spacing="10">
-                        <Label x:Name="RoleLabel" Text="Role" WidthRequest="120" TextColor="Black" VerticalOptions="Center"/>
-                        <Picker x:Name="RolePicker" ItemDisplayBinding="{Binding Description}" TextColor="Black"/>
+                        <Label x:Name="RoleLabel" Text="Role" WidthRequest="120" VerticalOptions="Center"/>
+                        <Picker x:Name="RolePicker" ItemDisplayBinding="{Binding Description}"/>
                     </HorizontalStackLayout>
                 </VerticalStackLayout>
             </Frame>
-
-            <!-- User Information -->
             <Frame Padding="10" Margin="5" BackgroundColor="White" CornerRadius="10" BorderColor="LightGray" HasShadow="False">
                 <VerticalStackLayout Spacing="5">
-                    <Label Text="User Information" FontSize="16" FontAttributes="Bold" TextColor="Black"/>
-
+                    <Label Text="User Information" FontSize="16" FontAttributes="Bold"/>
                     <HorizontalStackLayout Spacing="10">
-                        <Label Text="First Name" WidthRequest="120" TextColor="Black" VerticalOptions="Center"/>
-                        <Entry x:Name="FirstNameEntry" Placeholder="First Name" TextColor="Black" WidthRequest="200" VerticalOptions="Center"/>
+                        <Label Text="First Name" WidthRequest="120" VerticalOptions="Center"/>
+                        <Entry x:Name="FirstNameEntry" Placeholder="First Name" VerticalOptions="Center"/>
                     </HorizontalStackLayout>
-
                     <HorizontalStackLayout Spacing="10">
-                        <Label Text="Last Name" WidthRequest="120" TextColor="Black" VerticalOptions="Center"/>
-                        <Entry x:Name="LastNameEntry" Placeholder="Last Name" TextColor="Black" WidthRequest="200" VerticalOptions="Center"/>
+                        <Label Text="Last Name" WidthRequest="120" VerticalOptions="Center"/>
+                        <Entry x:Name="LastNameEntry" Placeholder="Last Name" VerticalOptions="Center"/>
                     </HorizontalStackLayout>
-
                     <HorizontalStackLayout Spacing="10">
-                        <Label Text="Middle Name" WidthRequest="120" TextColor="Black" VerticalOptions="Center"/>
-                        <Entry x:Name="MiddleNameEntry" Placeholder="Middle Name" TextColor="Black" WidthRequest="200" VerticalOptions="Center"/>
+                        <Label Text="Middle Name" WidthRequest="120" VerticalOptions="Center"/>
+                        <Entry x:Name="MiddleNameEntry" Placeholder="Middle Name" VerticalOptions="Center"/>
                     </HorizontalStackLayout>
-
                     <HorizontalStackLayout Spacing="10">
-                        <Label Text="Address" WidthRequest="120" TextColor="Black" VerticalOptions="Center"/>
-                        <Entry x:Name="AddressEntry" Placeholder="e.g., 18-7 Street Place, City" TextColor="Black" WidthRequest="200" VerticalOptions="Center"/>
+                        <Label Text="Address" WidthRequest="120" VerticalOptions="Center"/>
+                        <Entry x:Name="AddressEntry" Placeholder="e.g., 18-7 Street Place, City" VerticalOptions="Center"/>
                     </HorizontalStackLayout>
-
                     <HorizontalStackLayout Spacing="10">
-                        <Label Text="Birth Date" WidthRequest="120" TextColor="Black" VerticalOptions="Center"/>
-                        <DatePicker x:Name="BirthDatePicker" TextColor="Black" WidthRequest="200" VerticalOptions="Center"/>
+                        <Label Text="Birth Date" WidthRequest="120" VerticalOptions="Center"/>
+                        <DatePicker x:Name="BirthDatePicker" WidthRequest="200" VerticalOptions="Center"/>
                     </HorizontalStackLayout>
-
                     <HorizontalStackLayout Spacing="10">
-                        <Label Text="Email Address" WidthRequest="120" TextColor="Black" VerticalOptions="Center"/>
-                        <Entry x:Name="EmailEntry" Placeholder="e.g., patient@example.com" Keyboard="Email" TextColor="Black" WidthRequest="200" VerticalOptions="Center"/>
+                        <Label Text="Email Address" WidthRequest="120" VerticalOptions="Center"/>
+                        <Entry x:Name="EmailEntry" Placeholder="e.g., patient@example.com" Keyboard="Email" VerticalOptions="Center"/>
                     </HorizontalStackLayout>
-
                     <HorizontalStackLayout Spacing="10">
-                        <Label Text="Mobile Number" WidthRequest="120" TextColor="Black" VerticalOptions="Center"/>
-                        <Entry x:Name="MobileEntry" Placeholder="e.g., 0913456789" Keyboard="Telephone" TextColor="Black" WidthRequest="200" VerticalOptions="Center"/>
+                        <Label Text="Mobile Number" WidthRequest="120" VerticalOptions="Center"/>
+                        <Entry x:Name="MobileEntry" Placeholder="e.g., 0913456789" Keyboard="Telephone" VerticalOptions="Center"/>
                     </HorizontalStackLayout>
-
                     <HorizontalStackLayout Spacing="10">
-                        <Label Text="Note" WidthRequest="120" TextColor="Black" VerticalOptions="Start"/>
-                        <Editor x:Name="NoteEditor" Placeholder="Additional notes..." AutoSize="TextChanges" TextColor="Black" WidthRequest="200" HeightRequest="50"/>
-                    </HorizontalStackLayout> 
+                        <Label Text="Note" WidthRequest="120" VerticalOptions="Start"/>
+                        <Editor x:Name="NoteEditor" Placeholder="Additional notes..." AutoSize="TextChanges" WidthRequest="200" HeightRequest="50"/>
+                    </HorizontalStackLayout>
+                    <HorizontalStackLayout Spacing="10">
+                        <Label Text="Patient No." WidthRequest="120" VerticalOptions="Start"/>
+                        <Entry x:Name="PatientNoEntry" Placeholder="Patient No" VerticalOptions="Center"/>
+                    </HorizontalStackLayout>
                 </VerticalStackLayout>
             </Frame>
-
             <Button Text="Save" x:Name="SaveButton" Clicked="SaveButton_Clicked"/>
         </VerticalStackLayout>
     </ScrollView>

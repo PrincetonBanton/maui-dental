@@ -1,52 +1,50 @@
-<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8"?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="DentalApp.Pages.ProductDetailsPage"
-             BackgroundColor="MintCream"
-             Title="Product Details">
+             Title="Product Details"
+             BackgroundColor="White">
     <ScrollView>
         <VerticalStackLayout Padding="20" Spacing="10">
             <Frame Padding="10" Margin="5" BackgroundColor="White" CornerRadius="10" BorderColor="LightGray" HasShadow="False">
                 <VerticalStackLayout Spacing="5">
-                    <Label Text="Product Details" FontAttributes="Bold" FontSize="16" TextColor="Black"/>
+                    <Label Text="Product Details" FontAttributes="Bold" FontSize="16"/>
                     <HorizontalStackLayout Spacing="10">
-                        <Label Text="Product Name" WidthRequest="120" TextColor="Black" VerticalOptions="Center"/>
-                        <Entry x:Name="NameEntry" Placeholder="Product Name" TextColor="Black" WidthRequest="200" VerticalOptions="Center"/>
+                        <Label Text="Product Name" WidthRequest="120" VerticalOptions="Center"/>
+                        <Entry x:Name="NameEntry" Placeholder="Product Name" WidthRequest="200" VerticalOptions="Center"/>
                     </HorizontalStackLayout>
                     <HorizontalStackLayout Spacing="10">
-                        <Label Text="Product Code" WidthRequest="120" TextColor="Black" VerticalOptions="Center"/>
-                        <Entry x:Name="ProductCodeEntry" Placeholder="Product Code" TextColor="Black" WidthRequest="200" VerticalOptions="Center"/>
+                        <Label Text="Product Code" WidthRequest="120" VerticalOptions="Center"/>
+                        <Entry x:Name="ProductCodeEntry" Placeholder="Product Code" WidthRequest="200" VerticalOptions="Center"/>
                     </HorizontalStackLayout>
                     <HorizontalStackLayout Spacing="10">
-                        <Label Text="Description" WidthRequest="120" TextColor="Black" VerticalOptions="Start"/>
-                        <Editor x:Name="DescriptionEditor" Placeholder="Description" AutoSize="TextChanges" TextColor="Black" WidthRequest="200" HeightRequest="100"/>
+                        <Label Text="Description" WidthRequest="120" VerticalOptions="Start"/>
+                        <Editor x:Name="DescriptionEditor" Placeholder="Description" AutoSize="TextChanges" WidthRequest="200" HeightRequest="100"/>
                     </HorizontalStackLayout>
                     <HorizontalStackLayout Spacing="10">
-                        <Label Text="Product Type" WidthRequest="120" TextColor="Black" VerticalOptions="Center"/>
-                        <Picker x:Name="ProductTypePicker" Title="Product Type" TextColor="Black" WidthRequest="200" VerticalOptions="Center"/>
+                        <Label Text="Product Type" WidthRequest="120" VerticalOptions="Center"/>
+                        <Picker x:Name="ProductTypePicker" Title="Product Type" WidthRequest="200" VerticalOptions="Center"/>
                     </HorizontalStackLayout>
-
                 </VerticalStackLayout>
             </Frame>
-
             <Frame Padding="10" Margin="5" BackgroundColor="White" CornerRadius="10" BorderColor="LightGray" HasShadow="False">
                 <VerticalStackLayout Spacing="10">
-                    <Label Text="Pricing" FontAttributes="Bold" FontSize="16" TextColor="Black"/>
+                    <Label Text="Pricing" FontAttributes="Bold" FontSize="16"/>
                     <HorizontalStackLayout Spacing="10">
-                        <Label Text="Amount" WidthRequest="120" TextColor="Black" VerticalOptions="Center"/>
-                        <Entry x:Name="AmountEntry" Placeholder="0.00" Keyboard="Numeric" TextColor="Black" WidthRequest="200" VerticalOptions="Center" TextChanged="OnNumericEntryChanged"/>
+                        <Label Text="Amount" WidthRequest="120" VerticalOptions="Center"/>
+                        <Entry x:Name="AmountEntry" Placeholder="0.00" Keyboard="Numeric" WidthRequest="200" VerticalOptions="Center" TextChanged="OnNumericEntryChanged"/>
                     </HorizontalStackLayout>
                     <HorizontalStackLayout Spacing="10">
-                        <Label Text="Min Price" WidthRequest="120" TextColor="Black" VerticalOptions="Center"/>
-                        <Entry x:Name="MinPriceEntry" Placeholder="0.00" Keyboard="Numeric" TextColor="Black" WidthRequest="200" VerticalOptions="Center" TextChanged="OnNumericEntryChanged"/>
+                        <Label Text="Min Price" WidthRequest="120" VerticalOptions="Center"/>
+                        <Entry x:Name="MinPriceEntry" Placeholder="0.00" Keyboard="Numeric" WidthRequest="200" VerticalOptions="Center" TextChanged="OnNumericEntryChanged"/>
                     </HorizontalStackLayout>
                     <HorizontalStackLayout Spacing="10">
-                        <Label Text="Max Price" WidthRequest="120" TextColor="Black" VerticalOptions="Center"/>
-                        <Entry x:Name="MaxPriceEntry" Placeholder="0.00" Keyboard="Numeric" TextColor="Black" WidthRequest="200" VerticalOptions="Center" TextChanged="OnNumericEntryChanged" />
+                        <Label Text="Max Price" WidthRequest="120" VerticalOptions="Center"/>
+                        <Entry x:Name="MaxPriceEntry" Placeholder="0.00" Keyboard="Numeric" WidthRequest="200" VerticalOptions="Center" TextChanged="OnNumericEntryChanged"/>
                     </HorizontalStackLayout>
                 </VerticalStackLayout>
             </Frame>
-            <Button Text="Save" x:Name="SaveButton" Clicked="SaveButton_Clicked" />
+            <Button Text="Save" x:Name="SaveButton" Clicked="SaveButton_Clicked"/>
         </VerticalStackLayout>
     </ScrollView>
 </ContentPage>

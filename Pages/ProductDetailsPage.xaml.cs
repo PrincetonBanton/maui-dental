@@ -1,7 +1,7 @@
+using System.Text.RegularExpressions;
 using DentalApp.Models;
 using DentalApp.Services;
 using DentalApp.Models.Enum;
-using System.Text.RegularExpressions;
 
 namespace DentalApp.Pages;
 
@@ -13,8 +13,8 @@ public partial class ProductDetailsPage : ContentPage
     public ProductDetailsPage(ProductVM product = null)
     {
         InitializeComponent();
-        _product = product;
-        if (_product != null) BindProductDetails();
+        _product = product ?? new ProductVM();
+        BindProductDetails();
         ProductTypePicker.ItemsSource = Enum.GetValues<ProductType>().ToList();
     }
 
@@ -38,10 +38,11 @@ public partial class ProductDetailsPage : ContentPage
         _product.ProductCode = ProductCodeEntry.Text;
         _product.Description = DescriptionEditor.Text;
         _product.ProductType = (ProductType)ProductTypePicker.SelectedItem;
-        _product.Amount = ParseDouble(AmountEntry.Text);
-        _product.MinPrice = ParseDouble(MinPriceEntry.Text);
-        _product.MaxPrice = ParseDouble(MaxPriceEntry.Text);
-        double ParseDouble(string text) => double.TryParse(text, out var value) ? value : 0.00;
+        _product.Amount = ParseDecimal(AmountEntry.Text);
+        _product.MinPrice = ParseDecimal(MinPriceEntry.Text);
+        _product.MaxPrice = ParseDecimal(MaxPriceEntry.Text);
+
+        decimal ParseDecimal(string text) => decimal.TryParse(text, out var value) ? value : 0.00m;
 
         var (isValid, errorMessage) = ProductValidationService.ValidateProduct(_product);
         if (!isValid)
@@ -69,13 +70,12 @@ public partial class ProductDetailsPage : ContentPage
         {
             string newText = entry.Text;
             if (!IsValidNumericInput(newText)) entry.Text = e.OldTextValue;
-
         }
     }
+
     private bool IsValidNumericInput(string text)
     {
-        if (string.IsNullOrEmpty(text)) return true; 
+        if (string.IsNullOrEmpty(text)) return true;
         return Regex.IsMatch(text, @"^\d*\.?\d*$");
     }
-
 }

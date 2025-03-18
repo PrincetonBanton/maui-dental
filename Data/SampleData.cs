@@ -37,10 +37,21 @@ namespace DentalApp.Data
             return new List<ProductVM>
             {
                 new ProductVM { Id = 1, Name = "Offline Name", Description = "Offline", Amount = 150, ProductType = ProductType.Goods },
-                new ProductVM { Id = 2, Name = "Teeth Cleaning", Description = "Professional dental cleaning", Amount = 500, ProductType = ProductType.Goods },  
-                new ProductVM { Id = 3, Name = "Tooth Extraction", Description = "Painless tooth extraction", Amount = 500,  ProductType = ProductType.Goods },
-                new ProductVM { Id = 4, Name = "Toothpaste", Description = "Fluoride toothpaste", Amount = 100, ProductType = ProductType.Goods },
+                new ProductVM { Id = 2, Name = "Sample Cleaning", Description = "Professional dental cleaning", Amount = 500, ProductType = ProductType.Goods },  
+                new ProductVM { Id = 3, Name = "Offline Extraction", Description = "Painless tooth extraction", Amount = 500,  ProductType = ProductType.Goods },
+                new ProductVM { Id = 4, Name = "SampleName", Description = "Fluoride toothpaste", Amount = 100, ProductType = ProductType.Goods },
             };
+        }
+        public static List<Expense> GetSampleExpenses()
+        {
+            return new List<Expense>
+            { 
+                new Expense { Id = 1, Description = "Office Supplies", Amount = 150.00m, ExpenseDate = DateTime.Now, CreatedOn = DateTime.Now, EnteredBy = 1, ExpenseCategoryId = 2 },
+                new Expense { Id = 2, Description = "Dental Cleaning Equipment", Amount = 500.00m, ExpenseDate = DateTime.Now.AddDays(-2), CreatedOn = DateTime.Now, EnteredBy = 2, ExpenseCategoryId = 3 },
+                new Expense { Id = 3, Description = "Tooth Extraction Tools", Amount = 750.00m, ExpenseDate = DateTime.Now.AddDays(-5), CreatedOn = DateTime.Now, EnteredBy = 3, ExpenseCategoryId = 3 },
+                new Expense { Id = 4, Description = "Fluoride Treatment Supplies", Amount = 120.00m, ExpenseDate = DateTime.Now.AddDays(-7), CreatedOn = DateTime.Now, EnteredBy = 4, ExpenseCategoryId = 1 },
+            };
+
         }
 
     }

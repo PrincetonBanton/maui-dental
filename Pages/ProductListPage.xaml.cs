@@ -19,12 +19,6 @@ namespace DentalApp.Pages
             LoadProductList();
         }
 
-        protected override void OnAppearing()
-        {
-            base.OnAppearing();
-            LoadProductList();
-        }
-
         private async void LoadProductList()
         {
             await ApiConnectivityService.Instance.CheckApiConnectivityAsync();
@@ -64,11 +58,6 @@ namespace DentalApp.Pages
             }
         }
 
-        private void OnCategoryChanged(object sender, EventArgs e) => FilterProducts();
-        private void OnSearchImageTapped(object sender, TappedEventArgs e) => SearchBar.Focus();
-        private void OnDropListImageTapped(object sender, TappedEventArgs e) => CategoryPicker.Focus();
-
-
         private async void OnCreateProductButtonClicked(object sender, EventArgs e)
         {
             await Navigation.PushAsync(new ProductDetailsPage());
@@ -92,5 +81,9 @@ namespace DentalApp.Pages
                 await DisplayAlert(success ? "Success" : "Error", success ? "Product deleted." : "Failed to delete product.", "OK");
             }
         }
+
+        private void OnCategoryChanged(object sender, EventArgs e) => FilterProducts();
+        private void OnSearchImageTapped(object sender, TappedEventArgs e) => SearchBar.Focus();
+        private void OnDropListImageTapped(object sender, TappedEventArgs e) => CategoryPicker.Focus();
     }
 }

@@ -7,7 +7,7 @@ namespace DentalApp
         public AppShell()
         {
             InitializeComponent();
-            this.Loaded += OnShellLoaded; // Triggered when Shell is fully loaded
+            //this.Loaded += OnShellLoaded; // Triggered when Shell is fully loaded
         }
 
 

@@ -1,7 +1,7 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="DentalApp.Pages.ProductListPage"
-             BackgroundColor="MintCream">
+             BackgroundColor="White">
     <ScrollView>
         <VerticalStackLayout Padding="15" Spacing="10">
             <Button Text="Create Product" CornerRadius="0" Clicked="OnCreateProductButtonClicked" />
@@ -12,7 +12,7 @@
                         <TapGestureRecognizer Tapped="OnSearchImageTapped"/>
                     </Image.GestureRecognizers>
                 </Image>
-                <Entry x:Name="SearchBar" Placeholder="Search by name" TextColor="Black" Margin="10,0,0,0" Grid.Column="1"/>
+                <Entry x:Name="SearchBar" Placeholder="Search by name" WidthRequest="300" Margin="10,0,0,0" Grid.Column="1"/>
             </Grid>
 
             <Grid ColumnDefinitions="Auto, *">
@@ -36,37 +36,37 @@
             <VerticalStackLayout >
                 <Grid BackgroundColor="DarkGray" Padding="5">
                     <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="5*" />
                         <ColumnDefinition Width="3*" />
-                        <ColumnDefinition Width="1.5*" />
-                        <ColumnDefinition Width="1.5*" />
-                        <ColumnDefinition Width="1.5*" />
-                        <ColumnDefinition Width="1.5*" />
+                        <!--<ColumnDefinition Width="1.5*" />-->
+                        <!--<ColumnDefinition Width="1.5*" />-->
+                        <ColumnDefinition Width="2*" />
                     </Grid.ColumnDefinitions>
 
                     <Label Text="Name" FontAttributes="Bold" TextColor="White" Grid.Column="0"/>
                     <Label Text="Price" FontAttributes="Bold" TextColor="White" Grid.Column="1"/>
-                    <Label Text="Min" FontAttributes="Bold" TextColor="White" Grid.Column="2"/>
-                    <Label Text="Max" FontAttributes="Bold" TextColor="White" Grid.Column="3"/>
+                    <!--<Label Text="Min" FontAttributes="Bold" TextColor="White" Grid.Column="2"/>-->
+                    <!--<Label Text="Max" FontAttributes="Bold" TextColor="White" Grid.Column="3"/>-->
                 </Grid>
 
-                <ListView x:Name="ProductListView" HasUnevenRows="True" BackgroundColor="White">
+                <ListView x:Name="ProductListView" HasUnevenRows="True">
                     <ListView.ItemTemplate>
                         <DataTemplate>
                             <ViewCell>
                                 <Grid Padding="5">
                                     <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="5*"/>
                                         <ColumnDefinition Width="3*" />
-                                        <ColumnDefinition Width="1.5*" />
-                                        <ColumnDefinition Width="1.5*" />
-                                        <ColumnDefinition Width="1.5*" />
-                                        <ColumnDefinition Width="1.5*" />
+                                        <!--<ColumnDefinition Width="1.5*" />-->
+                                        <!--<ColumnDefinition Width="1.5*" />-->
+                                        <ColumnDefinition Width="2*" />
                                     </Grid.ColumnDefinitions>
 
-                                    <Label Text="{Binding Name}" FontSize="13" VerticalOptions="Center" TextColor="Black" Grid.Column="0"/>
-                                    <Label Text="{Binding Amount, StringFormat='{0:N2}'}" FontSize="13" VerticalOptions="Center" HorizontalTextAlignment="End" TextColor="Black" Grid.Column="1"/>
-                                    <Label Text="{Binding MinPrice, StringFormat='{0:N2}'}" FontSize="13" VerticalOptions="Center" HorizontalTextAlignment="End" TextColor="Black" Grid.Column="2"/>
-                                    <Label Text="{Binding MaxPrice, StringFormat='{0:N2}'}" FontSize="13" VerticalOptions="Center" HorizontalTextAlignment="End" TextColor="Black" Grid.Column="3"/>
-                                    <HorizontalStackLayout Margin="10,0,10,0" Grid.Column="4">
+                                    <Label Text="{Binding Name}" FontSize="13" VerticalOptions="Center" Grid.Column="0"/>
+                                    <Label Text="{Binding Amount, StringFormat='{0:N2}'}" FontSize="13" VerticalOptions="Center" HorizontalTextAlignment="Start" Grid.Column="1"/>
+                                    <!--<Label Text="{Binding MinPrice, StringFormat='{0:N2}'}" FontSize="13" VerticalOptions="Center" HorizontalTextAlignment="End" Grid.Column="2"/>-->
+                                    <!--<Label Text="{Binding MaxPrice, StringFormat='{0:N2}'}" FontSize="13" VerticalOptions="Center" HorizontalTextAlignment="End" Grid.Column="3"/>-->
+                                    <HorizontalStackLayout Margin="0,0,20,0" Spacing="10" Grid.Column="2">
                                         <ImageButton Source="edit.png" VerticalOptions="Center" HeightRequest="25" WidthRequest="25" Clicked="OnEditButtonClicked" />
                                         <ImageButton Source="delete.png" VerticalOptions="Center" HeightRequest="25" WidthRequest="25" Clicked="OnDeleteButtonClicked" />
                                     </HorizontalStackLayout>
