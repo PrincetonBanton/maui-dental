@@ -18,11 +18,11 @@
                 </HorizontalStackLayout>
                 <HorizontalStackLayout>
                     <Label Text="Date:" WidthRequest="120" VerticalTextAlignment="Center"/>
-                    <DatePicker x:Name="expenseDatePicker" TextColor="Black" Format="MM/dd/yyyy" HorizontalOptions="FillAndExpand"/>
+                    <DatePicker x:Name="expenseDatePicker" TextColor="Black" Format="MM/dd/yyyy" WidthRequest="300"/>
                 </HorizontalStackLayout>
                 <HorizontalStackLayout>
                     <Label Text="Category:" WidthRequest="120" VerticalTextAlignment="Center"/>
-                    <Picker x:Name="ExpenseCategoryPicker" ItemDisplayBinding="{Binding Name}" HorizontalOptions="FillAndExpand"/>
+                    <Picker x:Name="ExpenseCategoryPicker" ItemDisplayBinding="{Binding Name}" WidthRequest="300"/>
                 </HorizontalStackLayout>
                 <Button Text="Save" x:Name="SaveButton" Clicked="SaveButton_Clicked" />
             </StackLayout>
@@ -40,8 +40,8 @@
                 <Grid ColumnDefinitions=".8*,2.8*,2.3*,2.3*,2*">
                     <CheckBox x:Name="customDateCheckBox" IsChecked="False" VerticalOptions="Center" Grid.Column="0" HorizontalOptions="Start" CheckedChanged="OnCustomDateCheckedChanged"/>
                     <Label Text="Custom Filter" VerticalOptions="Center" Grid.Column="1"/>
-                    <DatePicker x:Name="expenseStartPicker" Date="{Binding CurrentDate}" Format="MM/dd/yyyy" Grid.Column="2" HorizontalOptions="Start"/>
-                    <DatePicker x:Name="expenseEndPicker" Date="{Binding CurrentDate}" Format="MM/dd/yyyy" Grid.Column="3" HorizontalOptions="Start"/>
+                    <DatePicker x:Name="expenseStartPicker" Date="{Binding CurrentDate}" Format="MM/dd/yyyy" Grid.Column="2" HorizontalOptions="Start" DateSelected="OnStartDateChanged"/>
+                    <DatePicker x:Name="expenseEndPicker" Date="{Binding CurrentDate}" Format="MM/dd/yyyy" Grid.Column="3" HorizontalOptions="Start" DateSelected="OnEndDateChanged"/>
                 </Grid>
             </StackLayout>
         </Frame>

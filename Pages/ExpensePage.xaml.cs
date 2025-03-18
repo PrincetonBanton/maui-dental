@@ -66,10 +66,6 @@ namespace DentalApp.Pages
             }
             ExpenseListView.ItemsSource = _allExpenses; 
         }
-        private void UpdateExpenseCount()
-        {
-            ExpenseCountLabel.Text = $"{_expenses.Count}";
-        }
         private async void OnAddExpenseClicked(object sender, EventArgs e)
         {
             //await Navigation.PushAsync(new ExpenseDetailsPage());
@@ -157,82 +153,10 @@ namespace DentalApp.Pages
             thisWeekRadioButton.IsEnabled = !isChecked;
             thisMonthRadioButton.IsEnabled = !isChecked;
             thisYearRadioButton.IsEnabled = !isChecked;
+
+            if (isChecked) ApplyCustomDateFilter();
+  
         }
-
-        private void OnQuickFilterRadioButtonChanged(object sender, CheckedChangedEventArgs e)
-        {
-            if (quickFilterCheckBox.IsChecked)
-            {
-                if (todayRadioButton.IsChecked)
-                {
-                    ApplyTodayFilter();
-                }
-                else if (thisWeekRadioButton.IsChecked)
-                {
-                    ApplyWeekFilter();
-                }
-                else if (thisMonthRadioButton.IsChecked)
-                {
-                    ApplyMonthFilter();
-                }
-                else if (thisYearRadioButton.IsChecked)
-                {
-                    ApplyYearFilter();
-                }
-            }
-        }
-
-        private void ApplyTodayFilter()
-        {
-            DateTime today = DateTime.Today;
-
-            var todayExpenses = _allExpenses
-                .Where(expense => expense.ExpenseDate.Date == today)
-                .OrderByDescending(expense => expense.ExpenseDate)
-                .ToList();
-
-            UpdateExpenseList(todayExpenses);
-        }
-
-        private void ApplyWeekFilter()
-        {
-            DateTime today = DateTime.Today;
-            DateTime startOfWeek = today.AddDays(-(int)today.DayOfWeek); // Start of the current week (Sunday)
-
-            var weekExpenses = _allExpenses
-                .Where(expense => expense.ExpenseDate.Date >= startOfWeek)
-                .OrderByDescending(expense => expense.ExpenseDate)
-                .ToList();
-
-            UpdateExpenseList(weekExpenses);
-        }
-
-        private void ApplyMonthFilter()
-        {
-            DateTime today = DateTime.Today;
-            DateTime startOfMonth = new DateTime(today.Year, today.Month, 1); // First day of the current month
-
-            var monthExpenses = _allExpenses
-                .Where(expense => expense.ExpenseDate.Date >= startOfMonth)
-                .OrderByDescending(expense => expense.ExpenseDate)
-                .ToList();
-
-            UpdateExpenseList(monthExpenses);
-        }
-
-        private void ApplyYearFilter()
-        {
-            int currentYear = DateTime.Today.Year;
-
-            var yearExpenses = _allExpenses
-                .Where(expense => expense.ExpenseDate.Year == currentYear)
-                .OrderByDescending(expense => expense.ExpenseDate)
-                .ToList();
-
-            UpdateExpenseList(yearExpenses);
-        }
-
-        // Helper function to update the ListView and UI
         private void UpdateExpenseList(List<Expense> filteredExpenses)
         {
             _expenses.Clear(); // Clears the current list
@@ -242,7 +166,49 @@ namespace DentalApp.Pages
             ExpenseListView.ItemsSource = _expenses;
             UpdateExpenseCount();
         }
+        private void UpdateExpenseCount() => ExpenseCountLabel.Text = $"{_expenses.Count}";
 
+        private void ApplyFilter(Func<Expense, bool> filterCriteria)
+        {
+            var filteredExpenses = _allExpenses
+                .Where(filterCriteria)
+                .OrderByDescending(expense => expense.ExpenseDate)
+                .ToList();
+
+            UpdateExpenseList(filteredExpenses);
+        }
+
+        private void OnQuickFilterRadioButtonChanged(object sender, CheckedChangedEventArgs e)
+        {
+            if (!quickFilterCheckBox.IsChecked) return;
+
+            DateTime today = DateTime.Today;
+            DateTime startOfWeek = today.AddDays(-(int)today.DayOfWeek);
+            DateTime startOfMonth = new DateTime(today.Year, today.Month, 1);
+            int currentYear = today.Year;
+
+            if (todayRadioButton.IsChecked)
+                ApplyFilter(expense => expense.ExpenseDate.Date == today);
+            else if (thisWeekRadioButton.IsChecked)
+                ApplyFilter(expense => expense.ExpenseDate.Date >= startOfWeek);
+            else if (thisMonthRadioButton.IsChecked)
+                ApplyFilter(expense => expense.ExpenseDate.Date >= startOfMonth);
+            else if (thisYearRadioButton.IsChecked)
+                ApplyFilter(expense => expense.ExpenseDate.Year == currentYear);
+        }
+
+        private void OnStartDateChanged(object sender, DateChangedEventArgs e) => ApplyCustomDateFilter();
+        private void OnEndDateChanged(object sender, DateChangedEventArgs e) => ApplyCustomDateFilter();
+
+        private void ApplyCustomDateFilter()
+        {
+            if (!customDateCheckBox.IsChecked) return;
+
+            DateTime startDate = expenseStartPicker.Date;
+            DateTime endDate = expenseEndPicker.Date;
+
+            ApplyFilter(expense => expense.ExpenseDate.Date >= startDate && expense.ExpenseDate.Date <= endDate);
+        }
 
     }
 }
