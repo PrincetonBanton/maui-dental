@@ -3,32 +3,32 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="DentalApp.Pages.ExpensePage"
              BackgroundColor="White">
-    
-    <StackLayout Margin="10" Padding="0">
-        <Button Text="Add Expense" CornerRadius="0" Clicked="OnAddExpenseClicked" />
-        <Frame x:Name="inputFrame" IsVisible="False" Padding="10" BorderColor="Black" BackgroundColor="white" CornerRadius="0">
+    <ScrollView>
+        <StackLayout Margin="10" Padding="0">
+        <Button Text="Add Expense" Clicked="OnShowExpenseFrame" />
+        <Frame x:Name="inputFrame" IsVisible="False" Padding="10">
             <StackLayout>
                 <HorizontalStackLayout>
-                    <Label Text="Description:" WidthRequest="120" VerticalTextAlignment="Center"/>
-                    <Entry x:Name="descriptionEntry" Placeholder="Enter description" HorizontalOptions="FillAndExpand"/>
+                    <Label Text="Description:" WidthRequest="100"/>
+                    <Entry x:Name="descriptionEntry" Placeholder="Enter description"/>
                 </HorizontalStackLayout>
                 <HorizontalStackLayout>
-                    <Label Text="Amount:" WidthRequest="120" VerticalTextAlignment="Center"/>
-                    <Entry x:Name="amountEntry" Placeholder="Enter amount" Keyboard="Numeric" HorizontalOptions="FillAndExpand"/>
+                    <Label Text="Amount:" WidthRequest="100"/>
+                    <Entry x:Name="amountEntry" Placeholder="Enter amount" Keyboard="Numeric" />
                 </HorizontalStackLayout>
                 <HorizontalStackLayout>
-                    <Label Text="Date:" WidthRequest="120" VerticalTextAlignment="Center"/>
-                    <DatePicker x:Name="expenseDatePicker" TextColor="Black" Format="MM/dd/yyyy" WidthRequest="300"/>
+                    <Label Text="Date:" WidthRequest="100"/>
+                    <DatePicker x:Name="ExpenseDatePicker" WidthRequest="300"/>
                 </HorizontalStackLayout>
                 <HorizontalStackLayout>
-                    <Label Text="Category:" WidthRequest="120" VerticalTextAlignment="Center"/>
+                    <Label Text="Category:" WidthRequest="100"/>
                     <Picker x:Name="ExpenseCategoryPicker" ItemDisplayBinding="{Binding Name}" WidthRequest="300"/>
                 </HorizontalStackLayout>
-                <Button Text="Save" x:Name="SaveButton" Clicked="SaveButton_Clicked" />
+                <Button Text="Save Expense" Clicked="SaveButton_Clicked" />
             </StackLayout>
         </Frame>
-        
-        <Frame BackgroundColor="White" BorderColor="LightGray" CornerRadius="0" Padding="10">
+
+        <Frame BackgroundColor="White" BorderColor="LightGray" Padding="10">
             <StackLayout>
                 <Grid ColumnDefinitions=".8*,2.3*,2.3*,2.3*,2.3*">
                     <CheckBox x:Name="quickFilterCheckBox" IsChecked="False" HorizontalOptions="Start" Grid.Column="0" CheckedChanged="OnQuickFilterCheckedChanged"/>
@@ -39,51 +39,40 @@
                 </Grid>
                 <Grid ColumnDefinitions=".8*,2.8*,2.3*,2.3*,2*">
                     <CheckBox x:Name="customDateCheckBox" IsChecked="False" VerticalOptions="Center" Grid.Column="0" HorizontalOptions="Start" CheckedChanged="OnCustomDateCheckedChanged"/>
-                    <Label Text="Custom Filter" VerticalOptions="Center" Grid.Column="1"/>
+                    <Label Text="Custom Filter" Grid.Column="1"/>
                     <DatePicker x:Name="expenseStartPicker" Date="{Binding CurrentDate}" Format="MM/dd/yyyy" Grid.Column="2" HorizontalOptions="Start" DateSelected="OnStartDateChanged"/>
                     <DatePicker x:Name="expenseEndPicker" Date="{Binding CurrentDate}" Format="MM/dd/yyyy" Grid.Column="3" HorizontalOptions="Start" DateSelected="OnEndDateChanged"/>
                 </Grid>
             </StackLayout>
         </Frame>
-
-        <VerticalStackLayout >
-            <Grid BackgroundColor="DarkGray" Padding="5">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="2*" />
-                    <ColumnDefinition Width="4*" />
-                    <ColumnDefinition Width="2*" />
-                    <ColumnDefinition Width="2*" />
-                </Grid.ColumnDefinitions>
+            
+        <Grid BackgroundColor="DarkGray" Padding="5">
+            <Grid ColumnDefinitions="2*,4*,2*,2*">
                 <Label Text="Date" FontAttributes="Bold" TextColor="White" Grid.Column="0"/>
                 <Label Text="Description" FontAttributes="Bold" TextColor="White" Grid.Column="1"/>
                 <Label Text="Amount" FontAttributes="Bold" TextColor="White" Grid.Column="2"/>
                 <Label Text="Entered By" FontAttributes="Bold" TextColor="White" Grid.Column="3"/>
             </Grid>
-            <ListView x:Name="ExpenseListView" HasUnevenRows="True" BackgroundColor="White">
-                <ListView.ItemTemplate>
-                    <DataTemplate>
-                        <ViewCell>
-                            <Grid Padding="5">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="2*" />
-                                    <ColumnDefinition Width="4*" />
-                                    <ColumnDefinition Width="2*" />
-                                    <ColumnDefinition Width="2*" />
-                                </Grid.ColumnDefinitions>
-
-                                <Label Text="{Binding ExpenseDate, StringFormat='{0:MM/dd/yyyy}'}" FontSize="12" Grid.Column="0"/>
-                                <Label Text="{Binding Description}" FontSize="12"  Grid.Column="1"/>
-                                <Label Text="{Binding Amount, StringFormat='{0:N2}'}" FontSize="12" Grid.Column="2"/>
-                                <Label Text="{Binding EnteredByName}" FontSize="12" Grid.Column="3"/>
-                            </Grid>
-                        </ViewCell>
-                    </DataTemplate>
-                </ListView.ItemTemplate>
-            </ListView>
-            <HorizontalStackLayout>
-                <Label Text="Number of Expenses:" TextColor="Black" Margin="0,20,0,0"/>
-                <Label x:Name="ExpenseCountLabel" Text="0" TextColor="Black"  Margin="10,20,0,0" />
-            </HorizontalStackLayout>
-        </VerticalStackLayout>
-    </StackLayout>
+        </Grid>
+        <ListView x:Name="ExpenseListView" HasUnevenRows="True" BackgroundColor="White">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <ViewCell>
+                        <Grid Padding="5" ColumnDefinitions="2*,4*,2*,2*">
+                            <Label Text="{Binding ExpenseDate, StringFormat='{0:MM/dd/yyyy}'}" FontSize="12" Grid.Column="0"/>
+                            <Label Text="{Binding Description}" FontSize="12" Grid.Column="1"/>
+                            <Label Text="{Binding Amount, StringFormat='{0:N2}'}" FontSize="12" Grid.Column="2"/>
+                            <Label Text="{Binding EnteredByName}" FontSize="12" Grid.Column="3"/>
+                        </Grid>
+                    </ViewCell>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+        <HorizontalStackLayout>
+            <Label Text="Number of Expenses:" TextColor="Black" Margin="0,20,0,0"/>
+            <Label x:Name="ExpenseCountLabel" Text="0" TextColor="Black"  Margin="10,20,0,0" />
+        </HorizontalStackLayout>
+        
+        </StackLayout>
+    </ScrollView>
 </ContentPage>

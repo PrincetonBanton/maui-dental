@@ -82,6 +82,16 @@ namespace DentalApp.Pages
             }
         }
 
+        private void OnSearchBarTextChanged(object sender, TextChangedEventArgs e)
+        {
+            var searchText = e.NewTextValue.ToLower();
+
+            ProductListView.ItemsSource = string.IsNullOrWhiteSpace(searchText)
+                ? _allProducts
+                : _allProducts.Where(p => p.Name.ToLower().Contains(searchText)).ToList();
+
+        }
+
         private void OnCategoryChanged(object sender, EventArgs e) => FilterProducts();
         private void OnSearchImageTapped(object sender, TappedEventArgs e) => SearchBar.Focus();
         private void OnDropListImageTapped(object sender, TappedEventArgs e) => CategoryPicker.Focus();

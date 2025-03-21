@@ -15,10 +15,9 @@ namespace DentalApp.Pages
         public ExpensePage(Expense expense = null)
         {
             InitializeComponent();
-            //categoryPicker.ItemsSource = Pages.GetValues<ExpenseCategory>().ToList();
             ExpenseListView.ItemsSource = _expenses;
             _expense = expense ?? new Expense();
-            BindExpenseDetails();
+            //BindExpenseDetails();
             LoadExpenseCategories();
             LoadExpenseList();
         }
@@ -38,8 +37,8 @@ namespace DentalApp.Pages
         private void BindExpenseDetails()
         {
             descriptionEntry.Text = _expense.Description;
-            amountEntry.Text = _expense.Amount > 0 ? _expense.Amount.ToString() : string.Empty;
-            expenseDatePicker.Date = _expense.ExpenseDate != default ? _expense.ExpenseDate : DateTime.Now;
+            amountEntry.Text = _expense.Amount.ToString("N2");
+            ExpenseDatePicker.Date = _expense.ExpenseDate;
             ExpenseCategoryPicker.SelectedItem = (ExpenseCategoryPicker.ItemsSource as List<ExpenseCategory>)?
                 .FirstOrDefault(c => c.Id == _expense.ExpenseCategoryId);
         }
@@ -66,9 +65,8 @@ namespace DentalApp.Pages
             }
             ExpenseListView.ItemsSource = _allExpenses; 
         }
-        private async void OnAddExpenseClicked(object sender, EventArgs e)
+        private async void OnShowExpenseFrame(object sender, EventArgs e)
         {
-            //await Navigation.PushAsync(new ExpenseDetailsPage());
             if (!inputFrame.IsVisible)
             {
                 inputFrame.TranslationY = -500; // Start above the screen
@@ -89,7 +87,7 @@ namespace DentalApp.Pages
 
             _expense.Description = descriptionEntry.Text;
             _expense.Amount = decimal.Parse(amountEntry.Text);
-            _expense.ExpenseDate = expenseDatePicker.Date;
+            _expense.ExpenseDate = ExpenseDatePicker.Date;
             _expense.EnteredBy = 1;  //Temporary
             _expense.ExpenseCategoryId = ((ExpenseCategory)ExpenseCategoryPicker.SelectedItem).Id;
 
@@ -99,7 +97,7 @@ namespace DentalApp.Pages
             //if (!isValid)
             //{
             //    await DisplayAlert("Validation Error", errorMessage, "OK");
-            //    return;
+            //    return;   
             //}
 
             await DisplayAlert("Confirm Expense",
@@ -119,6 +117,7 @@ namespace DentalApp.Pages
                 : "Failed to save product. Please try again.";
 
             await DisplayAlert(success ? "Success" : "Error", message, "OK");
+            inputFrame.IsVisible = false;
         }
 
         private async void OnEditButtonClicked(object sender, EventArgs e)

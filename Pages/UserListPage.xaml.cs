@@ -17,7 +17,6 @@ namespace DentalApp.Pages
         protected override async void OnAppearing()
         {
             base.OnAppearing();
-            LoadUserList();
             if (App.Instance.PatientNavigated == "patientdetails") App.Instance.PatientNavigated = "patientlist";
             if (App.Instance.DentistNavigated == "dentistdetails") App.Instance.DentistNavigated = "dentistlist";
         }
@@ -29,7 +28,7 @@ namespace DentalApp.Pages
             {
                 _allUsers = isApiAvailable
                     ? await _apiService.GetUsersAsync() ?? new List<UserVM>()
-                    : SampleData.GetSampleUsers(); //Replace w offline data sync
+                    : SampleData.GetSampleUsers();
                 UserListView.ItemsSource = _allUsers;
             }
             catch (Exception ex)

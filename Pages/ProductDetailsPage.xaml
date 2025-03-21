@@ -6,40 +6,40 @@
              BackgroundColor="White">
     <ScrollView>
         <VerticalStackLayout Padding="10" Spacing="10">
-            <Frame Padding="10" Margin="5" BackgroundColor="White" CornerRadius="10" BorderColor="LightGray" HasShadow="False">
+            <Frame Padding="10" Margin="0">
                 <VerticalStackLayout Spacing="5">
                     <Label Text="Product Details" FontAttributes="Bold" FontSize="16"/>
                     <HorizontalStackLayout Spacing="10">
-                        <Label Text="Product Name" WidthRequest="120" VerticalOptions="Center"/>
+                        <Label Text="Product Name" WidthRequest="100"/>
                         <Entry x:Name="NameEntry" Placeholder="Product Name" WidthRequest="200" VerticalOptions="Center"/>
                     </HorizontalStackLayout>
                     <HorizontalStackLayout Spacing="10">
-                        <Label Text="Product Code" WidthRequest="120" VerticalOptions="Center"/>
+                        <Label Text="Product Code" WidthRequest="100"/>
                         <Entry x:Name="ProductCodeEntry" Placeholder="Product Code" WidthRequest="200" VerticalOptions="Center"/>
                     </HorizontalStackLayout>
                     <HorizontalStackLayout Spacing="10">
-                        <Label Text="Description" WidthRequest="120" VerticalOptions="Start"/>
+                        <Label Text="Description" WidthRequest="100"/>
                         <Editor x:Name="DescriptionEditor" Placeholder="Description" AutoSize="TextChanges" WidthRequest="200" HeightRequest="100"/>
                     </HorizontalStackLayout>
                     <HorizontalStackLayout Spacing="10">
-                        <Label Text="Product Type" WidthRequest="120" VerticalOptions="Center"/>
-                        <Picker x:Name="ProductTypePicker" Title="Product Type" WidthRequest="200" VerticalOptions="Center"/>
+                        <Label Text="Product Type" WidthRequest="100"/>
+                        <Picker x:Name="ProductTypePicker" Title="Product Type" WidthRequest="200"/>
                     </HorizontalStackLayout>
                 </VerticalStackLayout>
             </Frame>
-            <Frame Padding="10" Margin="5" BackgroundColor="White" CornerRadius="10" BorderColor="LightGray" HasShadow="False">
+            <Frame Padding="10" Margin="0">
                 <VerticalStackLayout Spacing="10">
                     <Label Text="Pricing" FontAttributes="Bold" FontSize="16"/>
                     <HorizontalStackLayout Spacing="10">
-                        <Label Text="Amount" WidthRequest="120" VerticalOptions="Center"/>
+                        <Label Text="Amount" WidthRequest="100"/>
                         <Entry x:Name="AmountEntry" Placeholder="0.00" Keyboard="Numeric" WidthRequest="200" VerticalOptions="Center" TextChanged="OnNumericEntryChanged"/>
                     </HorizontalStackLayout>
                     <HorizontalStackLayout Spacing="10">
-                        <Label Text="Min Price" WidthRequest="120" VerticalOptions="Center"/>
+                        <Label Text="Min Price" WidthRequest="100"/>
                         <Entry x:Name="MinPriceEntry" Placeholder="0.00" Keyboard="Numeric" WidthRequest="200" VerticalOptions="Center" TextChanged="OnNumericEntryChanged"/>
                     </HorizontalStackLayout>
                     <HorizontalStackLayout Spacing="10">
-                        <Label Text="Max Price" WidthRequest="120" VerticalOptions="Center"/>
+                        <Label Text="Max Price" WidthRequest="100"/>
                         <Entry x:Name="MaxPriceEntry" Placeholder="0.00" Keyboard="Numeric" WidthRequest="200" VerticalOptions="Center" TextChanged="OnNumericEntryChanged"/>
                     </HorizontalStackLayout>
                 </VerticalStackLayout>

@@ -17,7 +17,6 @@ namespace DentalApp.Pages
         protected override void OnAppearing()
         {
             base.OnAppearing();
-            LoadDentistList();
             if (App.Instance.UserNavigated == "userdetails") App.Instance.UserNavigated = "userlist";
             if (App.Instance.PatientNavigated == "patientdetails") App.Instance.PatientNavigated = "patientlist";
         }

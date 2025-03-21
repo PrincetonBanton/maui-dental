@@ -5,7 +5,7 @@
              BackgroundColor="White">
         <ScrollView>
             <VerticalStackLayout Padding="15" Spacing="10">
-                <Button Text="Create Dentist" CornerRadius="0" Clicked="OnCreateDentistButtonClicked"/>
+                <Button Text="Create Dentist" Clicked="OnCreateDentistButtonClicked"/>
 
                 <Grid ColumnDefinitions="Auto, *">
                     <Image Source="search.png" VerticalOptions="Center" HeightRequest="15" Grid.Column="0">
@@ -13,32 +13,33 @@
                             <TapGestureRecognizer Tapped="OnSearchImageTapped"/>
                         </Image.GestureRecognizers>
                     </Image>
-                <Entry x:Name="SearchBar" Placeholder="Search by name" TextChanged="OnSearchBarTextChanged" WidthRequest="300" Margin="10,0,0,0" Grid.Column="1"/>
+                    <Entry x:Name="SearchBar" Placeholder="Search by name" TextChanged="OnSearchBarTextChanged" WidthRequest="300" Margin="10,0,0,0" Grid.Column="1"/>
                 </Grid>
 
                 <ListView x:Name="DentistListView" HasUnevenRows="True" ItemTapped="DentistListView_ItemTapped">
                     <ListView.ItemTemplate>
                         <DataTemplate>
                             <ViewCell>
-                            <Frame Padding="10" Margin="0,5,0,5" BackgroundColor="Transparent" BorderColor="Transparent">
+                            <Frame Padding="10" Margin="0,5,0,5" BorderColor="Transparent">
                                 <VerticalStackLayout Spacing="5">
                                     <Grid ColumnDefinitions="8*, 1*, 1*">
-                                        <Label Text="{Binding FullName}" FontSize="23" FontAttributes="Bold" VerticalOptions="Center" Grid.Column="0"/>
-                                            <ImageButton Source="edit.png" VerticalOptions="Center" HeightRequest="30" Grid.Column="1" Margin="0,0,5,0" Clicked="OnEditButtonClicked"/>
-                                            <ImageButton Source="delete.png" VerticalOptions="Center" HeightRequest="30" Grid.Column="2" Margin="0,0,5,0" Clicked="OnDeleteButtonClicked"/>
-                                        </Grid>
-                                        <Label Text="Date of Birth" FontSize="15" FontAttributes="Bold" />
-                                        <Label Text="{Binding BirthDate, StringFormat='{0:MM/dd/yyyy}'}" FontSize="13" TextColor="Gray" />
-                                        <Label Text="Contact No." FontSize="15" FontAttributes="Bold" />
-                                        <Label Text="{Binding Mobile}" FontSize="13" TextColor="Gray" />
-                                        <Label Text="E-mail" FontSize="15" FontAttributes="Bold" />
-                                        <Label Text="{Binding Email}" FontSize="13" TextColor="Gray" />
+                                        <Label Text="{Binding FullName}" FontSize="23" FontAttributes="Bold" Grid.Column="0"/>
+                                        <ImageButton Source="edit.png" HeightRequest="30" Grid.Column="1" Margin="0,0,5,0" Clicked="OnEditButtonClicked"/>
+                                         <ImageButton Source="delete.png" HeightRequest="30" Grid.Column="2" Margin="0,0,5,0" Clicked="OnDeleteButtonClicked"/>
+                                    </Grid>
+                                    <Label Text="Date of Birth" FontSize="15" FontAttributes="Bold" />
+                                    <Label Text="{Binding BirthDate, StringFormat='{0:MM/dd/yyyy}'}" FontSize="13" TextColor="Gray" />
+                                    <Label Text="Contact No." FontSize="15" FontAttributes="Bold" />
+                                    <Label Text="{Binding Mobile}" FontSize="13" TextColor="Gray" />
+                                    <Label Text="E-mail" FontSize="15" FontAttributes="Bold" />
+                                    <Label Text="{Binding Email}" FontSize="13" TextColor="Gray" />
                                     </VerticalStackLayout>
                                 </Frame>
                             </ViewCell>
                         </DataTemplate>
                     </ListView.ItemTemplate>
                 </ListView>
+                
             </VerticalStackLayout>
         </ScrollView>
 </ContentPage>

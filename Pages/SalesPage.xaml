@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="DentalApp.Pages.SalesPage"
+             BackgroundColor="White">
+
+    <ScrollView>
+        <StackLayout Margin="10" Padding="0">
+
+            <Frame Padding="10">
+                <StackLayout>
+                    <Label Text="Treatment" FontSize="16" FontAttributes="Bold"/>
+                    <HorizontalStackLayout>
+                        <Label Text="Date" WidthRequest="100"/>
+                        <DatePicker x:Name="TreatmentDatePicker" WidthRequest="300"/>
+                    </HorizontalStackLayout>
+                    <HorizontalStackLayout>
+                        <Label Text="Patient" WidthRequest="100"/>
+                        <Picker x:Name="PatientPicker" ItemDisplayBinding="{Binding FullName}" WidthRequest="300"/>
+                    </HorizontalStackLayout>
+                    <HorizontalStackLayout>
+                        <Label Text="Dentist" WidthRequest="100"/>
+                        <Picker x:Name="DentistPicker" ItemDisplayBinding="{Binding FullName}"  WidthRequest="300"/>
+                    </HorizontalStackLayout>
+                </StackLayout>
+            </Frame>
+
+            <Button Text="Add Products/Services" Clicked="OnShowServiceFrame" />
+            <Frame x:Name="inputFrame" IsVisible="False" Padding="10" BackgroundColor="white" CornerRadius="0">
+                <StackLayout>
+                    <SearchBar x:Name="ProductSearchBar" WidthRequest="350" Placeholder="Search" SearchCommand="{Binding SearchCommand}" TextChanged="OnProductSearchTextChanged"/>
+                    <ListView x:Name="ProductListView" ItemsSource="{Binding FilteredProducts}" SelectionMode="Single" HeightRequest="150" IsVisible="False" ItemTapped="OnProductSelected">
+                        <ListView.ItemTemplate>
+                            <DataTemplate>
+                                <ViewCell>
+                                    <HorizontalStackLayout Padding="10">
+                                        <Label Text="{Binding Name}" WidthRequest="200"/>
+                                        <Label Text="{Binding Amount, StringFormat='{0:N2}'}" HorizontalOptions="End"/>
+                                    </HorizontalStackLayout>
+                                </ViewCell>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
+                    <Grid ColumnDefinitions="6*,3*,1*">
+                        <Entry x:Name="NameEntry" WidthRequest="150" HorizontalTextAlignment="Center" Grid.Column="0"/>
+                        <Entry x:Name="AmountEntry" WidthRequest="100" Keyboard="Numeric" HorizontalTextAlignment="Center" Grid.Column="1"/>
+                        <ImageButton Source="add.png" HeightRequest="25" WidthRequest="25"  Clicked="OnAddServiceClicked"  Grid.Column="2"/>
+                    </Grid>
+                </StackLayout>
+            </Frame>
+            <Grid ColumnDefinitions="3*,2*" BackgroundColor="LightGray" Padding="5" >
+                <Label Text="Description" Grid.Column="0"/>
+                <Label Text="Amount" Grid.Column="1"/>
+            </Grid>
+            <ListView x:Name="AvailProductListView" ItemsSource="{Binding SelectedProducts}" HasUnevenRows="True">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <ViewCell>
+                            <Grid ColumnDefinitions="3*,2*" Padding="5">
+                                <Label Text="{Binding Name}" FontSize="14" Grid.Column="0"/>
+                                <Label Text="{Binding Amount, StringFormat='₱{0:N2}'}" FontSize="14" Grid.Column="2" HorizontalTextAlignment="End"/>
+                            </Grid>
+                        </ViewCell>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+
+        </StackLayout>
+    </ScrollView>
+</ContentPage>
