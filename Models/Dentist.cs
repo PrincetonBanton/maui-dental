@@ -1,9 +1,7 @@
 ﻿using DentalApp.Models.Enum;
 using DentalApp.Models;
-using System.Collections.Generic;
-using SQLite;
 
-namespace mazion.dental.api.Models
+namespace DentalApp.Models
 {
     public partial class Dentist : BaseModel
     {

@@ -44,7 +44,7 @@
                             <Grid Padding="5" ColumnDefinitions="5*,3*,2*">
                                 <Label Text="{Binding Name}" FontSize="13" Grid.Column="0"/>
                                 <Label Text="{Binding Amount, StringFormat='{0:N2}'}" FontSize="13" HorizontalTextAlignment="Start" Grid.Column="1"/>
-                                <HorizontalStackLayout Margin="0,0,20,0" Grid.Column="2">
+                                <HorizontalStackLayout Margin="0,0,20,0" Spacing="10" Grid.Column="2">
                                     <ImageButton Source="edit.png" HeightRequest="25" WidthRequest="25" Clicked="OnEditButtonClicked"/>
                                     <ImageButton Source="delete.png" HeightRequest="25" WidthRequest="25" Clicked="OnDeleteButtonClicked"/>
                                 </HorizontalStackLayout>

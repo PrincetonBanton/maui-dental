@@ -7,9 +7,11 @@ namespace DentalApp.Pages;
 
 public partial class SalesPage : ContentPage
 {
+    private SaleVM _sale;
     private readonly ApiService _apiService = new();
     private List<ProductVM> _allProducts = new();
-    public ObservableCollection<object> SelectedProducts { get; set; } = new();
+    public ObservableCollection<SaleItemVM> SelectedProducts { get; set; } = new();
+
     public ObservableCollection<ProductVM> FilteredProducts { get; set; } = new();
 
     public SalesPage()
@@ -98,23 +100,62 @@ public partial class SalesPage : ContentPage
             return;
         }
 
-        // Find the selected product from the original list
         var selectedProduct = _allProducts.FirstOrDefault(p => p.Name == NameEntry.Text);
         if (selectedProduct == null) return;
 
-        // Add the selected product as an object with required properties
-        SelectedProducts.Add(new
+        SelectedProducts.Add(new SaleItemVM
         {
             ProductId = selectedProduct.Id,
             Name = selectedProduct.Name,
-            Amount = decimal.Parse(AmountEntry.Text),
-            Quantity = 1 // Default quantity
+            Quantity = 1, // Default quantity
+            Amount = decimal.Parse(AmountEntry.Text)
         });
 
-        // Clear input fields
         ProductSearchBar.Text = "";
         NameEntry.Text = "";
         AmountEntry.Text = "";
         inputFrame.IsVisible = false;
     }
+
+    private async void OnSaveSaleClicked(object sender, EventArgs e)
+    {
+        if (PatientPicker.SelectedItem == null || DentistPicker.SelectedItem == null || !SelectedProducts.Any())
+        {
+            await DisplayAlert("Validation Error", "Please fill in all required fields.", "OK");
+            return;
+        }
+
+        _sale ??= new SaleVM();
+
+        _sale.SaleNo = $"SALE-{DateTime.UtcNow:yyyyMMdd-HHmmss}";
+        _sale.SaleDate = DateTime.UtcNow;
+        _sale.PatientId = ((PatientVM)PatientPicker.SelectedItem).Id;
+        _sale.DentistId = ((DentistVM)DentistPicker.SelectedItem).Id;
+        _sale.Note = "Patient purchased treatments";
+        //_sale.SubTotal = SelectedProducts.Sum(p => p.Amount);  
+        //_sale.Total = _sale.SubTotal * 1.06m; // Assuming 6% tax
+        _sale.Items = SelectedProducts.Select(p => new SaleItemVM
+        {
+            ProductId = p.ProductId,
+            Quantity = p.Quantity,
+            Amount = p.Amount
+        }).ToList();
+        _sale.Payment = new PaymentVM
+        {
+            PaymentAmount = _sale.Total,
+            PaymentType = 1, // Example: 1 for Cash
+            AmountTendered = _sale.Total, 
+            EnteredBy = 5, // Example user ID
+            PaymentDate = DateTime.UtcNow
+        };
+
+        bool success = await _apiService.CreateSaleAsync(_sale);
+        string message = success ? "Sale created successfully!" : "Failed to create sale. Please try again.";
+
+        await DisplayAlert(success ? "Success" : "Error", message, "OK");
+
+        if (success) await Navigation.PopAsync();
+    }
+
+
 }

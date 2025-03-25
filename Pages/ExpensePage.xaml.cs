@@ -91,21 +91,13 @@ namespace DentalApp.Pages
             _expense.EnteredBy = 1;  //Temporary
             _expense.ExpenseCategoryId = ((ExpenseCategory)ExpenseCategoryPicker.SelectedItem).Id;
 
-            //decimal ParseDecimal(string text) => decimal.TryParse(text, out var value) ? value : 0.00m;
+            var (isValid, errorMessage) = ExpenseValidationService.ValidateExpense(_expense);
+            if (!isValid)
+            {
+                await DisplayAlert("Validation Error", errorMessage, "OK");
+                return;
+            }
 
-            //var (isValid, errorMessage) = ProductValidationService.ValidateProduct(_product);
-            //if (!isValid)
-            //{
-            //    await DisplayAlert("Validation Error", errorMessage, "OK");
-            //    return;   
-            //}
-
-            await DisplayAlert("Confirm Expense",
-                $"Description: {_expense.Description}\n" +
-                $"Amount: {_expense.Amount:C}\n" +
-                $"Date: {_expense.ExpenseDate:MM/dd/yyyy}\n" +
-                $"Category ID: {_expense.ExpenseCategoryId}",
-                "OK");
             var success = _expense.Id == 0
                           ? await _apiService.CreateExpenseAsync(_expense)
                           : await _apiService.UpdateExpenseAsync(_expense);

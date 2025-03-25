@@ -1,4 +1,5 @@
 ﻿using DentalApp.Models;
+//using DentalApp.Models.ViewModels;
 using System.Net.Http.Json;
 
 namespace DentalApp.Services
@@ -110,5 +111,9 @@ namespace DentalApp.Services
         public Task<bool> CreateExpenseAsync(Expense expense) => PostAsync("Expense/Create", expense);
         public Task<bool> UpdateExpenseAsync(Expense expense) => PutAsync($"Expense/Update/{expense.Id}", expense);
         public Task<bool> DeleteExpenseAsync(int id)=> DeleteAsync($"Expense/Delete/{id}");
+        
+        //Sale Methods
+        public Task<bool> CreateSaleAsync(SaleVM sale) => PostAsync("Sale/Create", sale);
+
     }
 }

@@ -1,43 +1,36 @@
-﻿using SQLite;
+﻿using DentalApp.Models;
+using DentalApp.Models.Enum;
+using System.Globalization;
 
 namespace DentalApp.Models
 {
-    public class User : BaseModel
+    public partial class User : BaseModel
     {
         public int RoleId { get; set; }
-        public string? Username { get; set; } 
-        public string? Password { get; set; }  
-        public byte[]? PasswordHash { get; set; }  
-        public byte[]? PasswordSalt { get; set; } 
-        public string? FirstName { get; set; } 
-        public string? MiddleName { get; set; } 
-        public string? LastName { get; set; } 
+        public string? Username { get; set; }
+        public byte[]? PasswordHash { get; set; }
+        public byte[]? PasswordSalt { get; set; }
+        public UserStatus Status { get; set; }
+        public string FirstName { get; set; } = string.Empty;
+        public string? MiddleName { get; set; }
+        public string LastName { get; set; } = String.Empty;
 
-        public DateTime BirthDate { get; set; } 
-        public string? Mobile { get; set; }  
-        public string? Email { get; set; } 
-        public string? Address { get; set; }  
-        public string? Note { get; set; }  
-        public string? Occupation { get; set; }  
+        public string FullName
+        {
+            get { return CultureInfo.CurrentCulture.TextInfo.ToTitleCase(LastName + ", " + FirstName); }
+        }
 
-        public DateTime? CreatedOn { get; set; } 
-        public DateTime? LastLogin { get; set; } 
+        public string? Mobile { get; set; }
+        public DateTime? BirthDate { get; set; }
+        public DateTime CreatedOn { get; set; } = DateTime.Now;
+        public string? Email { get; set; }
+        public string? Occupation { get; set; }
 
-        [Ignore]
-        public string RoleName { get; set; }
-
-        [Ignore]
-        public int Status { get; set; }
-
-        [Ignore]
-        public string FullName =>
-            string.IsNullOrWhiteSpace(MiddleName)
-                ? $"{FirstName} {LastName}"
-                : $"{FirstName} {MiddleName} {LastName}";
-        [Ignore]
-        public string Initials =>
-            (!string.IsNullOrEmpty(FirstName) && !string.IsNullOrEmpty(LastName))
-                ? $"{FirstName[0]}{LastName[0]}".ToUpper()
-                : "??";
+        public string? Address { get; set; }
+        public string? Note { get; set; }
+        public DateTime? LastLogin { get; set; }
+        public virtual Role? Role { get; set; }
+        public virtual ICollection<Dentist> Dentists { get; set; } = new HashSet<Dentist>();
+        public virtual ICollection<Patient> Patients { get; set; } = new HashSet<Patient>();
     }
 }

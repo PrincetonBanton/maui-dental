@@ -1,4 +1,5 @@
 ﻿using SQLite;
+using Microsoft.EntityFrameworkCore;
 
 namespace DentalApp.Models
 {
@@ -6,7 +7,7 @@ namespace DentalApp.Models
     {
         public string? Description { get; set; }
 
-        //[Precision(9, 2)]
+        [Precision(9, 2)]
         public decimal Amount { get; set; }
         public DateTime ExpenseDate { get; set; }
         public DateTime CreatedOn { get; set; } = DateTime.Now;

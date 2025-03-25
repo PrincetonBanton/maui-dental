@@ -48,7 +48,7 @@
                     </Grid>
                 </StackLayout>
             </Frame>
-            <Grid ColumnDefinitions="3*,2*" BackgroundColor="LightGray" Padding="5" >
+            <Grid ColumnDefinitions="5*,2*,2*" BackgroundColor="LightGray" Padding="5" >
                 <Label Text="Description" Grid.Column="0"/>
                 <Label Text="Amount" Grid.Column="1"/>
             </Grid>
@@ -56,14 +56,15 @@
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <ViewCell>
-                            <Grid ColumnDefinitions="3*,2*" Padding="5">
+                            <Grid ColumnDefinitions="5*,2*,2*" Padding="5">
                                 <Label Text="{Binding Name}" FontSize="14" Grid.Column="0"/>
-                                <Label Text="{Binding Amount, StringFormat='₱{0:N2}'}" FontSize="14" Grid.Column="2" HorizontalTextAlignment="End"/>
+                                <Label Text="{Binding Amount, StringFormat='₱{0:N2}'}" FontSize="14" Grid.Column="1" HorizontalTextAlignment="End"/>
                             </Grid>
                         </ViewCell>
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>
+            <Button Text="Save Sale" Clicked="OnSaveSaleClicked"/>
 
         </StackLayout>
     </ScrollView>
