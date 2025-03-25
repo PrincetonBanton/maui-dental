@@ -83,8 +83,14 @@ namespace DentalApp.Pages
         }
         private void OnSearchBarTextChanged(object sender, TextChangedEventArgs e)
         {
-            var searchText = e.NewTextValue.ToLower();
+            if (!ApiConnectivityService.Instance.IsApiAvailable)
+            {
+                DisplayAlert("Offline", "You are offline. Search is not available.", "OK");
+                SearchBar.Text = string.Empty;
+                return;
+            }
 
+            var searchText = e.NewTextValue.ToLower();
             UserListView.ItemsSource = string.IsNullOrWhiteSpace(searchText)
                 ? _allUsers
                 : _allUsers.Where(user => user.FullName.ToLower().Contains(searchText)).ToList();

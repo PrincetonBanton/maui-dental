@@ -75,6 +75,12 @@ namespace DentalApp.Pages
         }
         private void OnSearchBarTextChanged(object sender, TextChangedEventArgs e)
         {
+            if (!ApiConnectivityService.Instance.IsApiAvailable)
+            {
+                DisplayAlert("Offline", "You are offline. Search is not available.", "OK");
+                SearchBar.Text = string.Empty;
+                return;
+            }
             var searchText = e.NewTextValue.ToLower();
             PatientListView.ItemsSource = string.IsNullOrWhiteSpace(searchText)
                 ? _allPatients

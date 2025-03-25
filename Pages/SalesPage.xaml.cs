@@ -132,14 +132,14 @@ public partial class SalesPage : ContentPage
             Quantity = p.Quantity,
             Amount = p.Amount
         }).ToList();
-        _sale.Payment = new PaymentVM
-        {
-            PaymentAmount = _sale.Total,
-            PaymentType = 1, // Example: 1 for Cash
-            AmountTendered = _sale.Total, 
-            EnteredBy = 5, // Example user ID
-            PaymentDate = DateTime.UtcNow
-        };
+        //_sale.Payment = new PaymentVM
+        //{
+        //    PaymentAmount = _sale.Total,
+        //    PaymentType = 1, 
+        //    AmountTendered = _sale.Total, 
+        //    EnteredBy = 5, 
+        //    PaymentDate = DateTime.UtcNow
+        //};
 
         bool success = await _apiService.CreateSaleAsync(_sale);
         string message = success ? "Sale created successfully!" : "Failed to create sale. Please try again.";

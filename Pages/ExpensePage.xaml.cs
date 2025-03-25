@@ -59,8 +59,6 @@ namespace DentalApp.Pages
         private async void SaveButton_Clicked(object sender, EventArgs e)
         {
             _expense ??= new Expense();
-
-
             _expense.Description = DescriptionEntry.Text;
             _expense.Amount = ParseDecimal(AmountEntry.Text);
             _expense.ExpenseDate = ExpenseDatePicker.Date;
@@ -92,10 +90,30 @@ namespace DentalApp.Pages
 
         private async void OnEditButtonClicked(object sender, EventArgs e)
         {
-        }
+            if (sender is ImageButton button && button.BindingContext is Expense selectedExpense)
+            {
+                _expense = selectedExpense; // Set the selected expense
 
+                DescriptionEntry.Text = _expense.Description;
+                AmountEntry.Text = _expense.Amount.ToString("N2");
+                ExpenseDatePicker.Date = _expense.ExpenseDate;
+                ExpenseCategoryPicker.SelectedItem = (ExpenseCategoryPicker.ItemsSource as List<ExpenseCategory>)?
+                    .FirstOrDefault(c => c.Id == _expense.ExpenseCategoryId);
+
+                await FrameAnimationService.ToggleVisibility(inputFrame);
+            }
+        }
         private async void OnDeleteButtonClicked(object sender, EventArgs e)
         {
+            if (sender is ImageButton button && button.BindingContext is Expense selectedExpense)
+            {
+                bool confirmDelete = await DisplayAlert("Confirm", "Delete this expense?", "Yes", "No");
+                if (!confirmDelete) return;
+
+                var success = await _apiService.DeleteExpenseAsync(selectedExpense.Id);
+                LoadExpenseList();
+                await DisplayAlert(success ? "Success" : "Error", success ? "Expense deleted." : "Failed to delete expense.", "OK");
+            }
         }
 
         private void OnQuickFilterCheckedChanged(object sender, CheckedChangedEventArgs e)

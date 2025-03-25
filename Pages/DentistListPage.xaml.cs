@@ -37,13 +37,11 @@ namespace DentalApp.Pages
                 await DisplayAlert("Error", "Failed to load users. Please try again.", "OK");
             }
         }
-
         private async void OnCreateDentistButtonClicked(object sender, EventArgs e)
         {
             App.Instance.DentistNavigated = "dentistdetails";
             await Navigation.PushAsync(new DentistDetailsPage());
-        }
-        
+        }     
         private async void OnEditButtonClicked(object sender, EventArgs e)
         {
             if (sender is ImageButton button && button.BindingContext is DentistVM selectedDentist)
@@ -52,7 +50,6 @@ namespace DentalApp.Pages
                 await Navigation.PushAsync(new DentistDetailsPage(selectedDentist));
             }
         }
-
         private async void OnDeleteButtonClicked(object sender, EventArgs e)
         {
             if (sender is ImageButton button && button.BindingContext is DentistVM selectedDentist)
@@ -65,7 +62,6 @@ namespace DentalApp.Pages
                 await DisplayAlert(success ? "Success" : "Error", success ? "Dentist deleted." : "Failed to delete dentist.", "OK");
             }
         }
-
         private async void DentistListView_ItemTapped(object sender, ItemTappedEventArgs e)
         {
             if (e.Item is DentistVM selectedDentist)
@@ -75,9 +71,15 @@ namespace DentalApp.Pages
             }
             ((ListView)sender).SelectedItem = null;
         }
-
         private void OnSearchBarTextChanged(object sender, TextChangedEventArgs e)
         {
+            if (!ApiConnectivityService.Instance.IsApiAvailable)
+            {
+                DisplayAlert("Offline", "You are offline. Search is not available.", "OK");
+                SearchBar.Text = string.Empty;
+                return;
+            }
+
             var searchText = e.NewTextValue.ToLower();
             DentistListView.ItemsSource = string.IsNullOrWhiteSpace(searchText)
                 ? _allDentists
