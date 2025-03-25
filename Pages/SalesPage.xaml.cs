@@ -2,6 +2,7 @@ using DentalApp.Models;
 using DentalApp.Data;
 using DentalApp.Services;
 using System.Collections.ObjectModel;
+using DentalApp.Services.Validations;
 
 namespace DentalApp.Pages;
 
@@ -78,20 +79,6 @@ public partial class SalesPage : ContentPage
             ProductListView.IsVisible = false;
         }
     }
-    private async void OnShowServiceFrame(object sender, EventArgs e)
-    {
-        if (!inputFrame.IsVisible)
-        {
-            inputFrame.TranslationY = -500; // Start above the screen
-            inputFrame.IsVisible = true;
-            await inputFrame.TranslateTo(0, 0, 250, Easing.SinInOut); // Animate down
-        }
-        else
-        {
-            await inputFrame.TranslateTo(0, -500, 250, Easing.SinInOut); // Animate back up
-            inputFrame.IsVisible = false;
-        }
-    }
     private void OnAddServiceClicked(object sender, EventArgs e)
     {
         if (string.IsNullOrWhiteSpace(NameEntry.Text) || string.IsNullOrWhiteSpace(AmountEntry.Text))
@@ -119,9 +106,14 @@ public partial class SalesPage : ContentPage
 
     private async void OnSaveSaleClicked(object sender, EventArgs e)
     {
-        if (PatientPicker.SelectedItem == null || DentistPicker.SelectedItem == null || !SelectedProducts.Any())
+        var patient = PatientPicker.SelectedItem as PatientVM;
+        var dentist = DentistPicker.SelectedItem as DentistVM;
+        var selectedProducts = SelectedProducts.ToList(); // Convert ObservableCollection to List
+
+        var (isValid, errorMessage) = SalesValidationService.ValidateSale(patient?.Id, dentist?.Id, selectedProducts);
+        if (!isValid)
         {
-            await DisplayAlert("Validation Error", "Please fill in all required fields.", "OK");
+            await DisplayAlert("Validation Error", errorMessage, "OK");
             return;
         }
 
@@ -156,6 +148,5 @@ public partial class SalesPage : ContentPage
 
         if (success) await Navigation.PopAsync();
     }
-
-
+    private async void OnShowServiceFrame(object sender, EventArgs e) => await FrameAnimationService.ToggleVisibility(inputFrame);
 }

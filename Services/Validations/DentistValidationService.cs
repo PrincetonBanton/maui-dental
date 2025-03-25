@@ -1,7 +1,7 @@
 ﻿using DentalApp.Models;
 using System.Text.RegularExpressions;
 
-namespace DentalApp.Services
+namespace DentalApp.Services.Validations
 {
     public static class DentistValidationService
     {

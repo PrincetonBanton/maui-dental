@@ -1,6 +1,7 @@
 using DentalApp.Data;
 using DentalApp.Models;
 using DentalApp.Services;
+using DentalApp.Services.Validations;
 using System.Collections.ObjectModel;
 
 namespace DentalApp.Pages
@@ -21,23 +22,12 @@ namespace DentalApp.Pages
             LoadExpenseCategories();
             LoadExpenseList();
         }
-        private async void LoadExpenseCategories()
-        {
-            try
-            {
-                List<ExpenseCategory> categories = await _apiService.GetExpenseCategoryAsync(); // Fetch from API
-                ExpenseCategoryPicker.ItemsSource = categories;
-            }
-            catch (Exception ex)
-            {
-                await DisplayAlert("Error", "Failed to load categories. Please try again.", "OK");
-            }
-        }
+        private async void LoadExpenseCategories() =>ExpenseCategoryPicker.ItemsSource = await _apiService.GetExpenseCategoryAsync();
 
         private void BindExpenseDetails()
         {
-            descriptionEntry.Text = _expense.Description;
-            amountEntry.Text = _expense.Amount.ToString("N2");
+            DescriptionEntry.Text = _expense.Description;
+            AmountEntry.Text = _expense.Amount.ToString("N2");
             ExpenseDatePicker.Date = _expense.ExpenseDate;
             ExpenseCategoryPicker.SelectedItem = (ExpenseCategoryPicker.ItemsSource as List<ExpenseCategory>)?
                 .FirstOrDefault(c => c.Id == _expense.ExpenseCategoryId);
@@ -65,31 +55,19 @@ namespace DentalApp.Pages
             }
             ExpenseListView.ItemsSource = _allExpenses; 
         }
-        private async void OnShowExpenseFrame(object sender, EventArgs e)
-        {
-            if (!inputFrame.IsVisible)
-            {
-                inputFrame.TranslationY = -500; // Start above the screen
-                inputFrame.IsVisible = true;
-                await inputFrame.TranslateTo(0, 0, 250, Easing.SinInOut); // Animate down
-            }
-            else
-            {
-                await inputFrame.TranslateTo(0, -500, 250, Easing.SinInOut); // Animate back up
-                inputFrame.IsVisible = false;
-            }
-        }
 
         private async void SaveButton_Clicked(object sender, EventArgs e)
         {
             _expense ??= new Expense();
 
 
-            _expense.Description = descriptionEntry.Text;
-            _expense.Amount = decimal.Parse(amountEntry.Text);
+            _expense.Description = DescriptionEntry.Text;
+            _expense.Amount = ParseDecimal(AmountEntry.Text);
             _expense.ExpenseDate = ExpenseDatePicker.Date;
             _expense.EnteredBy = 1;  //Temporary
-            _expense.ExpenseCategoryId = ((ExpenseCategory)ExpenseCategoryPicker.SelectedItem).Id;
+            _expense.ExpenseCategoryId = ExpenseCategoryPicker.SelectedItem is ExpenseCategory selectedCategory ? selectedCategory.Id : 0;
+
+            decimal ParseDecimal(string text) => decimal.TryParse(text, out var value) ? value : 0.00m;
 
             var (isValid, errorMessage) = ExpenseValidationService.ValidateExpense(_expense);
             if (!isValid)
@@ -201,5 +179,7 @@ namespace DentalApp.Pages
             ApplyFilter(expense => expense.ExpenseDate.Date >= startDate && expense.ExpenseDate.Date <= endDate);
         }
 
+        private void OnNumericEntryChanged(object sender, TextChangedEventArgs e) => NumericValidationService.OnNumericEntryChanged(sender, e);
+        private async void OnShowExpenseFrame(object sender, EventArgs e) => await FrameAnimationService.ToggleVisibility(inputFrame);
     }
 }

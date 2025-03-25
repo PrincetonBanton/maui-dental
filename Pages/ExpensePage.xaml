@@ -10,11 +10,11 @@
             <StackLayout>
                 <HorizontalStackLayout>
                     <Label Text="Description:" WidthRequest="100"/>
-                    <Entry x:Name="descriptionEntry" Placeholder="Enter description"/>
+                    <Entry x:Name="DescriptionEntry" Placeholder="Description"/>
                 </HorizontalStackLayout>
                 <HorizontalStackLayout>
-                    <Label Text="Amount:" WidthRequest="100"/>
-                    <Entry x:Name="amountEntry" Placeholder="Enter amount" Keyboard="Numeric" />
+                    <Label Text="Amount:" WidthRequest="100" />
+                    <Entry x:Name="AmountEntry" Placeholder="0.00" Keyboard="Numeric" TextChanged="OnNumericEntryChanged" />
                 </HorizontalStackLayout>
                 <HorizontalStackLayout>
                     <Label Text="Date:" WidthRequest="100"/>

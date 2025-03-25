@@ -1,6 +1,6 @@
 ﻿using DentalApp.Models;
 
-namespace DentalApp.Services
+namespace DentalApp.Services.Validations
 {
     public static class ExpenseValidationService
     {

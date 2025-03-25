@@ -1,7 +1,8 @@
- using System.Text.RegularExpressions;
+using System.Text.RegularExpressions;
 using DentalApp.Models;
 using DentalApp.Services;
 using DentalApp.Models.Enum;
+using DentalApp.Services.Validations;
 
 namespace DentalApp.Pages;
 
@@ -66,16 +67,6 @@ public partial class ProductDetailsPage : ContentPage
 
     private void OnNumericEntryChanged(object sender, TextChangedEventArgs e)
     {
-        if (sender is Entry entry)
-        {
-            string newText = entry.Text;
-            if (!IsValidNumericInput(newText)) entry.Text = e.OldTextValue;
-        }
-    }
-
-    private bool IsValidNumericInput(string text)
-    {
-        if (string.IsNullOrEmpty(text)) return true;
-        return Regex.IsMatch(text, @"^\d*\.?\d*$");
+        NumericValidationService.OnNumericEntryChanged(sender, e);
     }
 }
