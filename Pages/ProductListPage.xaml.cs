@@ -1,8 +1,6 @@
-using DentalApp.Models.Enum;
-using DentalApp.Models;
-//using DentalApp.Models.ViewModels;
-using DentalApp.Services;
 using DentalApp.Data;
+using DentalApp.Models;
+using DentalApp.Services;
 using System.Collections.ObjectModel;
 
 namespace DentalApp.Pages
@@ -16,7 +14,6 @@ namespace DentalApp.Pages
         public ProductListPage()
         {
             InitializeComponent();
-            ProductListView.ItemsSource = _filteredProducts;
             LoadProductList();
         }
 
@@ -29,34 +26,13 @@ namespace DentalApp.Pages
                 _allProducts = isApiAvailable
                     ? await _apiService.GetProductsAsync() ?? new List<ProductVM>()
                     : SampleData.GetSampleProducts();               //Replace w offline data sync
-
-                // Display all products initially (unfiltered)
-                _filteredProducts.Clear();
-                foreach (var product in _allProducts)
-                {
-                    _filteredProducts.Add(product);
-                }
             }
             catch (Exception ex)
             {
                 await DisplayAlert("Error", "Failed to load products. Please try again.", "OK");
             }
-        }
+            ProductListView.ItemsSource = _allProducts;
 
-        private void FilterProducts()
-        {
-            if (CategoryPicker.SelectedItem is string selectedCategory)
-            {
-                _filteredProducts.Clear();
-                var filtered = selectedCategory == "All"
-                    ? _allProducts
-                    : _allProducts.Where(p => p.ProductType == (selectedCategory == "Goods" ? ProductType.Goods : ProductType.Services));
-
-                foreach (var product in filtered)
-                {
-                    _filteredProducts.Add(product);
-                }
-            }
         }
 
         private async void OnCreateProductButtonClicked(object sender, EventArgs e)
@@ -92,9 +68,6 @@ namespace DentalApp.Pages
                 : _allProducts.Where(p => p.Name.ToLower().Contains(searchText)).ToList();
 
         }
-
-        private void OnCategoryChanged(object sender, EventArgs e) => FilterProducts();
         private void OnSearchImageTapped(object sender, TappedEventArgs e) => SearchBar.Focus();
-        private void OnDropListImageTapped(object sender, TappedEventArgs e) => CategoryPicker.Focus();
     }
 }

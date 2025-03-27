@@ -53,6 +53,16 @@ namespace DentalApp.Data
             };
 
         }
+        public static List<SaleVM> GetSampleSales()
+        {
+            return new List<SaleVM>
+            {
+                new SaleVM { SaleId = 1, SaleDate = DateTime.Now.AddDays(-1), PatientName = "Johannes Elmer Arrocena", DentistName = "Dr. Jane Smith", Total = 1500.00m, Status = "Unpaid" },
+                new SaleVM { SaleId = 2, SaleDate = DateTime.Now.AddDays(-3), PatientName = "Alice Brown", DentistName = "Dr. Mark Johnson", Total = 1200.00m, Status = "Unpaid" },
+                new SaleVM { SaleId = 3, SaleDate = DateTime.Now.AddDays(-7), PatientName = "Michael Scott", DentistName = "Dr. John Doe", Total = 1800.00m, Status = "Cancelled" },
+                new SaleVM { SaleId = 4, SaleDate = DateTime.Now.AddDays(-10), PatientName = "Pam Beesly", DentistName = "Dr. Sarah Connor", Total = 900.00m, Status = "Paid" }
+            };
+        }
 
     }
 }

@@ -1,7 +1,7 @@
 ﻿using DentalApp.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace DentalApp .Models
+namespace DentalApp.Models
 {
     public partial class SaleLine : BaseModel
     {

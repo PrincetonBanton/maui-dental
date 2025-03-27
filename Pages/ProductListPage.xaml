@@ -5,7 +5,7 @@
     <ScrollView>
         <VerticalStackLayout Padding="15" Spacing="10">
             <Button Text="Create Product" Clicked="OnCreateProductButtonClicked" />
-            
+
             <Grid ColumnDefinitions="Auto, *">
                 <Image Source="search.png" VerticalOptions="Center" HeightRequest="15" Grid.Column="0">
                     <Image.GestureRecognizers>
@@ -15,24 +15,6 @@
                 <Entry x:Name="SearchBar" TextChanged="OnSearchBarTextChanged" Margin="10,0,0,0" Grid.Column="1"/>
             </Grid>
 
-            <Grid ColumnDefinitions="Auto, *">
-                <Image Source="droplist.png" VerticalOptions="Center" HeightRequest="20" Grid.Column="0">
-                    <Image.GestureRecognizers>
-                        <TapGestureRecognizer Tapped="OnDropListImageTapped"/>
-                    </Image.GestureRecognizers>
-                </Image>
-                <Picker x:Name="CategoryPicker" Title="Select Category" TextColor="Black" Margin="10,0,0,0" Grid.Column="1"
-                    SelectedIndexChanged="OnCategoryChanged">
-                    <Picker.ItemsSource>
-                        <x:Array Type="{x:Type x:String}">
-                            <x:String>All</x:String>
-                            <x:String>Goods</x:String>
-                            <x:String>Services</x:String>
-                        </x:Array>
-                    </Picker.ItemsSource>
-                </Picker>
-            </Grid>
-            
             <Grid BackgroundColor="DarkGray" Padding="5" ColumnDefinitions="5*,3*,2*">
                 <Label Text="Name" FontAttributes="Bold" TextColor="White" Grid.Column="0"/>
                 <Label Text="Price" FontAttributes="Bold" TextColor="White" Grid.Column="1"/>

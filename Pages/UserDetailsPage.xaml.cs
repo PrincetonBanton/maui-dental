@@ -1,5 +1,4 @@
 using DentalApp.Models;
-using DentalApp.Models.Enum;
 using DentalApp.Services;
 using DentalApp.Services.Validations;
 

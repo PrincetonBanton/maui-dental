@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="DentalApp.Pages.SaleListPage"
+             BackgroundColor="White">
+    <ScrollView>
+        <StackLayout Margin="10" Padding="0">
+            <Grid BackgroundColor="Transparent" ColumnDefinitions="Auto,Auto,* ,Auto,Auto" ColumnSpacing="5" Margin="0,0,0,10">
+                <ImageButton Source="loguser.png" HeightRequest="20" WidthRequest="20" Grid.Column="0"/>
+                <Label Text="Welcome, User Name" VerticalOptions="Center" Grid.Column="1" FontSize="14"/>
+                <BoxView BackgroundColor="Transparent" Grid.Column="2"/>
+                <ImageButton Source="bell.png" HeightRequest="20" WidthRequest="20" Grid.Column="3" Margin="0,0,10,0"/>
+                <ImageButton Source="email.png" HeightRequest="20" WidthRequest="20" Grid.Column="4" Margin="0,0,10,0"/>
+            </Grid>
+            
+            <Button Text="Create Sale" Clicked="OnCreateSaleButtonClicked" />
+
+            <Frame Padding="10">
+                <VerticalStackLayout> 
+                    <Grid ColumnDefinitions="Auto, *">
+                        <Image Source="search.png" VerticalOptions="Center" HeightRequest="15" Grid.Column="0">
+                            <Image.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="OnSearchImageTapped"/>
+                            </Image.GestureRecognizers>
+                        </Image>
+                        <Entry x:Name="SearchBar" TextChanged="OnSearchBarTextChanged" Margin="10,0,0,0" Grid.Column="1"/>
+                    </Grid>
+                    <Grid ColumnDefinitions="*,*">
+                        <HorizontalStackLayout Grid.Column="0">
+                            <Label Text="From" Margin="0,0,10,0"/>
+                            <DatePicker />
+                        </HorizontalStackLayout>
+                        <HorizontalStackLayout Grid.Column="1">
+                            <Label Text="To" Margin="0,0,10,0"  />
+                            <DatePicker />
+                        </HorizontalStackLayout>
+                    </Grid>
+                    <Grid ColumnDefinitions="*,*" >
+                        <Label Text="Total Sale:" FontSize="14" VerticalOptions="Center" Grid.Column="0"/>
+                        <Entry Placeholder="0.00" Keyboard="Numeric" Grid.Column="1"/>
+                    </Grid>
+                </VerticalStackLayout>
+            </Frame>
+
+            <Grid Padding="5" BackgroundColor="DarkGray" ColumnDefinitions="1.5*,4*,1.5*,1.5*,1.5*">
+                    <Label Text="Date" FontAttributes="Bold" Grid.Column="0" />
+                    <Label Text="Patient" FontAttributes="Bold" Grid.Column="1" />
+                    <Label Text="Total" FontAttributes="Bold" Grid.Column="2" />
+                    <Label Text="Status" FontAttributes="Bold" Grid.Column="3" />
+                    <Label Text="" Grid.Column="4" />
+            </Grid>
+            <ListView x:Name="SaleListView" HasUnevenRows="True">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <ViewCell>
+                            <Grid Padding="5" ColumnDefinitions="1.5*,4*,1.5*,1.5*,1.5*">
+                                <Label Text="{Binding SaleDate, StringFormat='{0:MM/dd/yy}'}" FontSize="13" Grid.Column="0"/>
+                                <Label Text="{Binding PatientName}" FontSize="13" Grid.Column="1" />
+                                <Label Text="{Binding Total, StringFormat='{0:N2}'}" FontSize="13" Grid.Column="2" HorizontalTextAlignment="End" />
+                                <Label Text="{Binding Status}" FontSize="13" Grid.Column="3" />
+                                <HorizontalStackLayout Grid.Column="4" Spacing="4">
+                                    <ImageButton Source="edit.png" HeightRequest="25" WidthRequest="25" Clicked="OnEditButtonClicked"/>
+                                    <ImageButton Source="delete.png" HeightRequest="25" WidthRequest="25" Clicked="OnDeleteButtonClicked"/>
+                                </HorizontalStackLayout>
+                            </Grid>
+                        </ViewCell>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+
+        </StackLayout>
+    </ScrollView>
+</ContentPage>

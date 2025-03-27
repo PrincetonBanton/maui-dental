@@ -2,7 +2,7 @@
 
 namespace DentalApp.Models
 {
-    public class UserVM :  BaseModel
+    public class UserVM : BaseModel
     {
         public string? Username { get; set; }
         public string? Password { get; set; }

@@ -50,8 +50,8 @@
             <Grid ColumnDefinitions="2*,4*,2*,2*">
                 <Label Text="Date" FontAttributes="Bold" TextColor="White" Grid.Column="0"/>
                 <Label Text="Description" FontAttributes="Bold" TextColor="White" Grid.Column="1"/>
-                    <Label Text="Amount" FontAttributes="Bold" TextColor="White" Grid.Column="2"/>
-                </Grid>
+                <Label Text="Amount" FontAttributes="Bold" TextColor="White" Grid.Column="2"/>
+            </Grid>
         </Grid>
         <ListView x:Name="ExpenseListView" HasUnevenRows="True" BackgroundColor="White">
             <ListView.ItemTemplate>

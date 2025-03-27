@@ -1,9 +1,9 @@
-﻿    using DentalApp.Models;
-    using System.Text.RegularExpressions;
+﻿using DentalApp.Models;
+using System.Text.RegularExpressions;
 
-    namespace DentalApp.Services.Validations
-    {
-        public class UserValidationService
+namespace DentalApp.Services.Validations
+{
+    public class UserValidationService
         {
             public static (bool IsValid, string ErrorMessage) ValidateUser(UserVM user, string confirmPassword)
             {

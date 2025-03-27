@@ -11,7 +11,7 @@
         <ShellContent Title="Dashboard" ContentTemplate="{DataTemplate pages:Dashboard}" Route="Dashboard" />
     </FlyoutItem>-->
     <FlyoutItem Title="Sales" Icon="sale.png">
-        <ShellContent Title="Sales" ContentTemplate="{DataTemplate pages:SalesPage}" Route="SalesPage" />
+        <ShellContent Title="Sales" ContentTemplate="{DataTemplate pages:SaleListPage}" Route="SaleListPage" />
     </FlyoutItem>
     <FlyoutItem Title="Expense" Icon="expense.png">
         <ShellContent Title="Expense" ContentTemplate="{DataTemplate pages:ExpensePage}" Route="ExpensePage" />
