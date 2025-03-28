@@ -43,6 +43,16 @@ public partial class SaleListPage : ContentPage
     }
     private async void OnDeleteButtonClicked(object sender, EventArgs e)
     {
+        if (sender is ImageButton button && button.BindingContext is SaleVM selectedSale)
+        {
+            await DisplayAlert("Info", $"User ID: {selectedSale.SaleId}", "OK");
+            bool confirmDelete = await DisplayAlert("Confirm", "Delete this sale?", "Yes", "No");
+            if (!confirmDelete) return;
+
+            var success = await _apiService.DeleteSaleAsync(selectedSale.SaleId);
+            LoadSaleList();
+            await DisplayAlert(success ? "Success" : "Error", success ? "Sale deleted." : "Failed to delete sale.", "OK");
+        }
     }
 
     private void OnSearchBarTextChanged(object sender, TextChangedEventArgs e)

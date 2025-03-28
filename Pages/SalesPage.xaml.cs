@@ -8,7 +8,7 @@ namespace DentalApp.Pages;
 
 public partial class SalesPage : ContentPage
 {
-    private SaleVM _sale;
+    private SaleVM2 _sale;
     private readonly ApiService _apiService = new();
     private List<ProductVM> _allProducts = new();
     public ObservableCollection<SaleItemVM> SelectedProducts { get; set; } = new();
@@ -89,47 +89,47 @@ public partial class SalesPage : ContentPage
 
     private async void OnSaveSaleClicked(object sender, EventArgs e)
     {
-        //var patient = PatientPicker.SelectedItem as PatientVM;
-        //var dentist = DentistPicker.SelectedItem as DentistVM;
-        //var selectedProducts = SelectedProducts.ToList(); // Convert ObservableCollection to List
+        var patient = PatientPicker.SelectedItem as PatientVM;
+        var dentist = DentistPicker.SelectedItem as DentistVM;
+        var selectedProducts = SelectedProducts.ToList(); // Convert ObservableCollection to List
 
-        //var (isValid, errorMessage) = SalesValidationService.ValidateSale(patient?.Id, dentist?.Id, selectedProducts);
-        //if (!isValid)
+        var (isValid, errorMessage) = SalesValidationService.ValidateSale(patient?.Id, dentist?.Id, selectedProducts);
+        if (!isValid)
+        {
+            await DisplayAlert("Validation Error", errorMessage, "OK");
+            return;
+        }
+
+        _sale ??= new SaleVM2();
+
+        _sale.SaleNo = $"SALE-{DateTime.UtcNow:yyyyMMdd-HHmmss}";
+        _sale.SaleDate = DateTime.UtcNow;
+        _sale.PatientId = ((PatientVM)PatientPicker.SelectedItem).Id;
+        _sale.DentistId = ((DentistVM)DentistPicker.SelectedItem).Id;
+        _sale.Note = "Patient purchased treatments";
+        //_sale.SubTotal = SelectedProducts.Sum(p => p.Amount);  
+        //_sale.Total = _sale.SubTotal * 1.06m; // Assuming 6% tax
+        _sale.Items = SelectedProducts.Select(p => new SaleItemVM
+        {
+            ProductId = p.ProductId,
+            Quantity = p.Quantity,
+            Amount = p.Amount
+        }).ToList();
+        //_sale.Payment = new PaymentVM
         //{
-        //    await DisplayAlert("Validation Error", errorMessage, "OK");
-        //    return;
-        //}
+        //    PaymentAmount = _sale.Total,
+        //    PaymentType = 1, 
+        //    AmountTendered = _sale.Total, 
+        //    EnteredBy = 5, 
+        //    PaymentDate = DateTime.UtcNow
+        //};
 
-        //_sale ??= new SaleVM();
+        bool success = await _apiService.CreateSaleAsync(_sale);
+        string message = success ? "Sale created successfully!" : "Failed to create sale. Please try again.";
 
-        //_sale.SaleNo = $"SALE-{DateTime.UtcNow:yyyyMMdd-HHmmss}";
-        //_sale.SaleDate = DateTime.UtcNow;
-        //_sale.PatientId = ((PatientVM)PatientPicker.SelectedItem).Id;
-        //_sale.DentistId = ((DentistVM)DentistPicker.SelectedItem).Id;
-        //_sale.Note = "Patient purchased treatments";
-        ////_sale.SubTotal = SelectedProducts.Sum(p => p.Amount);  
-        ////_sale.Total = _sale.SubTotal * 1.06m; // Assuming 6% tax
-        //_sale.Items = SelectedProducts.Select(p => new SaleItemVM
-        //{
-        //    ProductId = p.ProductId,
-        //    Quantity = p.Quantity,
-        //    Amount = p.Amount
-        //}).ToList();
-        ////_sale.Payment = new PaymentVM
-        ////{
-        ////    PaymentAmount = _sale.Total,
-        ////    PaymentType = 1, 
-        ////    AmountTendered = _sale.Total, 
-        ////    EnteredBy = 5, 
-        ////    PaymentDate = DateTime.UtcNow
-        ////};
+        await DisplayAlert(success ? "Success" : "Error", message, "OK");
 
-        //bool success = await _apiService.CreateSaleAsync(_sale);
-        //string message = success ? "Sale created successfully!" : "Failed to create sale. Please try again.";
-
-        //await DisplayAlert(success ? "Success" : "Error", message, "OK");
-
-        //if (success) await Navigation.PopAsync();
+        if (success) await Navigation.PopAsync();
     }
     private void OnSearchBarTextChanged(object sender, TextChangedEventArgs e)
     {

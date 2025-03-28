@@ -66,6 +66,7 @@ namespace DentalApp.Pages
                 bool confirmDelete = await DisplayAlert("Confirm", "Delete this user?", "Yes", "No");
                 if (!confirmDelete) return;
 
+                await DisplayAlert("Info", $"User ID: {selectedUser.Id}", "OK");
                 var success = await _apiService.DeleteUserAsync(selectedUser.Id);
                 LoadUserList();
                 await DisplayAlert(success ? "Success" : "Error", success ? "User deleted." : "Failed to delete user.", "OK");
