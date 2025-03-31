@@ -11,17 +11,18 @@ public partial class SalesPage : ContentPage
     private SaleVM2 _sale;
     private readonly ApiService _apiService = new();
     private List<ProductVM> _allProducts = new();
+    private readonly Action<SaleVM> _onSaleCreated;
     public ObservableCollection<SaleItemVM> SelectedProducts { get; set; } = new();
-
     public ObservableCollection<ProductVM> FilteredProducts { get; set; } = new();
 
-    public SalesPage()
+    public SalesPage(Action<SaleVM> onSaleCreated = null)
     {
         InitializeComponent();
+        _onSaleCreated = onSaleCreated;
         LoadPatients();
         LoadDentists();
         LoadProducts();
-        BindingContext = this; // Bind to UI
+        BindingContext = this;
     }
 
     private async void LoadPatients()
@@ -107,8 +108,8 @@ public partial class SalesPage : ContentPage
         _sale.PatientId = ((PatientVM)PatientPicker.SelectedItem).Id;
         _sale.DentistId = ((DentistVM)DentistPicker.SelectedItem).Id;
         _sale.Note = "Patient purchased treatments";
-        //_sale.SubTotal = SelectedProducts.Sum(p => p.Amount);  
-        //_sale.Total = _sale.SubTotal * 1.06m; // Assuming 6% tax
+        _sale.SubTotal = SelectedProducts.Sum(p => p.Amount);
+        _sale.Total = _sale.SubTotal * 1.12m;                           // Assuming 12% tax
         _sale.Items = SelectedProducts.Select(p => new SaleItemVM
         {
             ProductId = p.ProductId,
@@ -129,7 +130,20 @@ public partial class SalesPage : ContentPage
 
         await DisplayAlert(success ? "Success" : "Error", message, "OK");
 
-        if (success) await Navigation.PopAsync();
+        if (success)
+        {
+            var newSale = new SaleVM
+            {
+                SaleId = _sale.Id,
+                SaleDate = _sale.SaleDate,
+                PatientName = patient.FullName,
+                DentistName = dentist.FullName,
+                Total = SelectedProducts.Sum(p => p.Amount),    
+                Status = "Unpaid"                               
+            };
+            _onSaleCreated?.Invoke(newSale); // Trigger the callback with the new sale
+            await Navigation.PopAsync();
+        }
     }
     private void OnSearchBarTextChanged(object sender, TextChangedEventArgs e)
     {

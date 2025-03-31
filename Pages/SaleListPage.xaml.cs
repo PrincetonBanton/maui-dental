@@ -9,10 +9,12 @@ public partial class SaleListPage : ContentPage
 {
     private readonly ApiService _apiService = new();
     private List<SaleVM> _allSales = new();
+    public ObservableCollection<SaleVM> Sales { get; set; } = new();
 
     public SaleListPage()
 	{
         InitializeComponent();
+        BindingContext = this; // Set the BindingContext to the page itself
         LoadSaleList();
     }
     private async void LoadSaleList()
@@ -21,21 +23,31 @@ public partial class SaleListPage : ContentPage
         bool isApiAvailable = ApiConnectivityService.Instance.IsApiAvailable;
         try
         {
-            _allSales = isApiAvailable
+            var sales = isApiAvailable
                 ? await _apiService.GetSalesAsync() ?? new List<SaleVM>()
-                : SampleData.GetSampleSales();             //Replace w offline data sync
+                : SampleData.GetSampleSales(); // Replace with offline data sync
 
+            Sales.Clear(); // Clear existing items
+            foreach (var sale in sales)
+            {
+                Sales.Add(sale); // Add new items to the ObservableCollection
+            }
         }
         catch (Exception ex)
         {
-            await DisplayAlert("Error", "Failed to load products. Please try again.", "OK");
+            await DisplayAlert("Error", "Failed to load sales. Please try again.", "OK");
         }
-        SaleListView.ItemsSource = _allSales;
-
     }
-    private async void OnCreateSaleButtonClicked(object sender, EventArgs e)
+   private async void OnCreateSaleButtonClicked(object sender, EventArgs e)
     {
-        await Navigation.PushAsync(new SalesPage());
+        var salesPage = new SalesPage(OnSaleCreated); // Pass a callback
+        await Navigation.PushAsync(salesPage);
+    }
+
+    private void OnSaleCreated(SaleVM newSale)
+    {
+        // Add the newly created sale to the list
+        Sales.Insert(0, newSale);
     }
     private async void OnEditButtonClicked(object sender, EventArgs e)
     {
@@ -54,7 +66,6 @@ public partial class SaleListPage : ContentPage
             await DisplayAlert(success ? "Success" : "Error", success ? "Sale deleted." : "Failed to delete sale.", "OK");
         }
     }
-
     private void OnSearchBarTextChanged(object sender, TextChangedEventArgs e)
     {
 

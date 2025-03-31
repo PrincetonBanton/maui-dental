@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace DentalApp.Models
 {
-    public class SaleVM2
+    public class SaleVM2 : BaseModel
     {
         public string SaleNo { get; set; }
         public DateTime SaleDate { get; set; }

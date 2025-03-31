@@ -2,7 +2,7 @@
 
 namespace DentalApp.Models
 {
-    public class SaleVM
+    public class SaleVM : BaseModel
     {
         public DateTime SaleDate { get; set; }
         public int SaleId { get; set; }
