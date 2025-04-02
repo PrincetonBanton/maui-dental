@@ -12,13 +12,16 @@ public partial class SalesPage : ContentPage
     private readonly ApiService _apiService = new();
     private List<ProductVM> _allProducts = new();
     private readonly Action<SaleVM> _onSaleCreated;
-    public ObservableCollection<SaleItemVM> SelectedProducts { get; set; } = new();
+    //public ObservableCollection<SaleItemVM> SelectedProducts { get; set; } = new();
+    public ObservableCollection<SaleLine> SelectedProducts { get; set; } = new();
     public ObservableCollection<ProductVM> FilteredProducts { get; set; } = new();
 
-    public SalesPage(Action<SaleVM> onSaleCreated = null)
+    public SalesPage(SaleVM selectedSale = null, Action<SaleVM> onSaleCreated = null)
     {
         InitializeComponent();
+
         _onSaleCreated = onSaleCreated;
+
         LoadPatients();
         LoadDentists();
         LoadProducts();
@@ -71,15 +74,23 @@ public partial class SalesPage : ContentPage
             return;
         }
 
+        if (!decimal.TryParse(AmountEntry.Text, out decimal amount))
+        {
+            DisplayAlert("Error", "Invalid amount entered. Please enter a valid number.", "OK");
+            return;
+        }
+
         var selectedProduct = _allProducts.FirstOrDefault(p => p.Name == NameEntry.Text);
         if (selectedProduct == null) return;
 
-        SelectedProducts.Add(new SaleItemVM
+        SelectedProducts.Add(new SaleLine
         {
-            ProductId = selectedProduct.Id,
-            Name = selectedProduct.Name,
-            Quantity = 1, // Default quantity
-            Amount = decimal.Parse(AmountEntry.Text)
+            SaleId = _sale?.Id ?? 0,
+            ProductId = selectedProduct.Id,  
+            Quantity = 1,
+            SubTotal = amount,
+            Total = amount * 1.12m,
+            ProductName = selectedProduct.Name  // Set the product name    
         });
 
         SearchBar.Text = "";
@@ -87,6 +98,7 @@ public partial class SalesPage : ContentPage
         AmountEntry.Text = "";
         inputFrame.IsVisible = false;
     }
+
 
     private async void OnSaveSaleClicked(object sender, EventArgs e)
     {
@@ -108,13 +120,13 @@ public partial class SalesPage : ContentPage
         _sale.PatientId = ((PatientVM)PatientPicker.SelectedItem).Id;
         _sale.DentistId = ((DentistVM)DentistPicker.SelectedItem).Id;
         _sale.Note = "Patient purchased treatments";
-        _sale.SubTotal = SelectedProducts.Sum(p => p.Amount);
+        _sale.SubTotal = SelectedProducts.Sum(p => p.SubTotal);
         _sale.Total = _sale.SubTotal * 1.12m;                           // Assuming 12% tax
-        _sale.Items = SelectedProducts.Select(p => new SaleItemVM
+        _sale.Items = SelectedProducts.Select(p => new SaleLine
         {
             ProductId = p.ProductId,
             Quantity = p.Quantity,
-            Amount = p.Amount
+            SubTotal = p.SubTotal
         }).ToList();
         //_sale.Payment = new PaymentVM
         //{
@@ -138,7 +150,7 @@ public partial class SalesPage : ContentPage
                 SaleDate = _sale.SaleDate,
                 PatientName = patient.FullName,
                 DentistName = dentist.FullName,
-                Total = SelectedProducts.Sum(p => p.Amount),    
+                Total = SelectedProducts.Sum(p => p.SubTotal),    
                 Status = "Unpaid"                               
             };
             _onSaleCreated?.Invoke(newSale); // Trigger the callback with the new sale

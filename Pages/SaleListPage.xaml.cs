@@ -38,12 +38,11 @@ public partial class SaleListPage : ContentPage
             await DisplayAlert("Error", "Failed to load sales. Please try again.", "OK");
         }
     }
-   private async void OnCreateSaleButtonClicked(object sender, EventArgs e)
+    private async void OnCreateSaleButtonClicked(object sender, EventArgs e)
     {
-        var salesPage = new SalesPage(OnSaleCreated); // Pass a callback
+        var salesPage = new SalesPage(null, OnSaleCreated); // Pass null for selectedSale and the callback
         await Navigation.PushAsync(salesPage);
     }
-
     private void OnSaleCreated(SaleVM newSale)
     {
         // Add the newly created sale to the list
@@ -51,7 +50,10 @@ public partial class SaleListPage : ContentPage
     }
     private async void OnEditButtonClicked(object sender, EventArgs e)
     {
-
+        if (sender is ImageButton button && button.BindingContext is SaleVM selectedSale)
+        {
+            await Navigation.PushAsync(new SalesPage(selectedSale));
+        }
     }
     private async void OnDeleteButtonClicked(object sender, EventArgs e)
     {

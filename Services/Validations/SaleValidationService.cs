@@ -5,7 +5,7 @@ namespace DentalApp.Services.Validations
 {
     public static class SalesValidationService
     {
-        public static (bool IsValid, string ErrorMessage) ValidateSale(int? patientId, int? dentistId, List<SaleItemVM> selectedProducts)
+        public static (bool IsValid, string ErrorMessage) ValidateSale(int? patientId, int? dentistId, List<SaleLine> selectedProducts)
         {
             if (patientId == null || patientId == 0)
                 return (false, "Please select a patient.");

@@ -62,8 +62,8 @@
                     <DataTemplate>
                         <ViewCell>
                             <Grid ColumnDefinitions="5*,2*,2*" Padding="5">
-                                <Label Text="{Binding Name}" FontSize="14" Grid.Column="0"/>
-                                <Label Text="{Binding Amount, StringFormat='₱{0:N2}'}" FontSize="14" Grid.Column="1" HorizontalTextAlignment="End"/>
+                                <Label Text="{Binding ProductName}" FontSize="14" Grid.Column="0"/>
+                                <Label Text="{Binding SubTotal, StringFormat='{0:N2}'}" FontSize="14" Grid.Column="1" HorizontalTextAlignment="End"/>
                             </Grid>
                         </ViewCell>
                     </DataTemplate>
