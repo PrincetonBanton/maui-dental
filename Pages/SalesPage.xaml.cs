@@ -8,7 +8,7 @@ namespace DentalApp.Pages;
 
 public partial class SalesPage : ContentPage
 {
-    private SaleVM2 _sale;
+    private SaleVM _sale;
     private readonly ApiService _apiService = new();
     private List<ProductVM> _allProducts = new();
     private readonly Action<SaleVM> _onSaleCreated;
@@ -16,17 +16,96 @@ public partial class SalesPage : ContentPage
     public ObservableCollection<SaleLine> SelectedProducts { get; set; } = new();
     public ObservableCollection<ProductVM> FilteredProducts { get; set; } = new();
 
-    public SalesPage(SaleVM selectedSale = null, Action<SaleVM> onSaleCreated = null)
+    public SalesPage(SaleVM selectedSale, Action<SaleVM> onSaleCreated = null)
     {
         InitializeComponent();
 
         _onSaleCreated = onSaleCreated;
 
-        LoadPatients();
-        LoadDentists();
-        LoadProducts();
+        if (selectedSale != null)
+        {
+            LoadSelectedSale(selectedSale);
+
+        } else
+        {
+            LoadPatients();
+            LoadDentists();
+            LoadProducts();
+        }
         BindingContext = this;
     }
+    private async void LoadSelectedSale(SaleVM selectedSale)
+    {
+        try
+        {
+            var response = await _apiService.GetSaleDetailAsync(selectedSale.SaleId);
+
+            if (response != null)
+            {
+                SaleVM newSale = new SaleVM
+                {
+                    SaleNo = response.SaleNo,
+                    SaleDate = response.SaleDate,
+                    PatientId = response.PatientId,
+                    PatientName = response.PatientName,
+                    DentistId = response.DentistId,
+                    DentistName = response.DentistName,
+                    Note = response.Note,
+                    SubTotal = response.SubTotal,
+                    Total = response.Total,
+                    AmountDue = response.AmountDue,
+                    // Map the Items collection
+                    Items = response.Items?.Select(item => new SaleLine
+                    {
+                        Id = item.Id,
+                        SaleId = item.SaleId,
+                        ProductId = item.ProductId,
+                        Quantity = item.Quantity,
+                        SubTotal = item.SubTotal,
+                        Total = item.Total,
+                        ProductName = item.ProductName
+                    }).ToList(),
+                    // Map the Payments collection
+                    Payments = response.Payments?.Select(payment => new Payment
+                    {
+                        PaymentAmount = payment.PaymentAmount,
+                        PaymentType = payment.PaymentType,
+                        PaymentDate = payment.PaymentDate,
+                        CreatedOn = payment.CreatedOn,
+                        SaleId = payment.SaleId,
+                        Id = payment.Id
+                    }).ToList()
+                };
+
+                // Now you can use 'newSale' as needed, for example, set it to a class property or use it directly
+                _sale = newSale;  // If you have a class-level variable '_sale' to store the data
+
+                // Optionally, display the newSale data in an alert for confirmation
+                string saleDetails = $"Sale ID: {newSale.Id}\n" +
+                                     $"Sale No: {newSale.SaleNo}\n" +
+                                     $"Sale Date: {newSale.SaleDate}\n" +
+                                     $"Patient Name: {newSale.PatientName}\n" +
+                                     $"Dentist Name: {newSale.DentistName}\n" +
+                                     $"Note: {newSale.Note}\n" +
+                                     $"SubTotal: {newSale.SubTotal}\n" +
+                                     $"Total: {newSale.Total}\n" +
+                                     $"Amount Due: {newSale.AmountDue}";
+
+                await DisplayAlert("Sale Loaded", saleDetails, "OK");
+            }
+            else
+            {
+                await DisplayAlert("Error", "Sale details not found.", "OK");
+            }
+        }
+        catch (Exception ex)
+        {
+            // Handle any exceptions that occur during the API call
+            await DisplayAlert("Error", $"Failed to load sale details: {ex.Message}", "OK");
+        }
+    }
+
+
 
     private async void LoadPatients()
     {
@@ -113,7 +192,7 @@ public partial class SalesPage : ContentPage
             return;
         }
 
-        _sale ??= new SaleVM2();
+        _sale ??= new SaleVM();
 
         _sale.SaleNo = $"SALE-{DateTime.UtcNow:yyyyMMdd-HHmmss}";
         _sale.SaleDate = DateTime.UtcNow;

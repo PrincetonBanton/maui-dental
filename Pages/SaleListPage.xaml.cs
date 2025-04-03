@@ -52,14 +52,23 @@ public partial class SaleListPage : ContentPage
     {
         if (sender is ImageButton button && button.BindingContext is SaleVM selectedSale)
         {
+            string saleDetails = $"Sale ID: {selectedSale.SaleId}\n" +
+                     $"Sale No: {selectedSale.SaleNo}\n" +
+                     $"Sale Date: {selectedSale.SaleDate}\n" +
+                     $"Patient Name: {selectedSale.PatientName}\n" +
+                     $"Dentist Name: {selectedSale.DentistName}\n" +
+                     $"Total: {selectedSale.Total}\n";
+
+            // Show the sale details in an alert
+            await DisplayAlert("Selected Sale", saleDetails, "OK");
             await Navigation.PushAsync(new SalesPage(selectedSale));
         }
     }
+
     private async void OnDeleteButtonClicked(object sender, EventArgs e)
     {
         if (sender is ImageButton button && button.BindingContext is SaleVM selectedSale)
         {
-            await DisplayAlert("Info", $"User ID: {selectedSale.SaleId}", "OK");
             bool confirmDelete = await DisplayAlert("Confirm", "Delete this sale?", "Yes", "No");
             if (!confirmDelete) return;
 
