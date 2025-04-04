@@ -26,8 +26,8 @@ public partial class SalesPage : ContentPage
         if (selectedSale != null)
         {
             LoadSelectedSale(selectedSale);
-
-        } else
+        } 
+        else
         {
             LoadPatients();
             LoadDentists();
@@ -43,14 +43,29 @@ public partial class SalesPage : ContentPage
 
             if (response != null)
             {
-                TreatmentDatePicker.Date = response.SaleDate;
+                // Convert the response items to JSON format
+                //string itemsJson = JsonSerializer.Serialize(response, new JsonSerializerOptions { WriteIndented = true });
+                //await DisplayAlert("Sale Items (API Format)", itemsJson, "OK");
 
+                TreatmentDatePicker.Date = response.SaleDate;
                 await LoadPatients();
                 await LoadDentists();
                 var selectedPatient = PatientPicker.ItemsSource.OfType<PatientVM>().FirstOrDefault(p => p.Id == response.PatientId);
                 var selectedDentist = DentistPicker.ItemsSource.OfType<DentistVM>().FirstOrDefault(d => d.Id == response.DentistId);
                 PatientPicker.SelectedItem = selectedPatient;
                 DentistPicker.SelectedItem = selectedDentist;
+
+                // Populate AvailProductListView with response items
+                AvailProductListView.ItemsSource = new ObservableCollection<SaleVM.SaleItem>(response.Items.Select(item => new SaleVM.SaleItem
+                {
+                    SaleId = item.SaleId,
+                    ProductId = item.ProductId,
+                    Quantity = item.Quantity,
+                    SubTotal = item.SubTotal,
+                    Total = item.Total,
+                    ProductName = item.ProductName
+                }));
+
             }
             else
             {
@@ -181,7 +196,6 @@ public partial class SalesPage : ContentPage
 
         bool success = await _apiService.CreateSaleAsync(_sale);
         string message = success ? "Sale created successfully!" : "Failed to create sale. Please try again.";
-
         await DisplayAlert(success ? "Success" : "Error", message, "OK");
 
         if (success)

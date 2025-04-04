@@ -32,14 +32,6 @@ public partial class SaleListPage : ContentPage
             {
                 Sales.Add(sale); // Add new items to the ObservableCollection
             }
-            // Display the sales data in a DisplayAlert
-            string salesDetails = "Sales List:\n";
-            foreach (var sale in sales)
-            {
-                salesDetails += $"Sale ID: {sale.SaleId}, Patient: {sale.PatientName}, Total: {sale.Total:N2}\n";
-            }
-
-            await DisplayAlert("Sales Retrieved", salesDetails, "OK");
         }
         catch (Exception ex)
         {

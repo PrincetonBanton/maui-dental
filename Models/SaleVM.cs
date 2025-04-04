@@ -22,9 +22,14 @@ namespace DentalApp.Models
 
         public class SaleItem  // Merging SaleItemCreate & SaleLine
         {
+            public int? Id { get; set; }  // Allowing null for the ID
             public int ProductId { get; set; }
             public int Quantity { get; set; }
-            public decimal Amount { get; set; } // Unified field for price
+            public decimal Amount { get; set; } 
+            public decimal? SubTotal { get; set; }      // Updated to match API structure
+            public decimal? Total { get; set; }         // Updated to match API structure
+            public string? ProductName { get; set; }    // Allowing null for ProductName
+            public int? SaleId { get; set; }            // Allowing null for SaleId
         }
 
         public class SalePayment  // Merging PaymentCreate & Payment
