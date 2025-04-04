@@ -57,7 +57,7 @@
                                 <Label Text="{Binding SaleDate, StringFormat='{0:MM/dd/yy}'}" FontSize="13" Grid.Column="0"/>
                                 <Label Text="{Binding PatientName}" FontSize="13" Grid.Column="1" />
                                 <Label Text="{Binding Total, StringFormat='{0:N2}'}" FontSize="13" Grid.Column="2" />
-                                <Label Text="{Binding SaleId}" FontSize="13" Grid.Column="3"/>
+                                <Label Text="{Binding Status}" FontSize="13" Grid.Column="3"/>
                                 <HorizontalStackLayout Grid.Column="4" Spacing="3">
                                     <ImageButton Source="info.png" HeightRequest="20" WidthRequest="20" Clicked="OnEditButtonClicked"/>
                                     <ImageButton Source="delete.png" HeightRequest="25" WidthRequest="25" Clicked="OnDeleteButtonClicked"/>

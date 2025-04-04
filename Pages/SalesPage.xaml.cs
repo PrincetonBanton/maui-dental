@@ -1,14 +1,16 @@
 using DentalApp.Models;
+using DentalApp.Models.Enum;
 using DentalApp.Data;
 using DentalApp.Services;
 using System.Collections.ObjectModel;
 using DentalApp.Services.Validations;
+using System.Text.Json;
 
 namespace DentalApp.Pages;
 
 public partial class SalesPage : ContentPage
 {
-    private SaleVM _sale;
+    private SaleCreate _sale;
     private readonly ApiService _apiService = new();
     private List<ProductVM> _allProducts = new();
     private readonly Action<SaleVM> _onSaleCreated;
@@ -42,56 +44,14 @@ public partial class SalesPage : ContentPage
 
             if (response != null)
             {
-                SaleVM newSale = new SaleVM
-                {
-                    SaleNo = response.SaleNo,
-                    SaleDate = response.SaleDate,
-                    PatientId = response.PatientId,
-                    PatientName = response.PatientName,
-                    DentistId = response.DentistId,
-                    DentistName = response.DentistName,
-                    Note = response.Note,
-                    SubTotal = response.SubTotal,
-                    Total = response.Total,
-                    AmountDue = response.AmountDue,
-                    // Map the Items collection
-                    Items = response.Items?.Select(item => new SaleLine
-                    {
-                        Id = item.Id,
-                        SaleId = item.SaleId,
-                        ProductId = item.ProductId,
-                        Quantity = item.Quantity,
-                        SubTotal = item.SubTotal,
-                        Total = item.Total,
-                        ProductName = item.ProductName
-                    }).ToList(),
-                    // Map the Payments collection
-                    Payments = response.Payments?.Select(payment => new Payment
-                    {
-                        PaymentAmount = payment.PaymentAmount,
-                        PaymentType = payment.PaymentType,
-                        PaymentDate = payment.PaymentDate,
-                        CreatedOn = payment.CreatedOn,
-                        SaleId = payment.SaleId,
-                        Id = payment.Id
-                    }).ToList()
-                };
+                TreatmentDatePicker.Date = response.SaleDate;
 
-                // Now you can use 'newSale' as needed, for example, set it to a class property or use it directly
-                _sale = newSale;  // If you have a class-level variable '_sale' to store the data
-
-                // Optionally, display the newSale data in an alert for confirmation
-                string saleDetails = $"Sale ID: {newSale.Id}\n" +
-                                     $"Sale No: {newSale.SaleNo}\n" +
-                                     $"Sale Date: {newSale.SaleDate}\n" +
-                                     $"Patient Name: {newSale.PatientName}\n" +
-                                     $"Dentist Name: {newSale.DentistName}\n" +
-                                     $"Note: {newSale.Note}\n" +
-                                     $"SubTotal: {newSale.SubTotal}\n" +
-                                     $"Total: {newSale.Total}\n" +
-                                     $"Amount Due: {newSale.AmountDue}";
-
-                await DisplayAlert("Sale Loaded", saleDetails, "OK");
+                await LoadPatients();
+                await LoadDentists();
+                var selectedPatient = PatientPicker.ItemsSource.OfType<PatientVM>().FirstOrDefault(p => p.Id == response.PatientId);
+                var selectedDentist = DentistPicker.ItemsSource.OfType<DentistVM>().FirstOrDefault(d => d.Id == response.DentistId);
+                PatientPicker.SelectedItem = selectedPatient;
+                DentistPicker.SelectedItem = selectedDentist;
             }
             else
             {
@@ -100,20 +60,17 @@ public partial class SalesPage : ContentPage
         }
         catch (Exception ex)
         {
-            // Handle any exceptions that occur during the API call
             await DisplayAlert("Error", $"Failed to load sale details: {ex.Message}", "OK");
         }
     }
 
-
-
-    private async void LoadPatients()
+    private async Task LoadPatients()
     {
         try { PatientPicker.ItemsSource = await _apiService.GetPatientsAsync(); }
         catch { await DisplayAlert("Error", "Failed to load patients.", "OK"); }
     }
 
-    private async void LoadDentists()
+    private async Task LoadDentists()
     {
         try { DentistPicker.ItemsSource = await _apiService.GetDentistsAsync(); }
         catch { await DisplayAlert("Error", "Failed to load dentists.", "OK"); }
@@ -164,7 +121,7 @@ public partial class SalesPage : ContentPage
 
         SelectedProducts.Add(new SaleLine
         {
-            SaleId = _sale?.Id ?? 0,
+            //SaleId = _sale?.Id ?? 0,
             ProductId = selectedProduct.Id,  
             Quantity = 1,
             SubTotal = amount,
@@ -192,7 +149,7 @@ public partial class SalesPage : ContentPage
             return;
         }
 
-        _sale ??= new SaleVM();
+        _sale ??= new SaleCreate();
 
         _sale.SaleNo = $"SALE-{DateTime.UtcNow:yyyyMMdd-HHmmss}";
         _sale.SaleDate = DateTime.UtcNow;
@@ -200,22 +157,27 @@ public partial class SalesPage : ContentPage
         _sale.DentistId = ((DentistVM)DentistPicker.SelectedItem).Id;
         _sale.Note = "Patient purchased treatments";
         _sale.SubTotal = SelectedProducts.Sum(p => p.SubTotal);
-        _sale.Total = _sale.SubTotal * 1.12m;                           // Assuming 12% tax
-        _sale.Items = SelectedProducts.Select(p => new SaleLine
+        _sale.Total = _sale.SubTotal;
+        _sale.Items = SelectedProducts.Select(p => new SaleItemCreate
         {
             ProductId = p.ProductId,
             Quantity = p.Quantity,
-            SubTotal = p.SubTotal
+            Amount = p.SubTotal // Corrected from SubTotal
         }).ToList();
-        //_sale.Payment = new PaymentVM
-        //{
-        //    PaymentAmount = _sale.Total,
-        //    PaymentType = 1, 
-        //    AmountTendered = _sale.Total, 
-        //    EnteredBy = 5, 
-        //    PaymentDate = DateTime.UtcNow
-        //};
+        _sale.Payment = new PaymentCreate
+        {
+            PaymentAmount = _sale.Total,
+            PaymentType = 1, // Cast to enum if needed
+            AmountTendered = _sale.Total,
+            EnteredBy = 5,
+            PaymentDate = DateTime.UtcNow
+        };
 
+        // Convert _sale to JSON format for display
+        string saleJson = JsonSerializer.Serialize(_sale, new JsonSerializerOptions { WriteIndented = true });
+
+        // Show alert with sale details in API format
+        await DisplayAlert("Sale Details (API Format)", saleJson, "OK");
         bool success = await _apiService.CreateSaleAsync(_sale);
         string message = success ? "Sale created successfully!" : "Failed to create sale. Please try again.";
 
@@ -225,7 +187,7 @@ public partial class SalesPage : ContentPage
         {
             var newSale = new SaleVM
             {
-                SaleId = _sale.Id,
+                //SaleId = _sale.Id,
                 SaleDate = _sale.SaleDate,
                 PatientName = patient.FullName,
                 DentistName = dentist.FullName,

@@ -118,7 +118,7 @@ namespace DentalApp.Services
             return sales.OrderByDescending(e => e.SaleId).ToList();
         }
         public Task<SaleVM?> GetSaleDetailAsync(int id) => GetAsync<SaleVM>($"Sale/GetDetail/{id}");
-        public Task<bool> CreateSaleAsync(SaleVM sale) => PostAsync("Sale/Create", sale);
+        public Task<bool> CreateSaleAsync(SaleCreate sale) => PostAsync("Sale/Create", sale);
         public Task<bool> DeleteSaleAsync(int id) => DeleteAsync($"Sale/Delete/{id}");
 
     }
