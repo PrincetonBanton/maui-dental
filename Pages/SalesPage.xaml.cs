@@ -10,11 +10,10 @@ namespace DentalApp.Pages;
 
 public partial class SalesPage : ContentPage
 {
-    private SaleCreate _sale;
+    private SaleVM _sale;
     private readonly ApiService _apiService = new();
     private List<ProductVM> _allProducts = new();
     private readonly Action<SaleVM> _onSaleCreated;
-    //public ObservableCollection<SaleItemVM> SelectedProducts { get; set; } = new();
     public ObservableCollection<SaleLine> SelectedProducts { get; set; } = new();
     public ObservableCollection<ProductVM> FilteredProducts { get; set; } = new();
 
@@ -69,7 +68,6 @@ public partial class SalesPage : ContentPage
         try { PatientPicker.ItemsSource = await _apiService.GetPatientsAsync(); }
         catch { await DisplayAlert("Error", "Failed to load patients.", "OK"); }
     }
-
     private async Task LoadDentists()
     {
         try { DentistPicker.ItemsSource = await _apiService.GetDentistsAsync(); }
@@ -121,7 +119,7 @@ public partial class SalesPage : ContentPage
 
         SelectedProducts.Add(new SaleLine
         {
-            //SaleId = _sale?.Id ?? 0,
+            SaleId = _sale?.Id ?? 0,
             ProductId = selectedProduct.Id,  
             Quantity = 1,
             SubTotal = amount,
@@ -149,35 +147,38 @@ public partial class SalesPage : ContentPage
             return;
         }
 
-        _sale ??= new SaleCreate();
-
-        _sale.SaleNo = $"SALE-{DateTime.UtcNow:yyyyMMdd-HHmmss}";
-        _sale.SaleDate = DateTime.UtcNow;
-        _sale.PatientId = ((PatientVM)PatientPicker.SelectedItem).Id;
-        _sale.DentistId = ((DentistVM)DentistPicker.SelectedItem).Id;
-        _sale.Note = "Patient purchased treatments";
-        _sale.SubTotal = SelectedProducts.Sum(p => p.SubTotal);
-        _sale.Total = _sale.SubTotal;
-        _sale.Items = SelectedProducts.Select(p => new SaleItemCreate
+        _sale ??= new SaleVM
         {
-            ProductId = p.ProductId,
-            Quantity = p.Quantity,
-            Amount = p.SubTotal // Corrected from SubTotal
-        }).ToList();
-        _sale.Payment = new PaymentCreate
-        {
-            PaymentAmount = _sale.Total,
-            PaymentType = 1, // Cast to enum if needed
-            AmountTendered = _sale.Total,
-            EnteredBy = 5,
-            PaymentDate = DateTime.UtcNow
+            SaleNo = $"SALE-{DateTime.UtcNow:yyyyMMdd-HHmmss}",
+            SaleDate = DateTime.UtcNow,
+            PatientId = patient?.Id ?? 0,
+            DentistId = dentist?.Id ?? 0,
+            Note = "Patient purchased treatments",
+            SubTotal = SelectedProducts.Sum(p => p.SubTotal),
+            Total = SelectedProducts.Sum(p => p.SubTotal),
+            Items = SelectedProducts.Select(p => new SaleVM.SaleItem
+            {
+                ProductId = p.ProductId,
+                Quantity = p.Quantity,
+                Amount = p.SubTotal
+            }).ToList(),
+            Payments = new List<SaleVM.SalePayment>
+            {
+                new SaleVM.SalePayment
+                {
+                    PaymentAmount = _sale.Total,
+                    PaymentType = 1,
+                    AmountTendered = _sale.Total,
+                    EnteredBy = 5,
+                    PaymentDate = DateTime.UtcNow
+                }
+            }
         };
 
         // Convert _sale to JSON format for display
         string saleJson = JsonSerializer.Serialize(_sale, new JsonSerializerOptions { WriteIndented = true });
-
-        // Show alert with sale details in API format
         await DisplayAlert("Sale Details (API Format)", saleJson, "OK");
+
         bool success = await _apiService.CreateSaleAsync(_sale);
         string message = success ? "Sale created successfully!" : "Failed to create sale. Please try again.";
 
@@ -187,7 +188,7 @@ public partial class SalesPage : ContentPage
         {
             var newSale = new SaleVM
             {
-                //SaleId = _sale.Id,
+                SaleId = _sale.Id,
                 SaleDate = _sale.SaleDate,
                 PatientName = patient.FullName,
                 DentistName = dentist.FullName,

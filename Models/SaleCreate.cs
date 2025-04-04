@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace DentalApp.Models
+﻿namespace DentalApp.Models
 {
     public class SaleCreate
     {
