@@ -27,7 +27,7 @@ public partial class SaleListPage : ContentPage
                 ? await _apiService.GetSalesAsync() ?? new List<SaleVM>()
                 : SampleData.GetSampleSales(); // Replace with offline data sync
 
-            _allSales = sales; // <-- This line was missing!
+            _allSales = sales; 
             Sales.Clear();
             foreach (var sale in sales)
             {
@@ -78,4 +78,33 @@ public partial class SaleListPage : ContentPage
             : _allSales.Where(p => p.PatientName.ToLower().Contains(searchText)).ToList();
     }
     private void OnSearchImageTapped(object sender, TappedEventArgs e) => SearchBar.Focus();
+    private void OnStartDateChanged(object sender, DateChangedEventArgs e) => ApplyCustomDateFilter();
+    private void OnEndDateChanged(object sender, DateChangedEventArgs e) => ApplyCustomDateFilter();
+
+    private void ApplyCustomDateFilter()
+    {
+        DateTime startDate = saleStartPicker.Date;
+        DateTime endDate = saleEndPicker.Date;
+
+        ApplyFilter(sales => sales.SaleDate.Date >= startDate && sales.SaleDate.Date <= endDate);
+    }
+    private void ApplyFilter(Func<SaleVM, bool> filterCriteria)
+    {
+        var filteredSales = _allSales
+            .Where(filterCriteria)
+            .OrderByDescending(sale => sale.SaleDate)
+            .ToList();
+
+        UpdateSaleList(filteredSales);
+    }
+    private void UpdateSaleList(List<SaleVM> filteredSales)
+    {
+        Sales.Clear();
+
+        foreach (var sale in filteredSales)
+            Sales.Add(sale); // Automatically updates the UI
+
+        SaleListView.ItemsSource = Sales;
+        //UpdateExpenseCount();
+    }
 }
