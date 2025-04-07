@@ -16,7 +16,6 @@ namespace DentalApp.Pages
             InitializeComponent();
             LoadProductList();
         }
-
         private async void LoadProductList()
         {
             await ApiConnectivityService.Instance.CheckApiConnectivityAsync();
@@ -34,7 +33,6 @@ namespace DentalApp.Pages
             ProductListView.ItemsSource = _allProducts;
 
         }
-
         private async void OnCreateProductButtonClicked(object sender, EventArgs e)
         {
             await Navigation.PushAsync(new ProductDetailsPage());
@@ -58,7 +56,6 @@ namespace DentalApp.Pages
                 await DisplayAlert(success ? "Success" : "Error", success ? "Product deleted." : "Failed to delete product.", "OK");
             }
         }
-
         private void OnSearchBarTextChanged(object sender, TextChangedEventArgs e)
         {
             var searchText = e.NewTextValue.ToLower();

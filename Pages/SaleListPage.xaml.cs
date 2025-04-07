@@ -27,20 +27,21 @@ public partial class SaleListPage : ContentPage
                 ? await _apiService.GetSalesAsync() ?? new List<SaleVM>()
                 : SampleData.GetSampleSales(); // Replace with offline data sync
 
-            Sales.Clear(); // Clear existing items
+            _allSales = sales; // <-- This line was missing!
+            Sales.Clear();
             foreach (var sale in sales)
             {
                 Sales.Add(sale); // Add new items to the ObservableCollection
             }
         }
-        catch (Exception ex)
+        catch (Exception)
         {
             await DisplayAlert("Error", "Failed to load sales. Please try again.", "OK");
         }
     }
     private async void OnCreateSaleButtonClicked(object sender, EventArgs e)
     {
-        var salesPage = new SalesPage(null, OnSaleCreated); // Pass null for selectedSale and the callback
+        var salesPage = new SalesPage(null, OnSaleCreated);
         await Navigation.PushAsync(salesPage);
     }
     private void OnSaleCreated(SaleVM newSale)
@@ -70,7 +71,11 @@ public partial class SaleListPage : ContentPage
     }
     private void OnSearchBarTextChanged(object sender, TextChangedEventArgs e)
     {
+        var searchText = e.NewTextValue.ToLower();
 
+        SaleListView.ItemsSource = string.IsNullOrWhiteSpace(searchText)
+            ? _allSales
+            : _allSales.Where(p => p.PatientName.ToLower().Contains(searchText)).ToList();
     }
     private void OnSearchImageTapped(object sender, TappedEventArgs e) => SearchBar.Focus();
 }

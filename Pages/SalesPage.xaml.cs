@@ -17,6 +17,9 @@ public partial class SalesPage : ContentPage
     public ObservableCollection<SaleLine> SelectedProducts { get; set; } = new();
     public ObservableCollection<ProductVM> FilteredProducts { get; set; } = new();
 
+    public bool IsNewSale { get; set; }
+    public bool IsExistingSale { get; set; }
+
     public SalesPage(SaleVM selectedSale, Action<SaleVM> onSaleCreated = null)
     {
         InitializeComponent();
@@ -26,12 +29,14 @@ public partial class SalesPage : ContentPage
         if (selectedSale != null)
         {
             LoadSelectedSale(selectedSale);
+            IsNewSale = false; IsExistingSale = true;
         } 
         else
         {
             LoadPatients();
             LoadDentists();
             LoadProducts();
+            IsNewSale = true; IsExistingSale = false;
         }
         BindingContext = this;
     }
@@ -147,8 +152,6 @@ public partial class SalesPage : ContentPage
         AmountEntry.Text = "";
         inputFrame.IsVisible = false;
     }
-
-
     private async void OnSaveSaleClicked(object sender, EventArgs e)
     {
         var patient = PatientPicker.SelectedItem as PatientVM;

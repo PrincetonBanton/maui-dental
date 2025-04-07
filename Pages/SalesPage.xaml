@@ -69,8 +69,8 @@
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>
-            <Button Text="Save Sale" Clicked="OnSaveSaleClicked"/>
-
+            <Button Text="Save Sale" Clicked="OnSaveSaleClicked" IsVisible="{Binding IsNewSale}"/>
+            <Button Text="Pay" Clicked="OnSaveSaleClicked" BackgroundColor="LimeGreen" IsVisible="{Binding IsExistingSale}"/>
         </StackLayout>
     </ScrollView>
 </ContentPage>

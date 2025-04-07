@@ -32,7 +32,7 @@ namespace DentalApp.Pages
 
                 DentistListView.ItemsSource = _allDentists;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 await DisplayAlert("Error", "Failed to load users. Please try again.", "OK");
             }

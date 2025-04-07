@@ -37,7 +37,6 @@ public partial class UserDetailsPage : ContentPage
         MobileEntry.Text = _user.Mobile;
         NoteEditor.Text = _user.Note;
     }
-
     private void ToggleFieldsVisibility()  //Replace this with proper standard
     {
         PasswordLabel.IsVisible = !_isEditMode;
@@ -47,7 +46,6 @@ public partial class UserDetailsPage : ContentPage
         RoleLabel.IsVisible = !_isEditMode;
         RolePicker.IsVisible = !_isEditMode;
     }
-
     private async void SaveButton_Clicked(object sender, EventArgs e)
     {
         _user ??= new UserVM();

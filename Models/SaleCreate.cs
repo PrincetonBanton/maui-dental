@@ -6,7 +6,7 @@
         public DateTime SaleDate { get; set; }
         public int PatientId { get; set; }
         public int DentistId { get; set; }
-        public string Note { get; set; }
+        public string? Note { get; set; }
         public decimal SubTotal { get; set; }
         public decimal Total { get; set; }
         public List<SaleItemCreate> Items { get; set; } = new();
