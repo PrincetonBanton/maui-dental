@@ -58,7 +58,6 @@ public partial class SalesPage : ContentPage
                 PatientPicker.SelectedItem = selectedPatient;
                 DentistPicker.SelectedItem = selectedDentist;
 
-                // Populate AvailProductListView with response items
                 AvailProductListView.ItemsSource = new ObservableCollection<SaleVM.SaleItem>(response.Items.Select(item => new SaleVM.SaleItem
                 {
                     SaleId = item.SaleId,
@@ -150,140 +149,6 @@ public partial class SalesPage : ContentPage
         AmountEntry.Text = "";
         inputFrame.IsVisible = false;
     }
-    private async void OnSavePayClicked(object sender, EventArgs e)
-    {
-        string paymentInput = await DisplayPromptAsync("Enter Payment", "Enter payment amount:", "OK", "Cancel", "0.00", maxLength: 10, keyboard: Keyboard.Numeric);
-        if (string.IsNullOrWhiteSpace(paymentInput) || !decimal.TryParse(paymentInput, out decimal paymentAmount))
-        {
-            await DisplayAlert("Error", "Invalid payment amount entered.", "OK");
-            return;
-        }
-
-        var patient = PatientPicker.SelectedItem as PatientVM;
-        var dentist = DentistPicker.SelectedItem as DentistVM;
-        var selectedProducts = SelectedProducts.ToList();
-
-        var (isValid, errorMessage) = SalesValidationService.ValidateSale(patient?.Id, dentist?.Id, selectedProducts);
-        if (!isValid)
-        {
-            await DisplayAlert("Validation Error", errorMessage, "OK");
-            return;
-        }
-
-        _sale ??= new SaleVM
-        {
-            SaleNo = $"SALE-{DateTime.UtcNow:yyyyMMdd-HHmmss}",
-            SaleDate = DateTime.UtcNow,
-            PatientId = patient?.Id ?? 0,
-            DentistId = dentist?.Id ?? 0,
-            Note = "Patient purchased treatments",
-            SubTotal = SelectedProducts.Sum(p => p.SubTotal),
-            Total = SelectedProducts.Sum(p => p.SubTotal),
-            Items = SelectedProducts.Select(p => new SaleVM.SaleItem
-            {
-                ProductId = p.ProductId,
-                Quantity = p.Quantity,
-                Amount = p.SubTotal
-            }).ToList(),
-            Payments = new List<SaleVM.SalePayment>
-        {
-            new SaleVM.SalePayment
-            {
-                PaymentAmount = paymentAmount,
-                PaymentType = 0, // You can later set this to enums like Cash, Card, etc.
-                AmountTendered = paymentAmount,
-                EnteredBy = 5,
-                PaymentDate = DateTime.UtcNow
-            }
-        }
-        };
-
-        bool success = await _apiService.CreateSaleAsync(_sale);
-        string message = success ? "Sale and payment recorded successfully!" : "Failed to save sale/payment. Try again.";
-        await DisplayAlert(success ? "Success" : "Error", message, "OK");
-
-        if (success)
-        {
-            var newSale = new SaleVM
-            {
-                SaleId = _sale.Id,
-                SaleDate = _sale.SaleDate,
-                PatientName = patient.FullName,
-                DentistName = dentist.FullName,
-                Total = SelectedProducts.Sum(p => p.SubTotal),
-                Status = paymentAmount >= _sale.Total ? "Paid" : "Partial"
-            };
-
-            _onSaleCreated?.Invoke(newSale);
-            await Navigation.PopAsync();
-        }
-    }
-
-
-    private async void OnSaveSaleClicked(object sender, EventArgs e)
-    {
-        var patient = PatientPicker.SelectedItem as PatientVM;
-        var dentist = DentistPicker.SelectedItem as DentistVM;
-        var selectedProducts = SelectedProducts.ToList(); // Convert ObservableCollection to List
-
-        var (isValid, errorMessage) = SalesValidationService.ValidateSale(patient?.Id, dentist?.Id, selectedProducts);
-        if (!isValid)
-        {
-            await DisplayAlert("Validation Error", errorMessage, "OK");
-            return;
-        }
-
-        _sale ??= new SaleVM
-        {
-            SaleNo = $"SALE-{DateTime.UtcNow:yyyyMMdd-HHmmss}",
-            SaleDate = DateTime.UtcNow,
-            PatientId = patient?.Id ?? 0,
-            DentistId = dentist?.Id ?? 0,
-            Note = "Patient purchased treatments",
-            SubTotal = SelectedProducts.Sum(p => p.SubTotal),
-            Total = SelectedProducts.Sum(p => p.SubTotal),
-            Items = SelectedProducts.Select(p => new SaleVM.SaleItem
-            {
-                ProductId = p.ProductId,
-                Quantity = p.Quantity,
-                Amount = p.SubTotal
-            }).ToList(),
-            Payments = new List<SaleVM.SalePayment>
-            {
-                new SaleVM.SalePayment
-                {
-                    PaymentAmount = 0,   //temporary
-                    PaymentType = 0,
-                    AmountTendered = 0, //temporary
-                    EnteredBy = 5,
-                    PaymentDate = DateTime.UtcNow
-                }
-            }
-        };
-
-        // Convert _sale to JSON format for display
-        string saleJson = JsonSerializer.Serialize(_sale, new JsonSerializerOptions { WriteIndented = true });
-        await DisplayAlert("Sale Details (API Format)", saleJson, "OK");
-
-        bool success = await _apiService.CreateSaleAsync(_sale);
-        string message = success ? "Sale created successfully!" : "Failed to create sale. Please try again.";
-        await DisplayAlert(success ? "Success" : "Error", message, "OK");
-
-        if (success)
-        {
-            var newSale = new SaleVM
-            {
-                SaleId = _sale.Id,
-                SaleDate = _sale.SaleDate,
-                PatientName = patient.FullName,
-                DentistName = dentist.FullName,
-                Total = SelectedProducts.Sum(p => p.SubTotal),    
-                Status = "Unpaid"                               
-            };
-            _onSaleCreated?.Invoke(newSale); // Trigger the callback with the new sale
-            await Navigation.PopAsync();
-        }
-    }
     private void OnSearchBarTextChanged(object sender, TextChangedEventArgs e)
     {
         string searchText = e.NewTextValue?.ToLower() ?? "";
@@ -302,4 +167,64 @@ public partial class SalesPage : ContentPage
     }
     private void OnSearchImageTapped(object sender, TappedEventArgs e) => SearchBar.Focus();
     private async void OnShowServiceFrame(object sender, EventArgs e) => await FrameAnimationService.ToggleVisibility(inputFrame);
+
+    private async void OnSaveSaleClicked(object sender, EventArgs e)
+    {
+        await SaveSaleAsync(0); // No payment yet
+    }
+
+    private async void OnSavePayClicked(object sender, EventArgs e)
+    {
+        string input = await DisplayPromptAsync("Enter Payment", "Enter payment amount:", "OK", "Cancel", "0.00", maxLength: 10, keyboard: Keyboard.Numeric);
+
+        if (string.IsNullOrWhiteSpace(input) || !decimal.TryParse(input, out decimal amount))
+        {
+            await DisplayAlert("Error", "Invalid payment amount entered.", "OK");
+            return;
+        }
+
+        await SaveSaleAsync(amount);
+    }
+
+    private async Task<bool> SaveSaleAsync(decimal paymentAmount)
+    {
+        var patient = PatientPicker.SelectedItem as PatientVM;
+        var dentist = DentistPicker.SelectedItem as DentistVM;
+        var selectedProducts = SelectedProducts.ToList();
+
+        var (isValid, errorMessage) = SalesValidationService.ValidateSale(patient?.Id, dentist?.Id, selectedProducts);
+        if (!isValid)
+        {
+            await DisplayAlert("Validation Error", errorMessage, "OK");
+            return false;
+        }
+
+        /*sale ??= BuildSale(paymentAmount);*/
+        _sale ??= CreateSale.BuildSale(patient, dentist, SelectedProducts, paymentAmount);
+
+        bool success = await _apiService.CreateSaleAsync(_sale);
+        string message = success ? "Sale saved successfully!" : "Failed to save sale.";
+        await DisplayAlert(success ? "Success" : "Error", message, "OK");
+
+        if (success)
+        {
+            string status = paymentAmount >= _sale.Total ? "Paid" : paymentAmount == 0 ? "Unpaid" : "Partial";
+
+            var newSale = new SaleVM
+            {
+                SaleId = _sale.Id,
+                SaleDate = _sale.SaleDate,
+                PatientName = patient.FullName,
+                DentistName = dentist.FullName,
+                Total = _sale.Total,
+                Status = status
+            };
+
+            _onSaleCreated?.Invoke(newSale);
+            await Navigation.PopAsync();
+        }
+
+        return success;
+    }
+
 }
