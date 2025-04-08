@@ -49,6 +49,24 @@ public partial class SaleListPage : ContentPage
         // Add the newly created sale to the list
         Sales.Insert(0, newSale);
     }
+    private async void OnPayButtonClicked(object sender, EventArgs e)
+    {
+        if (sender is ImageButton button && button.BindingContext is SaleVM selectedSale)
+        {
+            string totalAmountString = selectedSale.Total.ToString("0.00");
+
+            string paymentInput = await DisplayPromptAsync("Payment","Amount:","OK","Cancel",keyboard: Keyboard.Numeric,initialValue: totalAmountString
+            );
+
+            if (!decimal.TryParse(paymentInput, out decimal paymentAmount))
+            {
+                await DisplayAlert("Error", "Invalid payment amount entered.", "OK");
+                return;
+            }
+
+            await DisplayAlert("Payment Recorded", $"Payment of {paymentAmount:C} recorded.", "OK");
+        }
+    }
     private async void OnEditButtonClicked(object sender, EventArgs e)
     {
         if (sender is ImageButton button && button.BindingContext is SaleVM selectedSale)

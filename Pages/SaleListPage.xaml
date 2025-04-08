@@ -59,9 +59,35 @@
                                 <Label Text="{Binding Total, StringFormat='{0:N2}'}" FontSize="13" Grid.Column="2" />
                                 <Label Text="{Binding Status}" FontSize="13" Grid.Column="3"/>
                                 <HorizontalStackLayout Grid.Column="4" Spacing="3">
-                                    <ImageButton Source="info.png" HeightRequest="20" WidthRequest="20" Clicked="OnEditButtonClicked"/>
+
+                                    <!-- Pay button (only if unpaid) -->
+                                    <ImageButton Source="pay.png" HeightRequest="20" WidthRequest="20" Clicked="OnPayButtonClicked">
+                                        <ImageButton.Triggers>
+                                            <DataTrigger TargetType="ImageButton" Binding="{Binding Status}" Value="Unpaid">
+                                                <Setter Property="IsVisible" Value="True"/>
+                                            </DataTrigger>
+                                            <DataTrigger TargetType="ImageButton" Binding="{Binding Status}" Value="Paid">
+                                                <Setter Property="IsVisible" Value="False"/>
+                                            </DataTrigger>
+                                        </ImageButton.Triggers>
+                                    </ImageButton>
+
+                                    <!-- Edit button (only if paid) -->
+                                    <ImageButton Source="info.png" HeightRequest="20" WidthRequest="20" Clicked="OnEditButtonClicked">
+                                        <ImageButton.Triggers>
+                                            <DataTrigger TargetType="ImageButton" Binding="{Binding Status}" Value="Paid">
+                                                <Setter Property="IsVisible" Value="True"/>
+                                            </DataTrigger>
+                                            <DataTrigger TargetType="ImageButton" Binding="{Binding Status}" Value="Unpaid">
+                                                <Setter Property="IsVisible" Value="False"/>
+                                            </DataTrigger>
+                                        </ImageButton.Triggers>
+                                    </ImageButton>
+
+                                    <!-- Delete button (always visible) -->
                                     <ImageButton Source="delete.png" HeightRequest="25" WidthRequest="25" Clicked="OnDeleteButtonClicked"/>
                                 </HorizontalStackLayout>
+
                             </Grid>
                         </ViewCell>
                     </DataTemplate>
