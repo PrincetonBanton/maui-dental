@@ -111,7 +111,7 @@ namespace DentalApp.Services
         public Task<bool> UpdateExpenseAsync(Expense expense) => PutAsync($"Expense/Update/{expense.Id}", expense);
         public Task<bool> DeleteExpenseAsync(int id)=> DeleteAsync($"Expense/Delete/{id}");
 
-        //Sale Methods
+        //Sale Methods  
         public async Task<List<SaleVM>> GetSalesAsync()
         {
             var sales = await GetAsync<List<SaleVM>>("Sale/GetAll") ?? new List<SaleVM>();

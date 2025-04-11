@@ -99,7 +99,7 @@ public partial class SalesPage : ContentPage
         {
             _allProducts = isApiAvailable
                 ? await _apiService.GetProductsAsync() ?? new List<ProductVM>()
-                : SampleData.GetSampleProducts();               //Replace w offline data sync
+                : SampleData.GetSampleProducts();              
         }
         catch (Exception ex)
         {
@@ -175,7 +175,8 @@ public partial class SalesPage : ContentPage
 
     private async void OnSavePayClicked(object sender, EventArgs e)
     {
-        string input = await DisplayPromptAsync("Enter Payment", "Enter payment amount:", "OK", "Cancel", "0.00", maxLength: 10, keyboard: Keyboard.Numeric);
+        var subtotal = SelectedProducts.Sum(p => p.SubTotal);
+        string input = await DisplayPromptAsync("Enter Payment","Enter payment amount:","OK","Cancel", initialValue: subtotal.ToString("N2"), keyboard: Keyboard.Numeric);
 
         if (string.IsNullOrWhiteSpace(input) || !decimal.TryParse(input, out decimal amount))
         {
@@ -185,6 +186,7 @@ public partial class SalesPage : ContentPage
 
         await SaveSaleAsync(amount);
     }
+
 
     private async Task<bool> SaveSaleAsync(decimal paymentAmount)
     {

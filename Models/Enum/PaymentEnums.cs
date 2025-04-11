@@ -1,14 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace DentalApp.Models.Enum
+﻿namespace DentalApp.Models.Enum
 {
-    public enum PaymentType
+    public enum PaymentType : short
     {
-        Full = 0,
-        Partial = 1
+        Cash = 0,
+        GCash = 1,
+        BankTransfer = 2,
     }
 
     public enum PaymentStatus

@@ -46,7 +46,6 @@ public partial class SaleListPage : ContentPage
     }
     private void OnSaleCreated(SaleVM newSale)
     {
-        // Add the newly created sale to the list
         Sales.Insert(0, newSale);
     }
     private async void OnPayButtonClicked(object sender, EventArgs e)

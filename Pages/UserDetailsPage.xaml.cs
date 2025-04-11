@@ -10,6 +10,7 @@ public partial class UserDetailsPage : ContentPage
     private readonly ApiService _apiService = new();
     private bool _isEditMode;
 
+
     public UserDetailsPage(UserVM user = null)
     {
         InitializeComponent();
@@ -62,7 +63,7 @@ public partial class UserDetailsPage : ContentPage
         _user.Note = NoteEditor.Text;
         _user.RoleId = RolePicker.SelectedItem is Role selectedRole ? selectedRole.Id : 0;
 
-        var (isValid, errorMessage) = UserValidationService.ValidateUser(_user, ConfirmPasswordEntry.Text);
+        var (isValid, errorMessage) = UserValidationService.ValidateUser(_user, ConfirmPasswordEntry.Text, _isEditMode);
 
         if (!isValid)
         {

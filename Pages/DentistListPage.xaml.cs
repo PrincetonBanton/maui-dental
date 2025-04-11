@@ -1,13 +1,16 @@
 using DentalApp.Models;
 using DentalApp.Data;
 using DentalApp.Services;
+using System.Collections.ObjectModel;
 
 namespace DentalApp.Pages
 {
     public partial class DentistListPage : ContentPage
     {
         private readonly ApiService _apiService = new();
-        private List<DentistVM> _allDentists= new();
+        //private List<DentistVM> _allDentists= new();
+        private ObservableCollection<DentistVM> _allDentists = new();
+
 
         public DentistListPage()
         {
@@ -26,9 +29,13 @@ namespace DentalApp.Pages
             bool isApiAvailable = ApiConnectivityService.Instance.IsApiAvailable;
             try
             {
-                _allDentists = isApiAvailable
+                var dentistList = isApiAvailable
                     ? await _apiService.GetDentistsAsync() ?? new List<DentistVM>()
-                    : SampleData.GetSampleDentists(); //Replace w offline data sync
+                    : SampleData.GetSampleDentists(); // Replace with offline data sync
+
+                _allDentists.Clear();
+                foreach (var dentist in dentistList)
+                    _allDentists.Add(dentist);
 
                 DentistListView.ItemsSource = _allDentists;
             }
@@ -40,16 +47,18 @@ namespace DentalApp.Pages
         private async void OnCreateDentistButtonClicked(object sender, EventArgs e)
         {
             App.Instance.DentistNavigated = "dentistdetails";
-            await Navigation.PushAsync(new DentistDetailsPage());
-        }     
+            await Navigation.PushAsync(new DentistDetailsPage(_allDentists));
+        }
+
         private async void OnEditButtonClicked(object sender, EventArgs e)
         {
             if (sender is ImageButton button && button.BindingContext is DentistVM selectedDentist)
             {
                 App.Instance.DentistNavigated = "dentistdetails";
-                await Navigation.PushAsync(new DentistDetailsPage(selectedDentist));
+                await Navigation.PushAsync(new DentistDetailsPage(_allDentists, selectedDentist));
             }
         }
+
         private async void OnDeleteButtonClicked(object sender, EventArgs e)
         {
             if (sender is ImageButton button && button.BindingContext is DentistVM selectedDentist)
@@ -57,7 +66,6 @@ namespace DentalApp.Pages
                 bool confirmDelete = await DisplayAlert("Confirm", "Delete this dentist?", "Yes", "No");
                 if (!confirmDelete) return;
 
-                await DisplayAlert("Info", $"User ID: {selectedDentist.Id}", "OK");
                 var success = await _apiService.DeleteDentistAsync(selectedDentist.Id);
                 LoadDentistList();
                 await DisplayAlert(success ? "Success" : "Error", success ? "Dentist deleted." : "Failed to delete dentist.", "OK");
@@ -68,7 +76,7 @@ namespace DentalApp.Pages
             if (e.Item is DentistVM selectedDentist)
             {
                 App.Instance.DentistNavigated = "dentistdetails";
-                await Navigation.PushAsync(new DentistDetailsPage(selectedDentist));
+                await Navigation.PushAsync(new DentistDetailsPage(_allDentists, selectedDentist));
             }
             ((ListView)sender).SelectedItem = null;
         }
