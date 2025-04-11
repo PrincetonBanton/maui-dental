@@ -1,17 +1,19 @@
 using DentalApp.Models;
 using DentalApp.Services;
 using DentalApp.Services.Validations;
+using System.Collections.ObjectModel;
 
 namespace DentalApp.Pages;
 
 public partial class PatientDetailsPage : ContentPage
 {
-    private PatientVM _patient;
     private readonly ApiService _apiService = new();
-
-    public PatientDetailsPage(PatientVM patient = null)
+    private PatientVM _patient;
+    private ObservableCollection<PatientVM> _allPatients = new();
+    public PatientDetailsPage(ObservableCollection<PatientVM> allPatients, PatientVM patient = null)
     {
         InitializeComponent();
+        _allPatients = allPatients;
         _patient = patient;
         if (_patient != null) BindPatientDetails();
     }
@@ -35,7 +37,6 @@ public partial class PatientDetailsPage : ContentPage
     private async void SaveButton_Clicked(object sender, EventArgs e)
     {
         _patient ??= new PatientVM();
-
         _patient.FirstName = FirstNameEntry.Text;
         _patient.MiddleName = MiddleNameEntry.Text;
         _patient.LastName = LastNameEntry.Text;
@@ -47,21 +48,32 @@ public partial class PatientDetailsPage : ContentPage
         _patient.PatientNo = PatientNoEntry.Text;
 
         var (isValid, errorMessage) = PatientValidationService.ValidatePatient(_patient);
-
         if (!isValid)
         {
             await DisplayAlert("Validation Error", errorMessage, "OK");
             return;
         }
         bool success = _patient.Id != 0
-        ? await _apiService.UpdatePatientAsync(_patient)
+            ? await _apiService.UpdatePatientAsync(_patient)
             : await _apiService.CreatePatientAsync(_patient);
+
+        if (success)
+        {
+            var updatedList = await _apiService.GetPatientsAsync() ?? new List<PatientVM>();
+            _allPatients.Clear();
+            updatedList.ForEach(_allPatients.Add);
+        }
+
         string message = success
             ? (_patient.Id != 0 ? "Patient updated successfully!" : "Patient created successfully!")
             : "Failed to save patient. Please try again.";
 
         await DisplayAlert(success ? "Success" : "Error", message, "OK");
 
-        if (success) await Navigation.PopAsync();
+        if (success)
+        {
+            _patient = null;
+            await Navigation.PopAsync();
+        }
     }
 }

@@ -8,9 +8,7 @@ namespace DentalApp.Pages
     public partial class DentistListPage : ContentPage
     {
         private readonly ApiService _apiService = new();
-        //private List<DentistVM> _allDentists= new();
         private ObservableCollection<DentistVM> _allDentists = new();
-
 
         public DentistListPage()
         {
@@ -29,14 +27,12 @@ namespace DentalApp.Pages
             bool isApiAvailable = ApiConnectivityService.Instance.IsApiAvailable;
             try
             {
-                var dentistList = isApiAvailable
+             var dentistList = isApiAvailable
                     ? await _apiService.GetDentistsAsync() ?? new List<DentistVM>()
-                    : SampleData.GetSampleDentists(); // Replace with offline data sync
+                    : SampleData.GetSampleDentists(); 
 
                 _allDentists.Clear();
-                foreach (var dentist in dentistList)
-                    _allDentists.Add(dentist);
-
+                dentistList.ForEach(_allDentists.Add);
                 DentistListView.ItemsSource = _allDentists;
             }
             catch (Exception)
@@ -58,7 +54,15 @@ namespace DentalApp.Pages
                 await Navigation.PushAsync(new DentistDetailsPage(_allDentists, selectedDentist));
             }
         }
-
+        private async void DentistListView_ItemTapped(object sender, ItemTappedEventArgs e)
+        {
+            if (e.Item is DentistVM selectedDentist)
+            {
+                App.Instance.DentistNavigated = "dentistdetails";
+                await Navigation.PushAsync(new DentistDetailsPage(_allDentists, selectedDentist));
+            }
+            ((ListView)sender).SelectedItem = null;
+        }
         private async void OnDeleteButtonClicked(object sender, EventArgs e)
         {
             if (sender is ImageButton button && button.BindingContext is DentistVM selectedDentist)
@@ -70,15 +74,6 @@ namespace DentalApp.Pages
                 LoadDentistList();
                 await DisplayAlert(success ? "Success" : "Error", success ? "Dentist deleted." : "Failed to delete dentist.", "OK");
             }
-        }
-        private async void DentistListView_ItemTapped(object sender, ItemTappedEventArgs e)
-        {
-            if (e.Item is DentistVM selectedDentist)
-            {
-                App.Instance.DentistNavigated = "dentistdetails";
-                await Navigation.PushAsync(new DentistDetailsPage(_allDentists, selectedDentist));
-            }
-            ((ListView)sender).SelectedItem = null;
         }
         private void OnSearchBarTextChanged(object sender, TextChangedEventArgs e)
         {
