@@ -1,13 +1,14 @@
 using DentalApp.Models;
 using DentalApp.Data;
 using DentalApp.Services;
+using System.Collections.ObjectModel;
 
 namespace DentalApp.Pages
 {
     public partial class UserListPage : ContentPage
     {
         private readonly ApiService _apiService = new();
-        private List<UserVM> _allUsers = new();
+        private ObservableCollection<UserVM> _allUsers = new();
 
         public UserListPage()
         {
@@ -26,12 +27,14 @@ namespace DentalApp.Pages
             bool isApiAvailable = ApiConnectivityService.Instance.IsApiAvailable;
             try
             {
-                _allUsers = isApiAvailable
+                var userList = isApiAvailable
                     ? await _apiService.GetUsersAsync() ?? new List<UserVM>()
                     : SampleData.GetSampleUsers();
+                _allUsers.Clear();
+                userList.ForEach(_allUsers.Add);
                 UserListView.ItemsSource = _allUsers;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 await DisplayAlert("Error", "Failed to load users. Please try again.", "OK");
             }
@@ -39,48 +42,35 @@ namespace DentalApp.Pages
         private async void OnCreateUserButtonClicked(object sender, EventArgs e)
         {
             App.Instance.UserNavigated = "userdetails";
-            await Navigation.PushAsync(new UserDetailsPage());
+            await Navigation.PushAsync(new UserDetailsPage(_allUsers));
         }
         private async void OnEditButtonClicked(object sender, EventArgs e)
         {
             if (sender is ImageButton button && button.BindingContext is UserVM selectedUser)
             {
-                var user = await _apiService.GetUserByIdAsync(selectedUser.Id);
-
-                if (user != null)
-                {
-                    App.Instance.UserNavigated = "userdetails";
-                    await Navigation.PushAsync(new UserDetailsPage(user));
-                }
-                else
-                {
-                    await DisplayAlert("Error", "Failed to fetch user details.", "OK");
-                }
+                App.Instance.UserNavigated = "userdetails";
+                await Navigation.PushAsync(new UserDetailsPage(_allUsers, selectedUser));
             }
         }
-
+        private async void UserListView_ItemTapped(object sender, ItemTappedEventArgs e)
+        {
+            if (e.Item is UserVM selectedUser)
+            {
+                App.Instance.UserNavigated = "userdetails";
+                await Navigation.PushAsync(new UserDetailsPage(_allUsers, selectedUser));
+            }
+            ((ListView)sender).SelectedItem = null;
+        }
         private async void OnDeleteButtonClicked(object sender, EventArgs e)
         {
             if (sender is ImageButton button && button.BindingContext is UserVM selectedUser)
             {
                 bool confirmDelete = await DisplayAlert("Confirm", "Delete this user?", "Yes", "No");
                 if (!confirmDelete) return;
-
-                await DisplayAlert("Info", $"User ID: {selectedUser.Id}", "OK");
                 var success = await _apiService.DeleteUserAsync(selectedUser.Id);
                 LoadUserList();
                 await DisplayAlert(success ? "Success" : "Error", success ? "User deleted." : "Failed to delete user.", "OK");
             }
-        }
-
-        private async void UserListView_ItemTapped(object sender, ItemTappedEventArgs e)
-        {
-            if (e.Item is UserVM selectedUser)
-            {
-                App.Instance.UserNavigated = "userdetails";
-                await Navigation.PushAsync(new UserDetailsPage(selectedUser));
-            }
-            ((ListView)sender).SelectedItem = null;
         }
         private void OnSearchBarTextChanged(object sender, TextChangedEventArgs e)
         {

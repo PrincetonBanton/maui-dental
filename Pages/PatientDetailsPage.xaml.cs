@@ -10,6 +10,7 @@ public partial class PatientDetailsPage : ContentPage
     private readonly ApiService _apiService = new();
     private PatientVM _patient;
     private ObservableCollection<PatientVM> _allPatients = new();
+
     public PatientDetailsPage(ObservableCollection<PatientVM> allPatients, PatientVM patient = null)
     {
         InitializeComponent();

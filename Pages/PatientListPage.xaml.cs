@@ -8,7 +8,6 @@ namespace DentalApp.Pages
     public partial class PatientListPage : ContentPage
     {
         private readonly ApiService _apiService = new();
-        //private List<PatientVM> _allPatients = new();
         private ObservableCollection<PatientVM> _allPatients = new();
 
         public PatientListPage()
@@ -30,17 +29,16 @@ namespace DentalApp.Pages
             {
                 var patientList = isApiAvailable
                     ? await _apiService.GetPatientsAsync() ?? new List<PatientVM>()
-                    : SampleData.GetSamplePatients(); //Replace w offline data sync
+                    : SampleData.GetSamplePatients(); 
                 _allPatients.Clear();
                 patientList.ForEach(_allPatients.Add);
                 PatientListView.ItemsSource = _allPatients;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 await DisplayAlert("Error", "Failed to load users. Please try again.", "OK");
             }
-        }
-
+        }   
         private async void OnCreatePatientButtonClicked(object sender, EventArgs e)
         {
             App.Instance.PatientNavigated = "patientdetails";
@@ -69,7 +67,6 @@ namespace DentalApp.Pages
             {
                 bool confirmDelete = await DisplayAlert("Confirm", "Delete this patient?", "Yes", "No");
                 if (!confirmDelete) return;
-
                 var success = await _apiService.DeletePatientAsync(selectedPatient.Id);
                 LoadPatientList();
                 await DisplayAlert(success ? "Success" : "Error", success ? "Patient deleted." : "Failed to delete patient.", "OK");
