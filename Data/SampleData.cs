@@ -62,6 +62,15 @@ namespace DentalApp.Data
                 new SaleVM { SaleId = 4, SaleDate = DateTime.Now.AddDays(-10), PatientName = "Pam Beesly", DentistName = "Dr. Sarah Connor", Total = 900.00m, Status = "Paid" }
             };
         }
+        public static List<Supplier> GetSampleSuppliers()
+        {
+            return new List<Supplier>
+            {
+                new Supplier { Id = 1, Name = "Dental Equipment Co.", Mobile = "09452512457", Address = "Matina, Davao City" },
+                new Supplier { Id = 2, Name = "Medical Supply Co.", Mobile = "09351245698", Address = "Buhangin, Davao City" },
+                new Supplier { Id = 3, Name = "Toothpaste Store", Mobile = "09754625795", Address = "Uyanguren, Davao City" }
+            };
+        }
 
     }
 }

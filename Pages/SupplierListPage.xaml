@@ -1,0 +1,73 @@
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="DentalApp.Pages.SupplierListPage"
+             BackgroundColor="White">
+    <ContentPage.Resources>
+        <DataTemplate x:Key="PortraitTemplate">
+            <ViewCell>
+                <Grid Padding="5" ColumnDefinitions="3*,2*,2*">
+                    <Label Text="{Binding Name}" FontSize="13" Grid.Column="0"/>
+                    <Label Text="{Binding Mobile}" FontSize="13" Grid.Column="1"/>
+                    <HorizontalStackLayout Margin="0,0,20,0" Spacing="3" Grid.Column="2">
+                        <ImageButton Source="edit.png" HeightRequest="25" WidthRequest="25" Clicked="OnEditButtonClicked"/>
+                        <ImageButton Source="delete.png" HeightRequest="25" WidthRequest="25" Clicked="OnDeleteButtonClicked"/>
+                    </HorizontalStackLayout>
+                </Grid>
+            </ViewCell>
+        </DataTemplate>
+
+        <DataTemplate x:Key="LandscapeTemplate">
+            <ViewCell>
+                <Grid Padding="5" ColumnDefinitions="3*,2*,3*,2*">
+                    <Label Text="{Binding Name}" FontSize="13" Grid.Column="0"/>
+                    <Label Text="{Binding Mobile}" FontSize="13" Grid.Column="1"/>
+                    <Label Text="{Binding Address}" FontSize="13" Grid.Column="2"/>
+                    <HorizontalStackLayout Margin="0,0,20,0" Spacing="3" Grid.Column="3">
+                        <ImageButton Source="edit.png" HeightRequest="25" WidthRequest="25" Clicked="OnEditButtonClicked"/>
+                        <ImageButton Source="delete.png" HeightRequest="25" WidthRequest="25" Clicked="OnDeleteButtonClicked"/>
+                    </HorizontalStackLayout>
+                </Grid>
+            </ViewCell>
+        </DataTemplate>
+    </ContentPage.Resources>
+    
+    <ScrollView>
+        <VerticalStackLayout Padding="15" Spacing="10">
+            <Button Text="Create Supplier" Clicked="OnCreateSupplierButtonClicked" />
+
+            <Grid ColumnDefinitions="Auto, *">
+                <Image Source="search.png" VerticalOptions="Center" HeightRequest="15" Grid.Column="0">
+                    <Image.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnSearchImageTapped"/>
+                    </Image.GestureRecognizers>
+                </Image>
+                <Entry x:Name="SearchBar" TextChanged="OnSearchBarTextChanged" Margin="10,0,0,0" Grid.Column="1"/>
+            </Grid>
+
+            <Grid BackgroundColor="DarkGray" Padding="5" ColumnDefinitions="3*,2*,3*,2*">
+                <Label Text="Name" FontAttributes="Bold" TextColor="White" Grid.Column="0"/>
+                <Label Text="Contact" FontAttributes="Bold" TextColor="White" Grid.Column="1"/>
+                <Label Text="Address" FontAttributes="Bold" TextColor="White" Grid.Column="2"/>
+            </Grid>
+
+            <ListView x:Name="SupplierListView" HasUnevenRows="True">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <ViewCell>
+                            <Grid Padding="5" ColumnDefinitions="3*,2*,3*,2*">
+                                <Label Text="{Binding Name}" FontSize="13" Grid.Column="0"/>
+                                <Label Text="{Binding Mobile}" FontSize="13" HorizontalTextAlignment="Start" Grid.Column="1"/>
+                                <Label Text="{Binding Address}" FontSize="13" HorizontalTextAlignment="Start" Grid.Column="2"/>
+                                <HorizontalStackLayout Margin="0,0,20,0" Spacing="3" Grid.Column="3">
+                                    <ImageButton Source="edit.png" HeightRequest="25" WidthRequest="25" Clicked="OnEditButtonClicked"/>
+                                    <ImageButton Source="delete.png" HeightRequest="25" WidthRequest="25" Clicked="OnDeleteButtonClicked"/>
+                                </HorizontalStackLayout>
+                            </Grid>
+                        </ViewCell>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

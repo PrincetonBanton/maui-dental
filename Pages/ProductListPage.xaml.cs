@@ -9,7 +9,7 @@ namespace DentalApp.Pages
     {
         private readonly ApiService _apiService = new();
         private List<ProductVM> _allProducts = new();
-        private ObservableCollection<ProductVM> _filteredProducts = new();
+        //private ObservableCollection<ProductVM> _filteredProducts = new();
 
         public ProductListPage()
         {

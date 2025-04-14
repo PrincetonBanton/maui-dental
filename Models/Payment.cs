@@ -14,7 +14,7 @@ namespace DentalApp.Models
 
         [Precision(9, 2)]
         public decimal AmountTendered { get; set; }
-        public int EnteredBy { get; set; }
+        public int? EnteredBy { get; set; }
         public PaymentStatus Status { get; set; } = PaymentStatus.Confirmed;
         public DateTime PaymentDate { get; set; }
         public DateTime CreatedOn { get; set; } = DateTime.Now;

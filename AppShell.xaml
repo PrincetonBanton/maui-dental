@@ -10,6 +10,9 @@
     <!--<FlyoutItem Title="Dashboard" Icon="expense.png">
         <ShellContent Title="Dashboard" ContentTemplate="{DataTemplate pages:Dashboard}" Route="Dashboard" />
     </FlyoutItem>-->
+    <FlyoutItem Title="Supplier" Icon="supplier.png">
+        <ShellContent Title="Supplier" ContentTemplate="{DataTemplate pages:SupplierListPage}" Route="SupplierListPage" />
+    </FlyoutItem>
     <FlyoutItem Title="Sales" Icon="sale.png">
         <ShellContent Title="Sales" ContentTemplate="{DataTemplate pages:SaleListPage}" Route="SaleListPage" />
     </FlyoutItem>

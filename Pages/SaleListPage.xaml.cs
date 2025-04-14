@@ -54,8 +54,8 @@ public partial class SaleListPage : ContentPage
         {
             string totalAmountString = selectedSale.Total.ToString("0.00");
 
-            string paymentInput = await DisplayPromptAsync("Payment","Amount:","OK","Cancel",keyboard: Keyboard.Numeric,initialValue: totalAmountString
-            );
+            string paymentInput = await DisplayPromptAsync("Payment", "Amount:", "OK", "Cancel",
+                keyboard: Keyboard.Numeric, initialValue: totalAmountString);
 
             if (!decimal.TryParse(paymentInput, out decimal paymentAmount))
             {
@@ -63,9 +63,25 @@ public partial class SaleListPage : ContentPage
                 return;
             }
 
-            await DisplayAlert("Payment Recorded", $"Payment of {paymentAmount:C} recorded.", "OK");
+            var payment = new Payment
+            {
+                SaleId = selectedSale.SaleId,
+                PaymentAmount = paymentAmount,
+                AmountTendered = paymentAmount, // or ask separately if needed
+                PaymentType = 0, // Hardcoded as cash
+                EnteredBy = 41,
+                PaymentDate = DateTime.Now
+            };
+
+            bool success = await _apiService.AddPaymentAsync(payment);
+
+            await DisplayAlert(success ? "Success" : "Error",
+                success ? $"Payment of {paymentAmount:C} recorded." : "Payment failed. Try again.",
+                "OK");
+            LoadSaleList();
         }
     }
+
     private async void OnEditButtonClicked(object sender, EventArgs e)
     {
         if (sender is ImageButton button && button.BindingContext is SaleVM selectedSale)
