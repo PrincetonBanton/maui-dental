@@ -71,6 +71,15 @@ namespace DentalApp.Data
                 new Supplier { Id = 3, Name = "Toothpaste Store", Mobile = "09754625795", Address = "Uyanguren, Davao City" }
             };
         }
+        public static List<Appointment> GetSampleAppointments()
+        {
+            return new List<Appointment>
+            {
+                new Appointment { Id = 1, Date = new DateTime(2025, 4, 15, 9, 0, 0), PatientName = "John Doe", DentistName = "Dr. Sarah Cruz", Title = "Routine check-up" },
+                new Appointment { Id = 2, Date = new DateTime(2025, 4, 15, 10, 30, 0), PatientName = "Maria Lopez", DentistName = "Dr. Mark Santiago", Title = "Tooth extraction" },
+                new Appointment { Id = 3, Date = new DateTime(2025, 4, 16, 13, 0, 0), PatientName = "Carlos Reyes", DentistName = "Dr. Sarah Cruz", Title = "Follow-up consultation" }
+            };
+        }
 
     }
 }

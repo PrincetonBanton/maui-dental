@@ -125,8 +125,12 @@ namespace DentalApp.Services
         {
             var suppliers = await GetAsync<List<Supplier>>("Supplier/GetAll") ?? new List<Supplier>();
             return suppliers.OrderByDescending(e => e.Id).ToList();
-
-
+        }
+        //Supplier
+        public async Task<List<Appointment>> GetAppointmentsAsync()
+        {
+            var appointments = await GetAsync<List<Appointment>>("Appointment/GetAll") ?? new List<Appointment>();
+            return appointments.OrderByDescending(e => e.Id).ToList();
         }
     }
 }

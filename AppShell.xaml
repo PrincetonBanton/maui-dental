@@ -7,20 +7,23 @@
     Shell.FlyoutBehavior="Flyout"
     FlyoutBackgroundColor="LightGray">
 
-    <!--<FlyoutItem Title="Dashboard" Icon="expense.png">
+    <FlyoutItem Title="Dashboard" Icon="expense.png">
         <ShellContent Title="Dashboard" ContentTemplate="{DataTemplate pages:Dashboard}" Route="Dashboard" />
-    </FlyoutItem>-->
-    <FlyoutItem Title="Supplier" Icon="supplier.png">
+    </FlyoutItem>
+    <FlyoutItem Title="Suppliers" Icon="supplier.png">
         <ShellContent Title="Supplier" ContentTemplate="{DataTemplate pages:SupplierListPage}" Route="SupplierListPage" />
     </FlyoutItem>
-    <FlyoutItem Title="Sales" Icon="sale.png">
+    <FlyoutItem Title="Appointments" Icon="appointment.png">
+        <ShellContent Title="Appointment" ContentTemplate="{DataTemplate pages:AppointmentListPage}" Route="AppointmentListPage" />
+    </FlyoutItem>
+    <FlyoutItem Title="Revenue" Icon="sale.png">
         <ShellContent Title="Sales" ContentTemplate="{DataTemplate pages:SaleListPage}" Route="SaleListPage" />
+    </FlyoutItem>
+    <FlyoutItem Title="Pricing" Icon="product.png">
+        <ShellContent Title="Product" ContentTemplate="{DataTemplate pages:ProductListPage}" Route="ProductListPage" />
     </FlyoutItem>
     <FlyoutItem Title="Expense" Icon="expense.png">
         <ShellContent Title="Expense" ContentTemplate="{DataTemplate pages:ExpensePage}" Route="ExpensePage" />
-    </FlyoutItem>
-    <FlyoutItem Title="Product" Icon="product.png">
-        <ShellContent Title="Product" ContentTemplate="{DataTemplate pages:ProductListPage}" Route="ProductListPage" />
     </FlyoutItem>
     <FlyoutItem Title="People" Icon="users.png">
         <ShellContent Title="User" Icon="user.png" ContentTemplate="{DataTemplate pages:UserListPage}" Route="UserListPage" />

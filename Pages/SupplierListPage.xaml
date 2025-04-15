@@ -30,7 +30,6 @@
             </ViewCell>
         </DataTemplate>
     </ContentPage.Resources>
-    
     <ScrollView>
         <VerticalStackLayout Padding="15" Spacing="10">
             <Button Text="Create Supplier" Clicked="OnCreateSupplierButtonClicked" />
@@ -45,9 +44,9 @@
             </Grid>
 
             <Grid BackgroundColor="DarkGray" Padding="5" ColumnDefinitions="3*,2*,3*,2*">
-                <Label Text="Name" FontAttributes="Bold" TextColor="White" Grid.Column="0"/>
-                <Label Text="Contact" FontAttributes="Bold" TextColor="White" Grid.Column="1"/>
-                <Label Text="Address" FontAttributes="Bold" TextColor="White" Grid.Column="2"/>
+                <Label Text="Date" FontAttributes="Bold" TextColor="White" Grid.Column="0"/>
+                <Label Text="Patient" FontAttributes="Bold" TextColor="White" Grid.Column="1"/>
+                <Label Text="Dentist" FontAttributes="Bold" TextColor="White" Grid.Column="2"/>
             </Grid>
 
             <ListView x:Name="SupplierListView" HasUnevenRows="True">
