@@ -29,29 +29,6 @@ namespace DentalApp.Pages
                     ? await _apiService.GetAppointmentsAsync() ?? new List<Appointment>()
                     : SampleData.GetSampleAppointments();
 
-                var users = isApiAvailable
-                    ? await _apiService.GetUsersAsync() ?? new List<UserVM>()
-                    : SampleData.GetSampleUsers();
-
-                // Convert the response items to JSON format
-                string itemsJson = JsonSerializer.Serialize(users, new JsonSerializerOptions { WriteIndented = true });
-                await DisplayAlert("Sale Items (API Format)", itemsJson, "OK");
-
-                var userDict = users.ToDictionary(
-                    u => u.Id,
-                    u => $"{u.FirstName} {(string.IsNullOrWhiteSpace(u.MiddleName) ? "" : u.MiddleName + " ")}{u.LastName}".Trim()
-                );
-                string usersJson = JsonSerializer.Serialize(userDict, new JsonSerializerOptions { WriteIndented = true });
-                await DisplayAlert("Sale Items (API Format)", usersJson, "OK");
-
-                // 4. Map patient and dentist names
-                foreach (var appt in appointments)
-                {
-                    appt.PatientName = userDict.TryGetValue(appt.PatientId, out var patientName) ? patientName : "Unknown";
-                    appt.DentistName = userDict.TryGetValue(appt.DentistId, out var dentistName) ? dentistName : "Unknown";
-                }
-
-                // 5. Bind to UI
                 AppointmentListView.ItemsSource = appointments;
             }
             catch (Exception ex)

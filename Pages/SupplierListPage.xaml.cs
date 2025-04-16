@@ -8,8 +8,7 @@ namespace DentalApp.Pages
     public partial class SupplierListPage : ContentPage
     {
         private readonly ApiService _apiService = new();
-        private List<Supplier> _allSuppliers = new();
-        private ObservableCollection<Supplier> _filteredSuppliers = new();
+        private ObservableCollection<Supplier> _allSuppliers = new();
         private bool _isLandscape = false;
 
         public SupplierListPage()
@@ -44,19 +43,21 @@ namespace DentalApp.Pages
             //    await DisplayAlert("Orientation Changed", _isLandscape ? "Landscape" : "Portrait", "OK");
             //});
         }
-
-
         private async void LoadSupplierList()
         {
             await ApiConnectivityService.Instance.CheckApiConnectivityAsync();
             bool isApiAvailable = ApiConnectivityService.Instance.IsApiAvailable;
             try
             {
-                _allSuppliers = isApiAvailable
+                var supplierList = isApiAvailable
                     ? await _apiService.GetSuppliersAsync() ?? new List<Supplier>()
-                    : SampleData.GetSampleSuppliers(); // Replace with offline data sync
+                    : SampleData.GetSampleSuppliers();
+                _allSuppliers.Clear();
+                supplierList.ForEach(_allSuppliers.Add);
+                SupplierListView.ItemsSource = supplierList;
+                
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 await DisplayAlert("Error", "Failed to load suppliers. Please try again.", "OK");
             }
@@ -66,26 +67,33 @@ namespace DentalApp.Pages
 
         private async void OnCreateSupplierButtonClicked(object sender, EventArgs e)
         {
-            //await Navigation.PushAsync(new SupplierDetailsPage());
+            await Navigation.PushAsync(new SupplierDetailsPage(_allSuppliers));
         }
 
         private async void OnEditButtonClicked(object sender, EventArgs e)
         {
-            //if (sender is ImageButton button && button.BindingContext is SupplierVM selectedSupplier)
-            //    await Navigation.PushAsync(new SupplierDetailsPage(selectedSupplier));
+            if (sender is ImageButton button && button.BindingContext is Supplier selectedSupplier)
+                await Navigation.PushAsync(new SupplierDetailsPage(_allSuppliers, selectedSupplier));
         }
-
+        private async void SupplierListView_ItemTapped(object sender, ItemTappedEventArgs e)
+        {
+            if (e.Item is Supplier selectedSupplier)
+            {
+                await Navigation.PushAsync(new SupplierDetailsPage(_allSuppliers, selectedSupplier));
+            }
+            ((ListView)sender).SelectedItem = null;
+        }
         private async void OnDeleteButtonClicked(object sender, EventArgs e)
         {
-            //if (sender is ImageButton button && button.BindingContext is SupplierVM selectedSupplier)
-            //{
-            //    bool confirmDelete = await DisplayAlert("Confirm", "Delete this supplier?", "Yes", "No");
-            //    if (!confirmDelete) return;
+            if (sender is ImageButton button && button.BindingContext is Supplier selectedSupplier)
+            {
+                bool confirmDelete = await DisplayAlert("Confirm", "Delete this supplier?", "Yes", "No");
+                if (!confirmDelete) return;
 
-            //    var success = await _apiService.DeleteSupplierAsync(selectedSupplier.Id);
-            //    LoadSupplierList();
-            //    await DisplayAlert(success ? "Success" : "Error", success ? "Supplier deleted." : "Failed to delete supplier.", "OK");
-            //}
+                var success = await _apiService.DeleteSupplierAsync(selectedSupplier.Id);
+                LoadSupplierList();
+                await DisplayAlert(success ? "Success" : "Error", success ? "Supplier deleted." : "Failed to delete supplier.", "OK");
+            }
         }
 
         private void OnSearchBarTextChanged(object sender, TextChangedEventArgs e)

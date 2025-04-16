@@ -17,13 +17,13 @@ public partial class UserDetailsPage : ContentPage
         InitializeComponent();
         _allUsers = allUsers;
         _user = user;
+        //LoadRoles();
 
         if (_user != null) {
             _isEditMode = true;
             BindUserDetails();
             ToggleFieldsVisibility();
         }
-        LoadRoles();
     }
     protected override async void OnAppearing()
     {

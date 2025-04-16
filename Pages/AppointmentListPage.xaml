@@ -15,18 +15,21 @@
                 <Entry x:Name="SearchBar" TextChanged="OnSearchBarTextChanged" Margin="10,0,0,0" Grid.Column="1"/>
             </Grid>
 
-            <Grid BackgroundColor="DarkGray" Padding="5" ColumnDefinitions="5*,3*,2*">
+            <Grid BackgroundColor="DarkGray" Padding="5" ColumnDefinitions="2.4*,3.3*,3.3*,2*">
                 <Label Text="Date" FontAttributes="Bold" TextColor="White" Grid.Column="0"/>
                 <Label Text="Patient" FontAttributes="Bold" TextColor="White" Grid.Column="1"/>
+                <Label Text="Dentist" FontAttributes="Bold" TextColor="White" Grid.Column="2"/>
             </Grid>
             <ListView x:Name="AppointmentListView" HasUnevenRows="True">
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <ViewCell>
-                            <Grid Padding="5" ColumnDefinitions="5*,3*,2*">
-                                <Label Text="{Binding StartDate}" FontSize="13" Grid.Column="0"/>
-                                <Label Text="{Binding PatientId}" FontSize="13" Grid.Column="1"/>
-                                <HorizontalStackLayout Margin="0,0,20,0" Spacing="10" Grid.Column="2">
+                            <Grid Padding="5" ColumnDefinitions="2.4*,3.3*,3.3*,2*">
+                                <!--<Label Text="{Binding StartDate}" FontSize="13" Grid.Column="0"/>-->
+                                <Label Text="{Binding StartDate, StringFormat='{0:MM/dd/yyyy hh:mm tt}'}" FontSize="13" Grid.Column="0"/>
+                                <Label Text="{Binding PatientName}" FontSize="13" Grid.Column="1"/>
+                                <Label Text="{Binding DentistName}" FontSize="13" Grid.Column="2"/>
+                                <HorizontalStackLayout Margin="0,0,10,0" Spacing="3" Grid.Column="3">
                                     <ImageButton Source="edit.png" HeightRequest="25" WidthRequest="25" Clicked="OnEditButtonClicked"/>
                                     <ImageButton Source="delete.png" HeightRequest="25" WidthRequest="25" Clicked="OnDeleteButtonClicked"/>
                                 </HorizontalStackLayout>

@@ -126,7 +126,11 @@ namespace DentalApp.Services
             var suppliers = await GetAsync<List<Supplier>>("Supplier/GetAll") ?? new List<Supplier>();
             return suppliers.OrderByDescending(e => e.Id).ToList();
         }
-        //Supplier
+        public Task<bool> CreateSupplierAsync(Supplier supplier) => PostAsync("Supplier/Create", supplier);
+        public Task<bool> UpdateSupplierAsync(Supplier supplier) => PutAsync($"Supplier/Update/{supplier.Id}", supplier);
+        public Task<bool> DeleteSupplierAsync(int id) => DeleteAsync($"Supplier/Delete/{id}");
+
+        //Appointment
         public async Task<List<Appointment>> GetAppointmentsAsync()
         {
             var appointments = await GetAsync<List<Appointment>>("Appointment/GetAll") ?? new List<Appointment>();

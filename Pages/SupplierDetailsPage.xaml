@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="DentalApp.Pages.SupplierDetailsPage"
+             BackgroundColor="White">
+    <ScrollView>
+        <VerticalStackLayout Padding="10" Spacing="10">
+            <Frame Padding="10" Margin="0">
+                <VerticalStackLayout Spacing="5">
+                    <Label Text="Supplier Details" FontAttributes="Bold" FontSize="16"/>
+                    <HorizontalStackLayout Spacing="10">
+                        <Label Text="Name" WidthRequest="100"/>
+                        <Entry x:Name="NameEntry" Placeholder="Name" WidthRequest="200" VerticalOptions="Center"/>
+                    </HorizontalStackLayout>
+                    <HorizontalStackLayout Spacing="10">
+                        <Label Text="Description" WidthRequest="100"/>
+                        <Editor x:Name="DescriptionEditor" Placeholder="Description" AutoSize="TextChanges" WidthRequest="200" HeightRequest="80"/>
+                    </HorizontalStackLayout>
+                    <HorizontalStackLayout Spacing="10">
+                        <Label Text="First Name" WidthRequest="100"/>
+                        <Entry x:Name="FirstNameEntry" Placeholder="First Name" WidthRequest="200" VerticalOptions="Center"/>
+                    </HorizontalStackLayout>
+                    <HorizontalStackLayout Spacing="10">
+                        <Label Text="Last Name" WidthRequest="100"/>
+                        <Entry x:Name="LastNameEntry" Placeholder="Last Name" WidthRequest="200" VerticalOptions="Center"/>
+                    </HorizontalStackLayout>
+                    <HorizontalStackLayout Spacing="10">
+                        <Label Text="Mobile" WidthRequest="100"/>
+                        <Entry x:Name="MobileEntry" Placeholder="Mobile Number" Keyboard="Telephone" WidthRequest="200" VerticalOptions="Center"/>
+                    </HorizontalStackLayout>
+                    <HorizontalStackLayout Spacing="10">
+                        <Label Text="Phone" WidthRequest="100"/>
+                        <Entry x:Name="PhoneEntry" Placeholder="Phone Number" Keyboard="Telephone" WidthRequest="200" VerticalOptions="Center"/>
+                    </HorizontalStackLayout>
+                    <HorizontalStackLayout Spacing="10">
+                        <Label Text="Address" WidthRequest="100"/>
+                        <Editor x:Name="AddressEditor" Placeholder="Address" AutoSize="TextChanges" WidthRequest="200" HeightRequest="80"/>
+                    </HorizontalStackLayout>
+                </VerticalStackLayout>
+            </Frame>
+
+            <Button Text="Save" x:Name="SaveButton" Clicked="SaveButton_Clicked"/>
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>
