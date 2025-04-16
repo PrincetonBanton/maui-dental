@@ -5,7 +5,7 @@
     <ContentPage.Resources>
         <DataTemplate x:Key="PortraitTemplate">
             <ViewCell>
-                <Grid Padding="5" ColumnDefinitions="2.4*,3.3*,3.3*,2*">
+                <Grid Padding="5" ColumnDefinitions="2.5*,3*,3*,1.5*">
                     <Label Text="{Binding StartDate, StringFormat='{0:MM/dd/yyyy hh:mm tt}'}" FontSize="13" Grid.Column="0"/>
                     <Label Text="{Binding PatientName}" FontSize="13" Grid.Column="1"/>
                     <Label Text="{Binding DentistName}" FontSize="13" Grid.Column="2"/>
@@ -18,7 +18,7 @@
         </DataTemplate>
         <DataTemplate x:Key="LandscapeTemplate">
             <ViewCell>
-                <Grid Padding="5" ColumnDefinitions="2.4*,3.3*,3.3*,3.3*,2*">
+                <Grid Padding="5" ColumnDefinitions="2.5*,2*,2*,2*,1.5*">
                     <Label Text="{Binding StartDate, StringFormat='{0:MM/dd/yyyy hh:mm tt}'}" FontSize="13" Grid.Column="0"/>
                     <Label Text="{Binding PatientName}" FontSize="13" Grid.Column="1"/>
                     <Label Text="{Binding DentistName}" FontSize="13" Grid.Column="2"/>
@@ -45,28 +45,19 @@
                 <Entry x:Name="SearchBar" TextChanged="OnSearchBarTextChanged" Margin="10,0,0,0" Grid.Column="1"/>
             </Grid>
 
-            <Grid BackgroundColor="DarkGray" Padding="5" ColumnDefinitions="2.4*,3.3*,3.3*,2*">
+            <Grid x:Name="PortraitHeader" BackgroundColor="DarkGray" Padding="5" ColumnDefinitions="2.5*,3*,3*,1.5*">
                 <Label Text="Date" FontAttributes="Bold" TextColor="White" Grid.Column="0"/>
                 <Label Text="Patient" FontAttributes="Bold" TextColor="White" Grid.Column="1"/>
                 <Label Text="Dentist" FontAttributes="Bold" TextColor="White" Grid.Column="2"/>
             </Grid>
-            <ListView x:Name="AppointmentListView" HasUnevenRows="True">
-                <ListView.ItemTemplate>
-                    <DataTemplate>
-                        <ViewCell>
-                            <Grid Padding="5" ColumnDefinitions="2.4*,3.3*,3.3*,2*">
-                                <Label Text="{Binding StartDate, StringFormat='{0:MM/dd/yyyy hh:mm tt}'}" FontSize="13" Grid.Column="0"/>
-                                <Label Text="{Binding PatientName}" FontSize="13" Grid.Column="1"/>
-                                <Label Text="{Binding DentistName}" FontSize="13" Grid.Column="2"/>
-                                <HorizontalStackLayout Margin="0,0,10,0" Spacing="3" Grid.Column="3">
-                                    <ImageButton Source="edit.png" HeightRequest="25" WidthRequest="25" Clicked="OnEditButtonClicked"/>
-                                    <ImageButton Source="delete.png" HeightRequest="25" WidthRequest="25" Clicked="OnDeleteButtonClicked"/>
-                                </HorizontalStackLayout>
-                            </Grid>
-                        </ViewCell>
-                    </DataTemplate>
-                </ListView.ItemTemplate>
-            </ListView>
+            <Grid x:Name="LandscapeHeader" IsVisible="False" BackgroundColor="DarkGray" Padding="5" ColumnDefinitions="2.5*,2*,2*,2*,1.5*">
+                <Label Text="Date" FontAttributes="Bold" TextColor="White" Grid.Column="0"/>
+                <Label Text="Patient" FontAttributes="Bold" TextColor="White" Grid.Column="1"/>
+                <Label Text="Dentist" FontAttributes="Bold" TextColor="White" Grid.Column="2"/>
+                <Label Text="Title" FontAttributes="Bold" TextColor="White" Grid.Column="3"/>
+            </Grid>
+            
+            <ListView x:Name="AppointmentListView" HasUnevenRows="True" ItemTapped="AppointmentListView_ItemTapped"/>
 
         </VerticalStackLayout>
     </ScrollView>

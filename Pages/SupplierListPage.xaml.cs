@@ -37,6 +37,10 @@ namespace DentalApp.Pages
             var templateKey = _isLandscape ? "LandscapeTemplate" : "PortraitTemplate";
             var template = (DataTemplate)this.Resources[templateKey];
             SupplierListView.ItemTemplate = template;
+
+            LandscapeHeader.IsVisible = _isLandscape;
+            PortraitHeader.IsVisible = !_isLandscape;
+
         }
         private async void LoadSupplierList()
         {

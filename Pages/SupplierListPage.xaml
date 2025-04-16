@@ -44,13 +44,17 @@
                 <Entry x:Name="SearchBar" TextChanged="OnSearchBarTextChanged" Margin="10,0,0,0" Grid.Column="1"/>
             </Grid>
 
-            <Grid BackgroundColor="DarkGray" Padding="5" ColumnDefinitions="3*,2*,3*,2*">
+            <Grid x:Name="PortraitHeader" BackgroundColor="DarkGray" Padding="5" ColumnDefinitions="3*,2*,2*">
                 <Label Text="Name" FontAttributes="Bold" TextColor="White" Grid.Column="0"/>
                 <Label Text="Contact" FontAttributes="Bold" TextColor="White" Grid.Column="1"/>
             </Grid>
-
+            <Grid x:Name="LandscapeHeader" IsVisible="False" BackgroundColor="DarkGray" Padding="5" ColumnDefinitions="3*,2*,3*,2*">
+                <Label Text="Name" FontAttributes="Bold" TextColor="White" Grid.Column="0"/>
+                <Label Text="Contact" FontAttributes="Bold" TextColor="White" Grid.Column="1"/>
+                <Label Text="Address" FontAttributes="Bold" TextColor="White" Grid.Column="2"/>
+            </Grid>
+            
             <ListView x:Name="SupplierListView" HasUnevenRows="True" ItemTapped="SupplierListView_ItemTapped"/>
-
         </VerticalStackLayout>
     </ScrollView>
 </ContentPage>

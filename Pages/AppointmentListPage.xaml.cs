@@ -38,10 +38,8 @@ namespace DentalApp.Pages
             var template = (DataTemplate)this.Resources[templateKey];
             AppointmentListView.ItemTemplate = template;
 
-            //MainThread.BeginInvokeOnMainThread(async () =>
-            //{
-            //    await DisplayAlert("Orientation Changed", _isLandscape ? "Landscape" : "Portrait", "OK");
-            //});
+            LandscapeHeader.IsVisible = _isLandscape;
+            PortraitHeader.IsVisible = !_isLandscape;
         }
 
         private async void LoadAppointmentList()
@@ -77,6 +75,14 @@ namespace DentalApp.Pages
             //{
             //    await Navigation.PushAsync(new AppointmentDetailsPage(selectedAppointment));
             //}
+        }
+        private async void AppointmentListView_ItemTapped(object sender, ItemTappedEventArgs e)
+        {
+            //if (e.Item is Supplier selectedSupplier)
+            //{
+            //    await Navigation.PushAsync(new SupplierDetailsPage(_allSuppliers, selectedSupplier));
+            //}
+            //((ListView)sender).SelectedItem = null;
         }
 
         private async void OnDeleteButtonClicked(object sender, EventArgs e)
