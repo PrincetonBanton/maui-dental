@@ -9,13 +9,39 @@ namespace DentalApp.Pages
     public partial class AppointmentListPage : ContentPage
     {
         private readonly ApiService _apiService = new();
-        private List<Appointment> _allAppointments = new();
-        //private ObservableCollection<ProductVM> _filteredAppointments = new();
+        private ObservableCollection<Appointment> _allAppointments = new();
+        private bool _isLandscape = false;
 
         public AppointmentListPage()
         {
             InitializeComponent();
             LoadAppointmentList();
+        }
+        protected override void OnAppearing()
+        {
+            base.OnAppearing();
+            UpdateOrientation(Width, Height);
+        }
+
+        protected override void OnSizeAllocated(double width, double height)
+        {
+            base.OnSizeAllocated(width, height);
+            UpdateOrientation(width, height); // Also check when size changes
+        }
+
+        private void UpdateOrientation(double width, double height)
+        {
+            bool newIsLandscape = width > height;
+            _isLandscape = newIsLandscape;
+
+            var templateKey = _isLandscape ? "LandscapeTemplate" : "PortraitTemplate";
+            var template = (DataTemplate)this.Resources[templateKey];
+            AppointmentListView.ItemTemplate = template;
+
+            //MainThread.BeginInvokeOnMainThread(async () =>
+            //{
+            //    await DisplayAlert("Orientation Changed", _isLandscape ? "Landscape" : "Portrait", "OK");
+            //});
         }
 
         private async void LoadAppointmentList()
@@ -25,13 +51,15 @@ namespace DentalApp.Pages
 
             try
             {
-                var appointments = isApiAvailable
+                var appointmentList = isApiAvailable
                     ? await _apiService.GetAppointmentsAsync() ?? new List<Appointment>()
                     : SampleData.GetSampleAppointments();
 
-                AppointmentListView.ItemsSource = appointments;
+                _allAppointments.Clear();
+                appointmentList.ForEach(_allAppointments.Add);
+                AppointmentListView.ItemsSource = _allAppointments;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 await DisplayAlert("Error", "Failed to load appointments. Please try again.", "OK");
             }

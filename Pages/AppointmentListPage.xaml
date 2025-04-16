@@ -2,6 +2,36 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="DentalApp.Pages.AppointmentListPage"
              BackgroundColor="White">
+    <ContentPage.Resources>
+        <DataTemplate x:Key="PortraitTemplate">
+            <ViewCell>
+                <Grid Padding="5" ColumnDefinitions="2.4*,3.3*,3.3*,2*">
+                    <Label Text="{Binding StartDate, StringFormat='{0:MM/dd/yyyy hh:mm tt}'}" FontSize="13" Grid.Column="0"/>
+                    <Label Text="{Binding PatientName}" FontSize="13" Grid.Column="1"/>
+                    <Label Text="{Binding DentistName}" FontSize="13" Grid.Column="2"/>
+                    <HorizontalStackLayout Margin="0,0,10,0" Spacing="3" Grid.Column="3">
+                        <ImageButton Source="edit.png" HeightRequest="25" WidthRequest="25" Clicked="OnEditButtonClicked"/>
+                        <ImageButton Source="delete.png" HeightRequest="25" WidthRequest="25" Clicked="OnDeleteButtonClicked"/>
+                    </HorizontalStackLayout>
+                </Grid>
+            </ViewCell>
+        </DataTemplate>
+        <DataTemplate x:Key="LandscapeTemplate">
+            <ViewCell>
+                <Grid Padding="5" ColumnDefinitions="2.4*,3.3*,3.3*,3.3*,2*">
+                    <Label Text="{Binding StartDate, StringFormat='{0:MM/dd/yyyy hh:mm tt}'}" FontSize="13" Grid.Column="0"/>
+                    <Label Text="{Binding PatientName}" FontSize="13" Grid.Column="1"/>
+                    <Label Text="{Binding DentistName}" FontSize="13" Grid.Column="2"/>
+                    <Label Text="{Binding Title}" FontSize="13" Grid.Column="3"/>
+                    <HorizontalStackLayout Margin="0,0,10,0" Spacing="3" Grid.Column="4">
+                        <ImageButton Source="edit.png" HeightRequest="25" WidthRequest="25" Clicked="OnEditButtonClicked"/>
+                        <ImageButton Source="delete.png" HeightRequest="25" WidthRequest="25" Clicked="OnDeleteButtonClicked"/>
+                    </HorizontalStackLayout>
+                </Grid>
+            </ViewCell>
+        </DataTemplate>
+    </ContentPage.Resources>
+    
     <ScrollView>
         <VerticalStackLayout Padding="15" Spacing="10">
             <Button Text="Create Appointment" Clicked="OnCreateAppointmentButtonClicked" />
@@ -25,7 +55,6 @@
                     <DataTemplate>
                         <ViewCell>
                             <Grid Padding="5" ColumnDefinitions="2.4*,3.3*,3.3*,2*">
-                                <!--<Label Text="{Binding StartDate}" FontSize="13" Grid.Column="0"/>-->
                                 <Label Text="{Binding StartDate, StringFormat='{0:MM/dd/yyyy hh:mm tt}'}" FontSize="13" Grid.Column="0"/>
                                 <Label Text="{Binding PatientName}" FontSize="13" Grid.Column="1"/>
                                 <Label Text="{Binding DentistName}" FontSize="13" Grid.Column="2"/>

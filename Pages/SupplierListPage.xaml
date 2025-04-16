@@ -30,6 +30,7 @@
             </ViewCell>
         </DataTemplate>
     </ContentPage.Resources>
+    
     <ScrollView>
         <VerticalStackLayout Padding="15" Spacing="10">
             <Button Text="Create Supplier" Clicked="OnCreateSupplierButtonClicked" />
@@ -44,28 +45,11 @@
             </Grid>
 
             <Grid BackgroundColor="DarkGray" Padding="5" ColumnDefinitions="3*,2*,3*,2*">
-                <Label Text="Date" FontAttributes="Bold" TextColor="White" Grid.Column="0"/>
-                <Label Text="Patient" FontAttributes="Bold" TextColor="White" Grid.Column="1"/>
-                <Label Text="Dentist" FontAttributes="Bold" TextColor="White" Grid.Column="2"/>
+                <Label Text="Name" FontAttributes="Bold" TextColor="White" Grid.Column="0"/>
+                <Label Text="Contact" FontAttributes="Bold" TextColor="White" Grid.Column="1"/>
             </Grid>
 
-            <ListView x:Name="SupplierListView" HasUnevenRows="True" ItemTapped="SupplierListView_ItemTapped">
-                <ListView.ItemTemplate>
-                    <DataTemplate>
-                        <ViewCell>
-                            <Grid Padding="5" ColumnDefinitions="3*,2*,3*,2*">
-                                <Label Text="{Binding Name}" FontSize="13" Grid.Column="0"/>
-                                <Label Text="{Binding Mobile}" FontSize="13" HorizontalTextAlignment="Start" Grid.Column="1"/>
-                                <Label Text="{Binding Address}" FontSize="13" HorizontalTextAlignment="Start" Grid.Column="2"/>
-                                <HorizontalStackLayout Margin="0,0,20,0" Spacing="3" Grid.Column="3">
-                                    <ImageButton Source="edit.png" HeightRequest="25" WidthRequest="25" Clicked="OnEditButtonClicked"/>
-                                    <ImageButton Source="delete.png" HeightRequest="25" WidthRequest="25" Clicked="OnDeleteButtonClicked"/>
-                                </HorizontalStackLayout>
-                            </Grid>
-                        </ViewCell>
-                    </DataTemplate>
-                </ListView.ItemTemplate>
-            </ListView>
+            <ListView x:Name="SupplierListView" HasUnevenRows="True" ItemTapped="SupplierListView_ItemTapped"/>
 
         </VerticalStackLayout>
     </ScrollView>

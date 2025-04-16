@@ -37,11 +37,6 @@ namespace DentalApp.Pages
             var templateKey = _isLandscape ? "LandscapeTemplate" : "PortraitTemplate";
             var template = (DataTemplate)this.Resources[templateKey];
             SupplierListView.ItemTemplate = template;
-
-            //MainThread.BeginInvokeOnMainThread(async () =>
-            //{
-            //    await DisplayAlert("Orientation Changed", _isLandscape ? "Landscape" : "Portrait", "OK");
-            //});
         }
         private async void LoadSupplierList()
         {
