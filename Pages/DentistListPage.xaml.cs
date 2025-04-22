@@ -69,7 +69,7 @@ namespace DentalApp.Pages
             {
                 bool confirmDelete = await DisplayAlert("Confirm", "Delete this dentist?", "Yes", "No");
                 if (!confirmDelete) return;
-
+                await DisplayAlert("Info", $"Selected Dentist ID: {selectedDentist.Id}", "OK");
                 var success = await _apiService.DeleteDentistAsync(selectedDentist.Id);
                 LoadDentistList();
                 await DisplayAlert(success ? "Success" : "Error", success ? "Dentist deleted." : "Failed to delete dentist.", "OK");

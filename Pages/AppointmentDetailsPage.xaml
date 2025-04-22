@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="DentalApp.Pages.AppointmentDetailsPage"
+             BackgroundColor="White">
+    <ScrollView>
+        <VerticalStackLayout Padding="10" Spacing="10">
+            <Frame Padding="10" Margin="0">
+                <VerticalStackLayout Spacing="5">
+                    <Label Text="Appointment Details" FontAttributes="Bold" FontSize="16"/>
+
+                    <HorizontalStackLayout Spacing="10">
+                        <Label Text="Patient ID" WidthRequest="100"/>
+                        <Entry x:Name="PatientIdEntry" Placeholder="Patient ID" Keyboard="Numeric" WidthRequest="200" VerticalOptions="Center"/>
+                    </HorizontalStackLayout>
+
+                    <HorizontalStackLayout Spacing="10">
+                        <Label Text="Dentist ID" WidthRequest="100"/>
+                        <Entry x:Name="DentistIdEntry" Placeholder="Dentist ID" Keyboard="Numeric" WidthRequest="200" VerticalOptions="Center"/>
+                    </HorizontalStackLayout>
+
+                    <HorizontalStackLayout Spacing="10">
+                        <Label Text="Title" WidthRequest="100"/>
+                        <Entry x:Name="TitleEntry" Placeholder="Title" WidthRequest="200" VerticalOptions="Center"/>
+                    </HorizontalStackLayout>
+
+                    <HorizontalStackLayout Spacing="10">
+                        <Label Text="Description" WidthRequest="100"/>
+                        <Editor x:Name="DescriptionEditor" Placeholder="Description" AutoSize="TextChanges" WidthRequest="200" HeightRequest="80"/>
+                    </HorizontalStackLayout>
+
+                    <HorizontalStackLayout Spacing="10">
+                        <Label Text="Date" WidthRequest="100"/>
+                        <DatePicker x:Name="DatePicker" WidthRequest="200" VerticalOptions="Center"/>
+                    </HorizontalStackLayout>
+
+                    <HorizontalStackLayout Spacing="10">
+                        <Label Text="Start Time" WidthRequest="100"/>
+                        <TimePicker x:Name="StartTimePicker" WidthRequest="200" VerticalOptions="Center"/>
+                    </HorizontalStackLayout>
+
+                    <HorizontalStackLayout Spacing="10">
+                        <Label Text="End Time" WidthRequest="100"/>
+                        <TimePicker x:Name="EndTimePicker" WidthRequest="200" VerticalOptions="Center"/>
+                    </HorizontalStackLayout>
+                </VerticalStackLayout>
+            </Frame>
+        </VerticalStackLayout>
+    </ScrollView>
+
+</ContentPage>

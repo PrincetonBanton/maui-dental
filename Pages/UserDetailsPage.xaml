@@ -22,7 +22,7 @@
                     </HorizontalStackLayout>
                     <HorizontalStackLayout>
                         <Label x:Name="RoleLabel" Text="Role" WidthRequest="100"/>
-                        <Picker x:Name="RolePicker" ItemDisplayBinding="{Binding Description}" WidthRequest="300"/>
+                        <Picker x:Name="RolePicker" ItemDisplayBinding="{Binding Description}" WidthRequest="300"  Focused="RolePicker_Focused"/>
                     </HorizontalStackLayout>
                 </VerticalStackLayout>
             </Frame>
@@ -60,10 +60,6 @@
                     <HorizontalStackLayout>
                         <Label Text="Note" WidthRequest="100"/>
                         <Editor x:Name="NoteEditor" Placeholder="Additional notes..." AutoSize="TextChanges" WidthRequest="300" HeightRequest="50"/>
-                    </HorizontalStackLayout>
-                    <HorizontalStackLayout>
-                        <Label Text="Patient No." WidthRequest="100"/>
-                        <Entry x:Name="PatientNoEntry" Placeholder="Patient No" VerticalOptions="Center"/>
                     </HorizontalStackLayout>
                 </VerticalStackLayout>
             </Frame>

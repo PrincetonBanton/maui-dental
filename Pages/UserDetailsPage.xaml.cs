@@ -25,6 +25,14 @@ public partial class UserDetailsPage : ContentPage
             ToggleFieldsVisibility();
         }
     }
+    private async void RolePicker_Focused(object sender, FocusEventArgs e)
+    {
+        if (RolePicker.ItemsSource == null || ((List<Role>)RolePicker.ItemsSource).Count == 0)
+        {
+            LoadRoles();
+        }
+    }
+
     protected override async void OnAppearing()
     {
         base.OnAppearing();
@@ -33,13 +41,12 @@ public partial class UserDetailsPage : ContentPage
     private async void LoadRoles()
     {
         var roles = await _apiService.GetRolesAsync();
-        RolePicker.ItemsSource = roles;
+        var filteredRoles = roles?.Where(r => r.Id == 1 || r.Id == 3).ToList();
 
-        if (_user != null)
-        {
-            var selectedRole = roles.FirstOrDefault(r => r.Id == _user.RoleId);
-            RolePicker.SelectedItem = selectedRole;
-        }
+        RolePicker.ItemsSource = filteredRoles;
+        RolePicker.SelectedItem = _user != null
+            ? filteredRoles?.FirstOrDefault(r => r.Id == _user.RoleId)
+            : null;
     }
 
     private void BindUserDetails()
@@ -76,7 +83,8 @@ public partial class UserDetailsPage : ContentPage
         _user.Email = EmailEntry.Text;
         _user.Mobile = MobileEntry.Text;
         _user.Note = NoteEditor.Text;
-        _user.RoleId = RolePicker.SelectedItem is Role selectedRole ? selectedRole.Id : 0;
+        _user.RoleId = RolePicker.SelectedItem is Role selectedRole ? selectedRole.Id : 1;
+
 
         var (isValid, errorMessage) = UserValidationService.ValidateUser(_user, ConfirmPasswordEntry.Text, _isEditMode);    
         if (!isValid)
@@ -85,8 +93,8 @@ public partial class UserDetailsPage : ContentPage
             return;
         }
 
-        var jsonUser = System.Text.Json.JsonSerializer.Serialize(_user, new System.Text.Json.JsonSerializerOptions { WriteIndented = true });
-        await DisplayAlert("User Object", jsonUser, "OK");
+        //var jsonUser = System.Text.Json.JsonSerializer.Serialize(_user, new System.Text.Json.JsonSerializerOptions { WriteIndented = true });
+        //await DisplayAlert("User Object", jsonUser, "OK");
 
         bool success = _user.Id != 0
             ? await _apiService.UpdateUserAsync(_user)

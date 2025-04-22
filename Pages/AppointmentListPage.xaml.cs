@@ -66,7 +66,7 @@ namespace DentalApp.Pages
 
         private async void OnCreateAppointmentButtonClicked(object sender, EventArgs e)
         {
-            //await Navigation.PushAsync(new AppointmentDetailsPage()); // Rename ProductDetailsPage to AppointmentDetailsPage
+            await Navigation.PushAsync(new AppointmentDetailsPage()); // Rename ProductDetailsPage to AppointmentDetailsPage
         }
 
         private async void OnEditButtonClicked(object sender, EventArgs e)
