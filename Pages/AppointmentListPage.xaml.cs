@@ -62,20 +62,19 @@ namespace DentalApp.Pages
                 await DisplayAlert("Error", "Failed to load appointments. Please try again.", "OK");
             }
         }
-
-
         private async void OnCreateAppointmentButtonClicked(object sender, EventArgs e)
         {
-            await Navigation.PushAsync(new AppointmentDetailsPage()); // Rename ProductDetailsPage to AppointmentDetailsPage
+            await Navigation.PushAsync(new AppointmentDetailsPage(_allAppointments));
         }
 
         private async void OnEditButtonClicked(object sender, EventArgs e)
         {
-            //if (sender is ImageButton button && button.BindingContext is ProductVM selectedAppointment)
-            //{
-            //    await Navigation.PushAsync(new AppointmentDetailsPage(selectedAppointment));
-            //}
+            if (sender is ImageButton button && button.BindingContext is Appointment selectedAppointment)
+            {
+                await Navigation.PushAsync(new AppointmentDetailsPage(_allAppointments, selectedAppointment));
+            }
         }
+        
         private async void AppointmentListView_ItemTapped(object sender, ItemTappedEventArgs e)
         {
             //if (e.Item is Supplier selectedSupplier)
