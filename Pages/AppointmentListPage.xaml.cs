@@ -86,15 +86,15 @@ namespace DentalApp.Pages
 
         private async void OnDeleteButtonClicked(object sender, EventArgs e)
         {
-            //if (sender is ImageButton button && button.BindingContext is ProductVM selectedAppointment)
-            //{
-            //    bool confirmDelete = await DisplayAlert("Confirm", "Delete this appointment?", "Yes", "No");
-            //    if (!confirmDelete) return;
+            if (sender is ImageButton button && button.BindingContext is Appointment selectedAppointment)
+            {
+                bool confirmDelete = await DisplayAlert("Confirm", "Delete this appointment?", "Yes", "No");
+                if (!confirmDelete) return;
 
-            //    var success = await _apiService.DeleteProductAsync(selectedAppointment.Id);
-            //    LoadAppointmentList();
-            //    await DisplayAlert(success ? "Success" : "Error", success ? "Appointment deleted." : "Failed to delete appointment.", "OK");
-            //}
+                var success = await _apiService.DeleteAppointmentAsync(selectedAppointment.Id);
+                LoadAppointmentList();
+                await DisplayAlert(success ? "Success" : "Error", success ? "Appointment deleted." : "Failed to delete appointment.", "OK");
+            }
         }
 
         private void OnSearchBarTextChanged(object sender, TextChangedEventArgs e)

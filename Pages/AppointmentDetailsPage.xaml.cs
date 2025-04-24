@@ -1,5 +1,6 @@
 using DentalApp.Models;
 using DentalApp.Services;
+using DentalApp.Services.Validations;
 using System.Collections.ObjectModel;
 
 namespace DentalApp.Pages;
@@ -9,6 +10,7 @@ public partial class AppointmentDetailsPage : ContentPage
     private readonly ApiService _apiService = new();
     private Appointment _appointment;
     private ObservableCollection<Appointment> _allAppointments;
+    private List<PatientVM> _patients;
 
     public AppointmentDetailsPage(ObservableCollection<Appointment> allAppointments, Appointment appointment = null)
     {
@@ -18,8 +20,6 @@ public partial class AppointmentDetailsPage : ContentPage
         PopulateTimePickers();
         if (appointment != null)
         {
-            //var jsonUser = System.Text.Json.JsonSerializer.Serialize(_appointment, new System.Text.Json.JsonSerializerOptions { WriteIndented = true });
-            //DisplayAlert("User Object", jsonUser, "OK");
             BindApppointmentDetails();
         }
         LoadPatients();
@@ -77,45 +77,45 @@ public partial class AppointmentDetailsPage : ContentPage
 
     private async void SaveButton_Clicked(object sender, EventArgs e)
     {
-        //_dentist ??= new DentistVM();
-        //_dentist.FirstName = FirstNameEntry.Text;
-        //_dentist.MiddleName = MiddleNameEntry.Text;
-        //_dentist.LastName = LastNameEntry.Text;
-        //_dentist.BirthDate = BirthDatePicker.Date;
-        //_dentist.Email = EmailEntry.Text;
-        //_dentist.Mobile = MobileEntry.Text;
-        //_dentist.Address = AddressEntry.Text;
-        //_dentist.Note = NoteEditor.Text;
+        _appointment ??= new Appointment();
+        _appointment.Title = TitleEntry.Text;
+        _appointment.Description = DescriptionEditor.Text;
+        _appointment.StartDate = DatePicker.Date + DateTime.Parse(StartTimePicker.SelectedItem.ToString()).TimeOfDay;
+        _appointment.EndDate = DatePicker.Date + DateTime.Parse(EndTimePicker.SelectedItem.ToString()).TimeOfDay;
+        _appointment.PatientId = PatientPicker.SelectedItem is PatientVM selectedPatient ? selectedPatient.Id : 0;
+        _appointment.DentistId = DentistPicker.SelectedItem is DentistVM selectedDentist ? selectedDentist.Id : 0;
 
-        //var (isValid, errorMessage) = DentistValidationService.ValidateDentist(_dentist);
-        //if (!isValid)
-        //{
-        //    await DisplayAlert("Validation Error", errorMessage, "OK");
-        //    return;
-        //}
+        var (isValid, errorMessage) = AppointmentValidationService.ValidateAppointment(_appointment);
+        if (!isValid)
+        {
+            await DisplayAlert("Validation Error", errorMessage, "OK");
+            return;
+        }
+        var jsonUser = System.Text.Json.JsonSerializer.Serialize(_appointment, new System.Text.Json.JsonSerializerOptions { WriteIndented = true });
+        await DisplayAlert("User Object", jsonUser, "OK");
 
-        //bool success = _dentist.Id != 0
-        //    ? await _apiService.UpdateDentistAsync(_dentist)
-        //    : await _apiService.CreateDentistAsync(_dentist);
+        bool success = _appointment.Id != 0
+            ? await _apiService.UpdateAppointmentAsync(_appointment)
+            : await _apiService.CreateAppointmentAsync(_appointment);
 
-        //if (success)
-        //{
-        //    var updatedList = await _apiService.GetDentistsAsync() ?? new List<DentistVM>();
-        //    _allDentists.Clear();
-        //    updatedList.ForEach(_allDentists.Add);
-        //}
+        if (success)
+        {
+            var updatedList = await _apiService.GetAppointmentsAsync() ?? new List<Appointment>();
+            _allAppointments.Clear();
+            updatedList.ForEach(_allAppointments.Add);
+        }
 
-        //string message = success
-        //    ? (_dentist.Id != 0 ? "Patient updated successfully!" : "Dentist created successfully!")
-        //    : "Failed to save dentist. Please try again.";
+        string message = success
+            ? (_appointment.Id != 0 ? "Appointment updated successfully!" : "Appointment created successfully!")
+            : "Failed to save dentist. Please try again.";
 
-        //await DisplayAlert(success ? "Success" : "Error", message, "OK");
+        await DisplayAlert(success ? "Success" : "Error", message, "OK");
 
-        //if (success)
-        //{
-        //    _dentist = null;
-        //    await Navigation.PopAsync();
-        //}
+        if (success)
+        {
+            _appointment = null;
+            await Navigation.PopAsync();
+        }
     }
     private void PopulateTimePickers()
     {
@@ -131,6 +131,9 @@ public partial class AppointmentDetailsPage : ContentPage
 
         StartTimePicker.ItemsSource = times;
         EndTimePicker.ItemsSource = times;
+        // Set default selections
+        StartTimePicker.SelectedIndex = times.IndexOf("08:00 AM");
+        EndTimePicker.SelectedIndex = times.IndexOf("08:30 AM");
     }
     private void StartTimePicker_SelectedIndexChanged(object sender, EventArgs e)
     {
@@ -140,8 +143,6 @@ public partial class AppointmentDetailsPage : ContentPage
             var newEndTime = selectedStartTime.AddHours(.5);
             string formattedNewEndTime = newEndTime.ToString("hh:mm tt");
             var index = EndTimePicker.ItemsSource.IndexOf(formattedNewEndTime);
-
-            // If found, select it
             EndTimePicker.SelectedIndex = index >= 0 ? index : -1;
         }
     }
