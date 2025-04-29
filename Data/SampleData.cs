@@ -57,9 +57,9 @@ namespace DentalApp.Data
         {
             return new List<SaleVM>
             {
-                new SaleVM { SaleId = 1, SaleDate = DateTime.Now.AddDays(-1), PatientName = "Johannes Arrocena", DentistName = "Dr. Jane Smith", Total = 1500.00m, Status = "Unpaid" },
-                new SaleVM { SaleId = 2, SaleDate = DateTime.Now.AddDays(-3), PatientName = "Alice Brown", DentistName = "Dr. Mark Johnson", Total = 1200.00m, Status = "Unpaid" },
-                new SaleVM { SaleId = 4, SaleDate = DateTime.Now.AddDays(-10), PatientName = "Pam Beesly", DentistName = "Dr. Sarah Connor", Total = 900.00m, Status = "Paid" }
+                new SaleVM { SaleId = 1, SaleDate = DateTime.Now.AddDays(-1), PatientName = "Johannes Arrocena", DentistName = "Dr. Jane Smith", Total = 1500.00m, Status = 0 },
+                new SaleVM { SaleId = 2, SaleDate = DateTime.Now.AddDays(-3), PatientName = "Alice Brown", DentistName = "Dr. Mark Johnson", Total = 1200.00m, Status = 0 },
+                new SaleVM { SaleId = 4, SaleDate = DateTime.Now.AddDays(-10), PatientName = "Pam Beesly", DentistName = "Dr. Sarah Connor", Total = 900.00m, Status = 0 }
             };
         }
         public static List<Supplier> GetSampleSuppliers()

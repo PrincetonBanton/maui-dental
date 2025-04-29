@@ -1,5 +1,6 @@
 using DentalApp.Models;
 using DentalApp.Services;
+using DentalApp.Models.Enum;
 using DentalApp.Services.Validations;
 using System.Collections.ObjectModel;
 
@@ -27,12 +28,19 @@ public partial class UserDetailsPage : ContentPage
     }
     private async void RolePicker_Focused(object sender, FocusEventArgs e)
     {
-        if (RolePicker.ItemsSource == null || ((List<Role>)RolePicker.ItemsSource).Count == 0)
+        if (RolePicker.ItemsSource == null)
         {
-            LoadRoles();
+            var roles = Enum.GetValues(typeof(UserRole))
+                            .Cast<UserRole>()
+                            .Select(r => new { Id = (int)r, Description = r.ToString() })
+                            .ToList();
+
+            RolePicker.ItemsSource = roles;
+            // Set default role to "Staff"
+            RolePicker.SelectedItem = roles.FirstOrDefault(r => r.Description.ToLower() == "staff");
         }
     }
-
+     
     protected override async void OnAppearing()
     {
         base.OnAppearing();

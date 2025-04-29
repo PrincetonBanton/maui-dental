@@ -49,7 +49,7 @@
                     <Label Text="Status" FontAttributes="Bold" Grid.Column="3" />
                     <Label Text="" Grid.Column="4" />
             </Grid>
-            <ListView x:Name="SaleListView" HasUnevenRows="True" ItemsSource="{Binding Sales}">
+            <ListView ItemsSource="{Binding Sales}" x:Name="SaleListView" HasUnevenRows="True">
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <ViewCell>
@@ -57,16 +57,16 @@
                                 <Label Text="{Binding SaleDate, StringFormat='{0:MM/dd/yy}'}" FontSize="13" Grid.Column="0"/>
                                 <Label Text="{Binding PatientName}" FontSize="13" Grid.Column="1" />
                                 <Label Text="{Binding Total, StringFormat='{0:N2}'}" FontSize="13" Grid.Column="2" />
-                                <Label Text="{Binding Status}" FontSize="13" Grid.Column="3"/>
+                                <Label Text="{Binding StatusText}" FontSize="13" Grid.Column="3"/>
                                 <HorizontalStackLayout Grid.Column="4" Spacing="5">
 
                                     <!-- Pay button (only if unpaid) -->
                                     <ImageButton Source="pay.png" HeightRequest="20" WidthRequest="20" Clicked="OnPayButtonClicked">
                                         <ImageButton.Triggers>
-                                            <DataTrigger TargetType="ImageButton" Binding="{Binding Status}" Value="Unpaid">
+                                            <DataTrigger TargetType="ImageButton" Binding="{Binding Status}" Value='0'>
                                                 <Setter Property="IsVisible" Value="True"/>
                                             </DataTrigger>
-                                            <DataTrigger TargetType="ImageButton" Binding="{Binding Status}" Value="Paid">
+                                            <DataTrigger TargetType="ImageButton" Binding="{Binding Status}" Value='3'>
                                                 <Setter Property="IsVisible" Value="False"/>
                                             </DataTrigger>
                                         </ImageButton.Triggers>
@@ -75,10 +75,10 @@
                                     <!-- Edit button (only if paid) -->
                                     <ImageButton Source="info.png" HeightRequest="20" WidthRequest="20" Clicked="OnEditButtonClicked">
                                         <ImageButton.Triggers>
-                                            <DataTrigger TargetType="ImageButton" Binding="{Binding Status}" Value="Paid">
+                                            <DataTrigger TargetType="ImageButton" Binding="{Binding Status}" Value="3">
                                                 <Setter Property="IsVisible" Value="True"/>
                                             </DataTrigger>
-                                            <DataTrigger TargetType="ImageButton" Binding="{Binding Status}" Value="Unpaid">
+                                            <DataTrigger TargetType="ImageButton" Binding="{Binding Status}" Value="0">
                                                 <Setter Property="IsVisible" Value="False"/>
                                             </DataTrigger>
                                         </ImageButton.Triggers>

@@ -46,7 +46,6 @@ public partial class SalesPage : ContentPage
 
             if (response != null)
             {
-                // Convert the response items to JSON format
                 //string itemsJson = JsonSerializer.Serialize(response, new JsonSerializerOptions { WriteIndented = true });
                 //await DisplayAlert("Sale Items (API Format)", itemsJson, "OK");
 
@@ -210,7 +209,7 @@ public partial class SalesPage : ContentPage
 
         if (success)
         {
-            string status = paymentAmount >= _sale.Total ? "Paid" : paymentAmount == 0 ? "Unpaid" : "Partial";
+            //short status = paymentAmount >= _sale.Total ? 2 : paymentAmount == 0 ? 0 : 1;
 
             var newSale = new SaleVM
             {
@@ -219,7 +218,7 @@ public partial class SalesPage : ContentPage
                 PatientName = patient.FullName,
                 DentistName = dentist.FullName,
                 Total = _sale.Total,
-                Status = status
+                Status = 0
             };
 
             _onSaleCreated?.Invoke(newSale);

@@ -17,7 +17,7 @@ namespace DentalApp.Services
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"{errorMessage}: {ex.Message}");
+                await Shell.Current.DisplayAlert("Error", $"{errorMessage}: {ex.Message}", "OK");
                 return default;
             }
         }
@@ -110,9 +110,25 @@ namespace DentalApp.Services
         //Sale
         public async Task<List<SaleVM>> GetSalesAsync()
         {
-            var sales = await GetAsync<List<SaleVM>>("Sale/GetAll") ?? new List<SaleVM>();
-            return sales.OrderByDescending(e => e.SaleId).ToList();
+            try
+            {
+                var sales = await GetAsync<List<SaleVM>>("Sale/GetAll");
+
+                if (sales == null)
+                {
+                    await Shell.Current.DisplayAlert("Error", "Unable to load sales. The server returned no data.", "OK");
+                    return new List<SaleVM>();
+                }
+
+                return sales.OrderByDescending(e => e.SaleId).ToList();
+            }
+            catch (Exception ex)
+            {
+                await Shell.Current.DisplayAlert("Error", $"An error occurred while fetching sales:\n{ex.Message}", "OK");
+                return new List<SaleVM>();
+            }
         }
+
         public Task<SaleVM?> GetSaleDetailAsync(int id) => GetAsync<SaleVM>($"Sale/GetDetail/{id}");
         public Task<bool> CreateSaleAsync(SaleVM sale) => PostAsync("Sale/Create", sale);
         public Task<bool> DeleteSaleAsync(int id) => DeleteAsync($"Sale/Delete/{id}");

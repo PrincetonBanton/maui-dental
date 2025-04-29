@@ -50,6 +50,7 @@ namespace DentalApp.Pages
             {
                 App.Instance.PatientNavigated = "patientdetails";
                 await Navigation.PushAsync(new PatientDetailsPage(_allPatients, selectedPatient));
+
             }
         }
         private async void PatientListView_ItemTapped(object sender, ItemTappedEventArgs e)
@@ -57,7 +58,8 @@ namespace DentalApp.Pages
             if (e.Item is PatientVM selectedPatient)
             {
                 App.Instance.PatientNavigated = "patientdetails";
-                await Navigation.PushAsync(new PatientDetailsPage(_allPatients, selectedPatient));
+                //await Navigation.PushAsync(new PatientDetailsPage(_allPatients, selectedPatient));
+                await Navigation.PushAsync(new PatientRecordPage(_allPatients, selectedPatient));
             }
             ((ListView)sender).SelectedItem = null;
         }

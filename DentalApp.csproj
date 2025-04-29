@@ -101,6 +101,9 @@
 	  <MauiXaml Update="Pages\PatientDetailsPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
+	  <MauiXaml Update="Pages\PatientRecordPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="Pages\ProductDetailsPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
@@ -144,6 +147,7 @@
 
 	<ItemGroup>
 	  <Folder Include="Models\ViewModels\" />
+	  <Folder Include="Helpers\" />
 	</ItemGroup>
 
 </Project>

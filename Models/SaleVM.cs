@@ -1,4 +1,5 @@
 ﻿using System;
+using DentalApp.Models.Enum;
 
 namespace DentalApp.Models
 {
@@ -15,7 +16,8 @@ namespace DentalApp.Models
         public decimal SubTotal { get; set; }
         public decimal Total { get; set; }
         public decimal AmountDue { get; set; } // For tracking unpaid amounts
-        public string? Status { get; set; }    // e.g., "Unpaid", "Completed"
+        public short Status { get; set; }    // e.g., "Unpaid", "Completed"
+        public string StatusText => ((SaleStatus)Status).ToString().Replace("_", " ");
 
         public List<SaleItem> Items { get; set; } = new();
         public List<SalePayment> Payments { get; set; } = new();

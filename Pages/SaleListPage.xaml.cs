@@ -8,7 +8,7 @@ namespace DentalApp.Pages;
 public partial class SaleListPage : ContentPage
 {
     private readonly ApiService _apiService = new();
-    private List<SaleVM> _allSales = new();
+    private ObservableCollection<SaleVM> _allSales = new();
     public ObservableCollection<SaleVM> Sales { get; set; } = new();
 
     public SaleListPage()
@@ -23,16 +23,19 @@ public partial class SaleListPage : ContentPage
         bool isApiAvailable = ApiConnectivityService.Instance.IsApiAvailable;
         try
         {
-            var sales = isApiAvailable
+            var salesList = isApiAvailable
                 ? await _apiService.GetSalesAsync() ?? new List<SaleVM>()
                 : SampleData.GetSampleSales(); // Replace with offline data sync
 
-            _allSales = sales; 
-            Sales.Clear();
-            foreach (var sale in sales)
-            {
-                Sales.Add(sale); // Add new items to the ObservableCollection
-            }
+            //var jsonUser = System.Text.Json.JsonSerializer.Serialize(salesList, new System.Text.Json.JsonSerializerOptions { WriteIndented = true });
+            //await DisplayAlert("User Object", jsonUser, "OK");
+
+            _allSales.Clear();
+            salesList.ForEach(_allSales.Add);
+
+            var jsonUser = System.Text.Json.JsonSerializer.Serialize(_allSales, new System.Text.Json.JsonSerializerOptions { WriteIndented = true });
+            await DisplayAlert("User Object", jsonUser, "OK");
+            SaleListView.ItemsSource = _allSales;
         }
         catch (Exception)
         {
@@ -46,8 +49,10 @@ public partial class SaleListPage : ContentPage
     }
     private void OnSaleCreated(SaleVM newSale)
     {
-        Sales.Insert(0, newSale);
+        _allSales.Insert(0, newSale); // Add to master list
+        Sales.Insert(0, newSale);     // Add to bound list (UI)
     }
+
     private async void OnPayButtonClicked(object sender, EventArgs e)
     {
         if (sender is ImageButton button && button.BindingContext is SaleVM selectedSale)

@@ -16,6 +16,7 @@ namespace DentalApp.Models
         public DateTime? Date { get; set; }
 
         public virtual User? User { get; set; }
+        public string FormattedDisplay => $"{StartDate:MM/dd/yyyy} - {Description}";
 
     }
 }
