@@ -1,4 +1,6 @@
-﻿namespace DentalApp
+﻿using Microsoft.Maui.Storage;
+
+namespace DentalApp
 {
     public partial class App : Application
     {
@@ -14,7 +16,20 @@
         {
             InitializeComponent();
             Instance = this;
-            MainPage = new AppShell();
+
+            // Check if user is logged in
+            var token = Preferences.Get("AuthToken", string.Empty);
+
+            //MainPage = new AppShell();
+
+            if (!string.IsNullOrEmpty(token))
+            {
+                MainPage = new AppShell(); // User is logged in
+            }
+            else
+            {
+                MainPage = new NavigationPage(new Pages.Auth.LoginPage()); // Show login page
+            }
         }
     }
 }
