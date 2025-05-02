@@ -2,6 +2,7 @@
 using System.Net.Http.Json;
 using System.Text.Json;
 using System.Text;
+using System.Net.Http.Headers; 
 
 namespace DentalApp.Services
 {
@@ -157,27 +158,6 @@ namespace DentalApp.Services
         public Task<bool> CreateAppointmentAsync(Appointment appointment) => PostAsync("Appointment/Create", appointment);
         public Task<bool> UpdateAppointmentAsync(Appointment appointment) => PutAsync($"Appointment/Update/{appointment.Id}", appointment);
         public Task<bool> DeleteAppointmentAsync(int id) => DeleteAsync($"Appointment/Delete/{id}");
-
-
-        //Auth
-        public async Task<string> AuthenticateAsync(string username, string password)
-        {
-            var loginData = new { Username = username, Password = password };
-            var json = JsonSerializer.Serialize(loginData);
-            var content = new StringContent(json, Encoding.UTF8, "application/json");
-
-            var response = await _httpClient.PostAsync("your-api-endpoint/login", content);
-
-            if (response.IsSuccessStatusCode)
-            {
-                var result = await response.Content.ReadAsStringAsync();
-                // assuming your API returns a token in plain string or JSON { token: "..." }
-                return result; // parse appropriately
-            }
-
-            return null;
-        }
-
 
     }
 }

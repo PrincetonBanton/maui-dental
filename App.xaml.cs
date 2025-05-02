@@ -1,4 +1,5 @@
 ﻿using Microsoft.Maui.Storage;
+using DentalApp.Services;
 
 namespace DentalApp
 {
@@ -17,18 +18,17 @@ namespace DentalApp
             InitializeComponent();
             Instance = this;
 
-            // Check if user is logged in
             var token = Preferences.Get("AuthToken", string.Empty);
-
-            //MainPage = new AppShell();
+            var apiService = new ApiService(); // <-- create instance
 
             if (!string.IsNullOrEmpty(token))
             {
-                MainPage = new AppShell(); // User is logged in
+                //apiService.AttachToken(token); // <-- attach token globally
+                MainPage = new AppShell();
             }
             else
             {
-                MainPage = new NavigationPage(new Pages.Auth.LoginPage()); // Show login page
+                MainPage = new NavigationPage(new Pages.Auth.LoginPage());
             }
         }
     }
