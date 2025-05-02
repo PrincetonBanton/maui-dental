@@ -77,6 +77,9 @@ public partial class SaleListPage : ContentPage
                 EnteredBy = 41,
                 PaymentDate = DateTime.Now
             };
+            
+            var jsonUser = System.Text.Json.JsonSerializer.Serialize(payment, new System.Text.Json.JsonSerializerOptions { WriteIndented = true });
+            await DisplayAlert("User Object", jsonUser, "OK");
 
             bool success = await _apiService.AddPaymentAsync(payment);
 

@@ -2,7 +2,8 @@
 using System.Net.Http.Json;
 using System.Text.Json;
 using System.Text;
-using System.Net.Http.Headers; 
+using System.Net.Http.Headers;
+//using Xamarin.Essentials; // To access Preferences for storing token
 
 namespace DentalApp.Services
 {
@@ -10,6 +11,46 @@ namespace DentalApp.Services
     {
         private const string BaseUrl = "https://localhost:7078";
         private readonly HttpClient _httpClient = new();
+
+        public ApiService()
+        {
+            AttachToken();
+        }
+
+        private async void AttachToken()
+        {
+            var tokenJson = Preferences.Get("AuthToken", string.Empty);
+            if (string.IsNullOrEmpty(tokenJson))
+            {
+                await Shell.Current.DisplayAlert("Token", "No token found in Preferences", "OK");
+                return;
+            }
+
+            try
+            {
+                var tokenObject = JsonSerializer.Deserialize<Dictionary<string, object>>(tokenJson);
+                if (tokenObject != null && tokenObject.ContainsKey("result"))
+                {
+                    var tokenResult = tokenObject["result"]?.ToString();
+                    if (!string.IsNullOrEmpty(tokenResult))
+                    {
+                        _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", tokenResult);
+                    }
+                    else
+                    {
+                        await Shell.Current.DisplayAlert("Token Error", "Result field is empty in the token", "OK");
+                    }
+                }
+                else
+                {
+                    await Shell.Current.DisplayAlert("Deserialization Error", "Failed to find 'result' in the token JSON", "OK");
+                }
+            }
+            catch (Exception ex)
+            {
+                await Shell.Current.DisplayAlert("Deserialization Error", $"Error: {ex.Message}", "OK");
+            }
+        }
 
         // Generic method to handle requests
         private async Task<T?> RequestAsync<T>(Func<Task<T?>> request, string errorMessage)
@@ -53,7 +94,6 @@ namespace DentalApp.Services
                 return response.IsSuccessStatusCode;
             }, "Error deleting data");
 
-
         // User
         public Task<List<Role>> GetRolesAsync()
             => GetAsync<List<Role>>("Role/GetAll") ?? Task.FromResult(new List<Role>());
@@ -67,8 +107,7 @@ namespace DentalApp.Services
         public Task<bool> UpdateUserAsync(UserVM user) => PutAsync($"User/Update/{user.Id}", user);
         public Task<bool> DeleteUserAsync(int id) => DeleteAsync($"User/Delete/{id}");
 
-
-        //Patients
+        // Patients
         public async Task<List<PatientVM>> GetPatientsAsync()
         {
             var patients = await GetAsync<List<PatientVM>>("Patient/GetAll") ?? new List<PatientVM>();
@@ -78,7 +117,7 @@ namespace DentalApp.Services
         public Task<bool> UpdatePatientAsync(PatientVM patient) => PutAsync($"Patient/Update/{patient.Id}", patient);
         public Task<bool> DeletePatientAsync(int id) => DeleteAsync($"Patient/Delete/{id}");
 
-        //Dentist
+        // Dentist
         public async Task<List<DentistVM>> GetDentistsAsync()
         {
             var dentists = await GetAsync<List<DentistVM>>("Dentist/GetAll") ?? new List<DentistVM>();
@@ -98,9 +137,7 @@ namespace DentalApp.Services
         public Task<bool> UpdateProductAsync(ProductVM product) => PutAsync($"Product/Update/{product.Id}", product);
         public Task<bool> DeleteProductAsync(int id) => DeleteAsync($"Product/Delete/{id}");
 
-        // Expense 
-        public Task<List<ExpenseCategory>> GetExpenseCategoryAsync()
-            => GetAsync<List<ExpenseCategory>>("Expense/GetCategories") ?? Task.FromResult(new List<ExpenseCategory>());
+        // Expense
         public async Task<List<Expense>> GetExpensesAsync()
         {
             var expenses = await GetAsync<List<Expense>>("Expense/GetAll") ?? new List<Expense>();
@@ -109,8 +146,10 @@ namespace DentalApp.Services
         public Task<bool> CreateExpenseAsync(Expense expense) => PostAsync("Expense/Create", expense);
         public Task<bool> UpdateExpenseAsync(Expense expense) => PutAsync($"Expense/Update/{expense.Id}", expense);
         public Task<bool> DeleteExpenseAsync(int id) => DeleteAsync($"Expense/Delete/{id}");
+        public Task<List<ExpenseCategory>> GetExpenseCategoryAsync()
+            => GetAsync<List<ExpenseCategory>>("Expense/GetCategories") ?? Task.FromResult(new List<ExpenseCategory>());
 
-        //Sale
+        // Sale
         public async Task<List<SaleVM>> GetSalesAsync()
         {
             try
@@ -136,10 +175,15 @@ namespace DentalApp.Services
         public Task<bool> CreateSaleAsync(SaleVM sale) => PostAsync("Sale/Create", sale);
         public Task<bool> DeleteSaleAsync(int id) => DeleteAsync($"Sale/Delete/{id}");
 
-        //Payment
+        // Payment
         public Task<bool> AddPaymentAsync(Payment payment) => PostAsync("Payment/AddPayment", payment);
+        public async Task<List<Payment>> GetPaymentsAsync(int patientId)
+        {
+            var payments = await GetAsync<List<Payment>>("Payment/GetPayments?patientId=" + patientId) ?? new List<Payment>();
+            return payments.OrderByDescending(e => e.Id).ToList();
+        }
 
-        //Supplier
+        // Supplier
         public async Task<List<Supplier>> GetSuppliersAsync()
         {
             var suppliers = await GetAsync<List<Supplier>>("Supplier/GetAll") ?? new List<Supplier>();
@@ -149,7 +193,7 @@ namespace DentalApp.Services
         public Task<bool> UpdateSupplierAsync(Supplier supplier) => PutAsync($"Supplier/Update/{supplier.Id}", supplier);
         public Task<bool> DeleteSupplierAsync(int id) => DeleteAsync($"Supplier/Delete/{id}");
 
-        //Appointment
+        // Appointment
         public async Task<List<Appointment>> GetAppointmentsAsync()
         {
             var appointments = await GetAsync<List<Appointment>>("Appointment/GetAll") ?? new List<Appointment>();
@@ -158,6 +202,5 @@ namespace DentalApp.Services
         public Task<bool> CreateAppointmentAsync(Appointment appointment) => PostAsync("Appointment/Create", appointment);
         public Task<bool> UpdateAppointmentAsync(Appointment appointment) => PutAsync($"Appointment/Update/{appointment.Id}", appointment);
         public Task<bool> DeleteAppointmentAsync(int id) => DeleteAsync($"Appointment/Delete/{id}");
-
     }
 }
