@@ -182,7 +182,7 @@ namespace DentalApp.Services
         // Payment
         public Task<bool> AddPaymentAsync(Payment payment) => PostAsync("Payment/AddPayment", payment);
         public Task<List<Payment>> GetPaymentsAsync(int patientId)
-            => GetAsync<List<Payment>>($"Payment/GetPayments?patientId={patientId}");
+            => GetAsync<List<Payment>>($"Payment/GetPayments/{patientId}");
 
         // Supplier
         public async Task<List<Supplier>> GetSuppliersAsync()
