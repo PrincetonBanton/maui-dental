@@ -27,14 +27,12 @@ public partial class SaleListPage : ContentPage
                 ? await _apiService.GetSalesAsync() ?? new List<SaleVM>()
                 : SampleData.GetSampleSales(); // Replace with offline data sync
 
-            //var jsonUser = System.Text.Json.JsonSerializer.Serialize(salesList, new System.Text.Json.JsonSerializerOptions { WriteIndented = true });
-            //await DisplayAlert("User Object", jsonUser, "OK");
-
             _allSales.Clear();
             salesList.ForEach(_allSales.Add);
 
-            var jsonUser = System.Text.Json.JsonSerializer.Serialize(_allSales, new System.Text.Json.JsonSerializerOptions { WriteIndented = true });
-            await DisplayAlert("User Object", jsonUser, "OK");
+            //var jsonUser = System.Text.Json.JsonSerializer.Serialize(_allSales, new System.Text.Json.JsonSerializerOptions { WriteIndented = true });
+            //await DisplayAlert("User Object", jsonUser, "OK");
+
             SaleListView.ItemsSource = _allSales;
         }
         catch (Exception)

@@ -181,11 +181,8 @@ namespace DentalApp.Services
 
         // Payment
         public Task<bool> AddPaymentAsync(Payment payment) => PostAsync("Payment/AddPayment", payment);
-        public async Task<List<Payment>> GetPaymentsAsync(int patientId)
-        {
-            var payments = await GetAsync<List<Payment>>("Payment/GetPayments?patientId=" + patientId) ?? new List<Payment>();
-            return payments.OrderByDescending(e => e.Id).ToList();
-        }
+        public Task<List<Payment>> GetPaymentsAsync(int patientId)
+            => GetAsync<List<Payment>>($"Payment/GetPayments?patientId={patientId}");
 
         // Supplier
         public async Task<List<Supplier>> GetSuppliersAsync()

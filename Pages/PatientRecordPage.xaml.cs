@@ -31,8 +31,9 @@
         }
         private void BindPatientDetails()
         {
-            var jsonUser = System.Text.Json.JsonSerializer.Serialize(_patient, new System.Text.Json.JsonSerializerOptions { WriteIndented = true });
-            DisplayAlert("User Object", jsonUser, "OK");
+            //var jsonUser = System.Text.Json.JsonSerializer.Serialize(_patient, new System.Text.Json.JsonSerializerOptions { WriteIndented = true });
+            //DisplayAlert("User Object", jsonUser, "OK");
+
             NameLabel.Text = $"Name: {_patient.FirstName} {_patient.MiddleName} {_patient.LastName}".Trim();
             //BdayLabel.Text = _patient.BirthDate.ToString();
             BdayLabel.Text = $"Age: {CalculateAge(_patient.BirthDate).ToString()}";
@@ -71,25 +72,20 @@
 
     private async void LoadPaymentsForPatient(int patientId)
     {
-        //await ApiConnectivityService.Instance.CheckApiConnectivityAsync();
-        //bool isApiAvailable = ApiConnectivityService.Instance.IsApiAvailable;
+        await ApiConnectivityService.Instance.CheckApiConnectivityAsync();
+        bool isApiAvailable = ApiConnectivityService.Instance.IsApiAvailable;
 
-        //try
-        //{
-        //    var payments = isApiAvailable
-        //        ? await _apiService.GetPaymentsAsync(patientId) ?? new List<Payment>()
-        //        : new List<Payment>(); // optionally use SampleData here
+        try
+        {
+            var payments = isApiAvailable
+                ? await _apiService.GetPaymentsAsync(patientId) ?? new List<Payment>()
+                : new List<Payment>();
 
-        //    //var filtered = payments
-        //    //    .Where(p => p.PatientId == patientId);
-
-        //    _allPayments = new ObservableCollection<Payment>(payments);
-        //    PaymentListView.ItemsSource = _allPayments;
-        //}
-        //catch (Exception)
-        //{
-        //    await DisplayAlert("Error", "Failed to load payments. Please try again.", "OK");
-        //}
+            PaymentListView.ItemsSource = payments;
+        }
+        catch (Exception ex)
+        {
+            await DisplayAlert("Error", $"Failed to load payments. {ex.Message}", "OK");
+        }
     }
-
 }

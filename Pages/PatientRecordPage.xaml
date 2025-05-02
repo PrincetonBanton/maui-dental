@@ -30,15 +30,18 @@
             </VerticalStackLayout>
         </Frame>
 
-        <!--<Frame Padding="10" Margin="0">
-            <CollectionView x:Name="PaymentListView">
-                <CollectionView.ItemTemplate>
-                    <DataTemplate>
-                        <Label FontSize="14" Text="{Binding SaleId}" />
-                    </DataTemplate>
-                </CollectionView.ItemTemplate>
-            </CollectionView>
-        </Frame>-->
+        <Frame Padding="10" Margin="0">
+            <VerticalStackLayout>
+                <Label Text="Sale History" FontSize="16" FontAttributes="Bold"/>
+                <CollectionView x:Name="PaymentListView" ItemsSource="{Binding}">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <Label FontSize="14" Text="{Binding SaleId}" />
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+            </VerticalStackLayout>
+        </Frame>
 
     </VerticalStackLayout>
 </ContentPage>
