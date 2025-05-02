@@ -18,12 +18,10 @@ namespace DentalApp
             InitializeComponent();
             Instance = this;
 
-            var token = Preferences.Get("AuthToken", string.Empty);
-            var apiService = new ApiService(); // <-- create instance
+            var token = Preferences.Get("AuthToken", string.Empty);          
 
             if (!string.IsNullOrEmpty(token))
             {
-                //apiService.AttachToken(token); // <-- attach token globally
                 MainPage = new AppShell();
             }
             else

@@ -19,6 +19,8 @@ namespace DentalApp.Services
 
         private async void AttachToken()
         {
+
+            if (Shell.Current == null) return;
             var tokenJson = Preferences.Get("AuthToken", string.Empty);
             if (string.IsNullOrEmpty(tokenJson))
             {
@@ -38,6 +40,8 @@ namespace DentalApp.Services
                     }
                     else
                     {
+
+                        // Preferences.Set("AuthToken", string.Empty);
                         await Shell.Current.DisplayAlert("Token Error", "Result field is empty in the token", "OK");
                     }
                 }
