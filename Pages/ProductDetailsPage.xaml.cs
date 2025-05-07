@@ -27,8 +27,10 @@ public partial class ProductDetailsPage : ContentPage
         DescriptionEditor.Text = _product.Description;
         ProductTypePicker.SelectedItem = _product.ProductType;
         AmountEntry.Text = _product.Amount.ToString("N2");
-        MinPriceEntry.Text = _product.MinPrice.ToString("N2");
-        MaxPriceEntry.Text = _product.MaxPrice.ToString("N2");
+        //MinPriceEntry.Text = _product.MinPrice.ToString("N2");
+        //MaxPriceEntry.Text = _product.MaxPrice.ToString("N2");
+        MinPriceEntry.Text = _product.Amount.ToString("N2");
+        MaxPriceEntry.Text = _product.Amount.ToString("N2");
     }
 
     private async void SaveButton_Clicked(object sender, EventArgs e)
@@ -44,6 +46,9 @@ public partial class ProductDetailsPage : ContentPage
         _product.MaxPrice = ParseDecimal(MaxPriceEntry.Text);
 
         decimal ParseDecimal(string text) => decimal.TryParse(text, out var value) ? value : 0.00m;
+
+        var jsonUser = System.Text.Json.JsonSerializer.Serialize(_product, new System.Text.Json.JsonSerializerOptions { WriteIndented = true });
+        await DisplayAlert("User Object", jsonUser, "OK");
 
         var (isValid, errorMessage) = ProductValidationService.ValidateProduct(_product);
         if (!isValid)

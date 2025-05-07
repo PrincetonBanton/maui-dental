@@ -25,8 +25,8 @@ namespace DentalApp.Services.Validations
             if (product.MaxPrice <= 0)
                 return (false, "Maximum price must be a positive number.");
 
-            if (product.MinPrice > product.MaxPrice)
-                return (false, "Minimum price cannot be greater than maximum price.");
+            //if (product.MinPrice > product.MaxPrice)
+            //    return (false, "Minimum price cannot be greater than maximum price.");
 
             return (true, string.Empty);
         }

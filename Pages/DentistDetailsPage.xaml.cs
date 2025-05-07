@@ -2,6 +2,7 @@ using DentalApp.Models;
 using DentalApp.Services;
 using DentalApp.Services.Validations;
 using System.Collections.ObjectModel;
+using Windows.System;
 
 namespace DentalApp.Pages;
 
@@ -10,12 +11,20 @@ public partial class DentistDetailsPage : ContentPage
     private readonly ApiService _apiService = new();
     private DentistVM _dentist;
     private ObservableCollection<DentistVM> _allDentists = new();
+    private bool _isEditMode;
+
     public DentistDetailsPage(ObservableCollection<DentistVM> allDentists, DentistVM dentist = null)
     {
         InitializeComponent();
         _allDentists = allDentists;
         _dentist = dentist;
-        if (_dentist != null) BindPatientDetails();
+
+        if (_dentist != null)
+        {
+            _isEditMode = true;
+            BindPatientDetails();
+            ToggleFieldsVisibility();
+        }
     }
     protected override async void OnAppearing()
     {
@@ -24,18 +33,28 @@ public partial class DentistDetailsPage : ContentPage
     }
     private void BindPatientDetails()
     {
+        //var jsonUser = System.Text.Json.JsonSerializer.Serialize(_dentist, new System.Text.Json.JsonSerializerOptions { WriteIndented = true });
+        //DisplayAlert("User Object", jsonUser, "OK");
+
         FirstNameEntry.Text = _dentist.FirstName;
         LastNameEntry.Text = _dentist.LastName;
-        //MiddleNameEntry.Text = _dentist.MiddleName;
+        MiddleNameEntry.Text = _dentist.MiddleName;
         AddressEntry.Text = _dentist.Address;
         BirthDatePicker.Date = _dentist.BirthDate;
         EmailEntry.Text = _dentist.Email;
         MobileEntry.Text = _dentist.Mobile;
         NoteEditor.Text = _dentist.Note;
     }
+    private void ToggleFieldsVisibility()
+    {
+        UsernameEntry.Text = _dentist.Username;
+        LoginInfoFrame.IsVisible = !_isEditMode;
+    }
     private async void SaveButton_Clicked(object sender, EventArgs e)
     {
         _dentist ??= new DentistVM();
+        _dentist.Username = UsernameEntry.Text;
+        _dentist.Password = PasswordEntry.Text;
         _dentist.FirstName = FirstNameEntry.Text;
         _dentist.MiddleName = MiddleNameEntry.Text;
         _dentist.LastName = LastNameEntry.Text;
@@ -45,7 +64,7 @@ public partial class DentistDetailsPage : ContentPage
         _dentist.Address = AddressEntry.Text;
         _dentist.Note = NoteEditor.Text;
 
-        var (isValid, errorMessage) = DentistValidationService.ValidateDentist(_dentist);
+        var (isValid, errorMessage) = DentistValidationService.ValidateDentist(_dentist, ConfirmPasswordEntry.Text, _isEditMode);
         if (!isValid)
         {
             await DisplayAlert("Validation Error", errorMessage, "OK");

@@ -18,8 +18,6 @@ public partial class UserDetailsPage : ContentPage
         InitializeComponent();
         _allUsers = allUsers;
         _user = user;
-        //LoadRoles();
-
         if (_user != null) {
             _isEditMode = true;
             BindUserDetails();
@@ -46,17 +44,6 @@ public partial class UserDetailsPage : ContentPage
         base.OnAppearing();
         if (App.Instance.UserNavigated == "userlist") await Navigation.PopAsync(); 
     }
-    private async void LoadRoles()
-    {
-        var roles = await _apiService.GetRolesAsync();
-        var filteredRoles = roles?.Where(r => r.Id == 1 || r.Id == 3).ToList();
-
-        RolePicker.ItemsSource = filteredRoles;
-        RolePicker.SelectedItem = _user != null
-            ? filteredRoles?.FirstOrDefault(r => r.Id == _user.RoleId)
-            : null;
-    }
-
     private void BindUserDetails()
     {
         FirstNameEntry.Text = _user.FirstName;
@@ -70,13 +57,8 @@ public partial class UserDetailsPage : ContentPage
     }
     private void ToggleFieldsVisibility()  
     {
-        PasswordLabel.IsVisible = !_isEditMode;
-        PasswordEntry.IsVisible = !_isEditMode;
-        ConfirmPasswordLabel.IsVisible = !_isEditMode;
-        ConfirmPasswordEntry.IsVisible = !_isEditMode;
-        RoleLabel.IsVisible = !_isEditMode;
-        RolePicker.IsVisible = !_isEditMode;
         UsernameEntry.Text = _user.Username;
+        LoginInfoFrame.IsVisible = !_isEditMode;
     }
     private async void SaveButton_Clicked(object sender, EventArgs e)
     {
