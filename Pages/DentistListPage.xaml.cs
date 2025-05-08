@@ -27,7 +27,7 @@ namespace DentalApp.Pages
             bool isApiAvailable = ApiConnectivityService.Instance.IsApiAvailable;
             try
             {
-             var dentistList = isApiAvailable
+                var dentistList = isApiAvailable
                     ? await _apiService.GetDentistsAsync() ?? new List<DentistVM>()
                     : SampleData.GetSampleDentists(); 
 
@@ -56,12 +56,12 @@ namespace DentalApp.Pages
         }
         private async void DentistListView_ItemTapped(object sender, ItemTappedEventArgs e)
         {
-            if (e.Item is DentistVM selectedDentist)
-            {
-                App.Instance.DentistNavigated = "dentistdetails";
-                await Navigation.PushAsync(new DentistDetailsPage(_allDentists, selectedDentist));
-            }
-            ((ListView)sender).SelectedItem = null;
+            //if (e.Item is DentistVM selectedDentist)
+            //{
+            //    App.Instance.DentistNavigated = "dentistdetails";
+            //    await Navigation.PushAsync(new DentistDetailsPage(_allDentists, selectedDentist));
+            //}
+            //((ListView)sender).SelectedItem = null;
         }
         private async void OnDeleteButtonClicked(object sender, EventArgs e)
         {
@@ -69,7 +69,7 @@ namespace DentalApp.Pages
             {
                 bool confirmDelete = await DisplayAlert("Confirm", "Delete this dentist?", "Yes", "No");
                 if (!confirmDelete) return;
-                await DisplayAlert("Info", $"Selected Dentist ID: {selectedDentist.Id}", "OK");
+
                 var success = await _apiService.DeleteDentistAsync(selectedDentist.Id);
                 LoadDentistList();
                 await DisplayAlert(success ? "Success" : "Error", success ? "Dentist deleted." : "Failed to delete dentist.", "OK");

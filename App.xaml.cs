@@ -18,16 +18,18 @@ namespace DentalApp
             InitializeComponent();
             Instance = this;
 
-            var token = Preferences.Get("AuthToken", string.Empty);          
+            var token = Preferences.Get("AuthToken", string.Empty);
 
-            if (!string.IsNullOrEmpty(token))
-            {
-                MainPage = new AppShell();
-            }
-            else
-            {
-                MainPage = new NavigationPage(new Pages.Auth.LoginPage());
-            }
+            //if (!string.IsNullOrEmpty(token))
+            //{
+            //    MainPage = new AppShell();
+            //}
+            //else
+            //{
+            //    MainPage = new NavigationPage(new Pages.Auth.LoginPage());
+            //}
+
+            MainPage = new AppShell();
         }
     }
 }

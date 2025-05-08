@@ -2,7 +2,6 @@ using DentalApp.Models;
 using DentalApp.Services;
 using DentalApp.Services.Validations;
 using System.Collections.ObjectModel;
-using Windows.System;
 
 namespace DentalApp.Pages;
 

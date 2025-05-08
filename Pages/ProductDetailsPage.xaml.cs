@@ -1,22 +1,31 @@
-using System.Text.RegularExpressions;
 using DentalApp.Models;
-using DentalApp.Services;
 using DentalApp.Models.Enum;
+using DentalApp.Services;
 using DentalApp.Services.Validations;
+using System.Collections.ObjectModel;
+
 
 namespace DentalApp.Pages;
 
 public partial class ProductDetailsPage : ContentPage
 {
-    private ProductVM _product;
     private readonly ApiService _apiService = new();
+    private ProductVM _product;
+    private ObservableCollection<ProductVM> _allProducts = new();
+    private bool _isEditMode;
 
-    public ProductDetailsPage(ProductVM product = null)
+    public ProductDetailsPage(ObservableCollection<ProductVM> allProducts, ProductVM product = null)
     {
         InitializeComponent();
-        _product = product ?? new ProductVM();
-        BindProductDetails();
+        _allProducts = allProducts;
+        _product = product;
         ProductTypePicker.ItemsSource = Enum.GetValues<ProductType>().ToList();
+
+        if (_product != null)
+        {
+            _isEditMode = true;
+            BindProductDetails();
+        }
     }
 
     private void BindProductDetails()
@@ -61,13 +70,24 @@ public partial class ProductDetailsPage : ContentPage
             ? await _apiService.UpdateProductAsync(_product)
             : await _apiService.CreateProductAsync(_product);
 
+            if (success)
+            {
+                var updatedList = await _apiService.GetProductsAsync() ?? new List<ProductVM>();
+                _allProducts.Clear();
+                updatedList.ForEach(_allProducts.Add);
+            }
+
         string message = success
             ? (_product.Id != 0 ? "Product updated successfully!" : "Product created successfully!")
             : "Failed to save product. Please try again.";
 
         await DisplayAlert(success ? "Success" : "Error", message, "OK");
 
-        if (success) await Navigation.PopAsync();
+        if (success)
+        {
+            _product = null;
+            await Navigation.PopAsync();
+        }
     }
 
     private void OnNumericEntryChanged(object sender, TextChangedEventArgs e)

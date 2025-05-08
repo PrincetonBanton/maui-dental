@@ -53,12 +53,12 @@
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <ViewCell>
-                            <Grid Padding="5" ColumnDefinitions="1.6*,3.4*,1.6*,1.7*,1.5*">
+                            <Grid Padding="5" ColumnDefinitions="1.6*,3.4*,1.6*,1.7*, 1.7*,1.5*">
                                 <Label Text="{Binding SaleDate, StringFormat='{0:MM/dd/yy}'}" FontSize="13" Grid.Column="0"/>
                                 <Label Text="{Binding PatientName}" FontSize="13" Grid.Column="1" />
                                 <Label Text="{Binding Total, StringFormat='{0:N2}'}" FontSize="13" Grid.Column="2" />
-                                <!--<Label Text="{Binding StatusText}" FontSize="13" Grid.Column="3"/>-->
                                 <Label Text="{Binding Status}" FontSize="13" Grid.Column="3"/>
+                                <Label Text="{Binding StatusText}" FontSize="13" Grid.Column="5"/>
                                 <HorizontalStackLayout Grid.Column="4" Spacing="5">
 
                                     <!-- Pay button (only if unpaid) -->

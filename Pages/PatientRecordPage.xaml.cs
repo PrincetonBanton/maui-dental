@@ -31,9 +31,6 @@
         }
         private void BindPatientDetails()
         {
-            //var jsonUser = System.Text.Json.JsonSerializer.Serialize(_patient, new System.Text.Json.JsonSerializerOptions { WriteIndented = true });
-            //DisplayAlert("User Object", jsonUser, "OK");
-
             NameLabel.Text = $"Name: {_patient.FirstName} {_patient.MiddleName} {_patient.LastName}".Trim();
             //BdayLabel.Text = _patient.BirthDate.ToString();
             BdayLabel.Text = $"Age: {CalculateAge(_patient.BirthDate).ToString()}";
@@ -60,7 +57,7 @@
 
             var filtered = appointments?.Where(a => a.PatientId == patientId) ?? Enumerable.Empty<Appointment>();
 
-            _allAppointments = new ObservableCollection<Appointment>(filtered);
+            _allAppointments = new ObservableCollection<Appointment>(filtered);            
             AppointmentListView.ItemsSource = _allAppointments;
         }
         catch (Exception ex)
@@ -80,7 +77,8 @@
             var payments = isApiAvailable
                 ? await _apiService.GetPaymentsAsync(patientId) ?? new List<Payment>()
                 : new List<Payment>();
-
+            var jsonUser = System.Text.Json.JsonSerializer.Serialize(payments, new System.Text.Json.JsonSerializerOptions { WriteIndented = true });
+            await DisplayAlert("User Object", jsonUser, "OK");
             PaymentListView.ItemsSource = payments;
         }
         catch (Exception ex)
