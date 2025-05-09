@@ -8,8 +8,8 @@ namespace DentalApp.Pages
     public partial class ProductListPage : ContentPage
     {
         private readonly ApiService _apiService = new();
-        private List<ProductVM> _allProducts = new();
-        //private ObservableCollection<ProductVM> _filteredProducts = new();
+        //private List<ProductVM> _allProducts = new();
+        private ObservableCollection<ProductVM> _allProducts = new();
 
         public ProductListPage()
         {
@@ -22,9 +22,13 @@ namespace DentalApp.Pages
             bool isApiAvailable = ApiConnectivityService.Instance.IsApiAvailable;
             try
             {
-                _allProducts = isApiAvailable
+                var productList = isApiAvailable
                     ? await _apiService.GetProductsAsync() ?? new List<ProductVM>()
-                    : SampleData.GetSampleProducts();               //Replace w offline data sync
+                    : SampleData.GetSampleProducts();
+
+                _allProducts.Clear();
+                productList.ForEach(_allProducts.Add);
+                ProductListView.ItemsSource = _allProducts;
             }
             catch (Exception ex)
             {
@@ -35,13 +39,13 @@ namespace DentalApp.Pages
         }
         private async void OnCreateProductButtonClicked(object sender, EventArgs e)
         {
-            await Navigation.PushAsync(new ProductDetailsPage());
+            await Navigation.PushAsync(new ProductDetailsPage(_allProducts));
         }
         private async void OnEditButtonClicked(object sender, EventArgs e)
         {
             if (sender is ImageButton button && button.BindingContext is ProductVM selectedProduct)
             {
-                await Navigation.PushAsync(new ProductDetailsPage(selectedProduct));
+                await Navigation.PushAsync(new ProductDetailsPage(_allProducts, selectedProduct));
             }
         }
         private async void OnDeleteButtonClicked(object sender, EventArgs e)

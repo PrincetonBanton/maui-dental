@@ -2,46 +2,55 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="DentalApp.Pages.PatientRecordPage"
+             Title="Patient Records"
              BackgroundColor="White">
-    
-    <VerticalStackLayout Padding="10" Spacing="10">
 
-        <Frame Padding="10" Margin="0">
-            <VerticalStackLayout>
-                <Label Text="Patient Profile" FontSize="16" FontAttributes="Bold"/>
-                <Label x:Name="NameLabel" FontSize="14"/>
-                <Label x:Name="BdayLabel" FontSize="14"/>
-                <Label x:Name="MobileLabel" FontSize="14"/>
-                <Label x:Name="EmailLabel" FontSize="14"/>
-            </VerticalStackLayout>
-        </Frame>
-
-        <Frame Padding="10" Margin="0">
-            <VerticalStackLayout>
-                <Label Text="Appointments" FontSize="16" FontAttributes="Bold"/>
-
-                <CollectionView x:Name="AppointmentListView" ItemsSource="{Binding}">
-                    <CollectionView.ItemTemplate>
-                        <DataTemplate>
-                            <Label FontSize="14" Text="{Binding FormattedDisplay}" />
-                        </DataTemplate>
-                    </CollectionView.ItemTemplate>
-                </CollectionView>
-            </VerticalStackLayout>
-        </Frame>
-
-        <Frame Padding="10" Margin="0">
-            <VerticalStackLayout>
-                <Label Text="Sale History" FontSize="16" FontAttributes="Bold"/>
-                <CollectionView x:Name="PaymentListView" ItemsSource="{Binding}">
-                    <CollectionView.ItemTemplate>
-                        <DataTemplate>
-                            <Label FontSize="14" Text="{Binding SaleId}" />
-                        </DataTemplate>
-                    </CollectionView.ItemTemplate>
-                </CollectionView>
-            </VerticalStackLayout>
-        </Frame>
+    <VerticalStackLayout Padding="10" Spacing="15">
+        <VerticalStackLayout>
+            <Label x:Name="NameLabel" FontSize="14"/>
+            <Label x:Name="BdayLabel" FontSize="14"/>
+            <Label x:Name="MobileLabel" FontSize="14"/>
+            <Label x:Name="EmailLabel" FontSize="14"/>
+        </VerticalStackLayout>
+        <VerticalStackLayout>
+            <Label Text="Appointments" FontAttributes="Bold" />
+            <Grid BackgroundColor="DarkGray" ColumnDefinitions="*, 2*, *" Padding="5">
+                <Label Text="Date" TextColor="White" Grid.Column="0" />
+                <Label Text="Description" TextColor="White" Grid.Column="1" />
+                <Label Text="Dentist" TextColor="White" Grid.Column="2" />
+            </Grid>
+            <CollectionView x:Name="AppointmentListView" ItemsSource="{Binding}">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Grid ColumnDefinitions="*, 2*, *" Padding="3">
+                            <Label Text="{Binding StartDate, StringFormat='{0:MM/dd/yyyy hh:mm tt}'}" Grid.Column="0" />
+                            <Label Text="{Binding Description}" Grid.Column="1" />
+                            <Label Text="{Binding DentistName}" Grid.Column="2" />
+                        </Grid>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </VerticalStackLayout>
+        <VerticalStackLayout>
+            <Label Text="Sale History" FontAttributes="Bold"/>
+            <Grid BackgroundColor="DarkGray" ColumnDefinitions="*, 2*, *" Padding="5">
+                <Label Text="Date" TextColor="White" Grid.Column="0" />
+                <Label Text="Description" TextColor="White" Grid.Column="1" />
+                <Label Text="Amount" TextColor="White" Grid.Column="2" />
+            </Grid>
+            <CollectionView x:Name="PaymentListView" ItemsSource="{Binding}" >
+                <CollectionView.ItemTemplate >
+                    <DataTemplate>
+                        <Grid ColumnDefinitions="*, 2*, *" Padding="3">
+                            <Label Text="{Binding PaymentDate, StringFormat='{0:MM/dd/yyyy hh:mm tt}'}" Grid.Column="0" />
+                            <!--<Label Text="{Binding SaleId}" Grid.Column="1" />-->
+                            <Label Text="Get Sale Description Id" Grid.Column="1" />
+                            <Label Text="{Binding PaymentAmount}" Grid.Column="2" />
+                        </Grid>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </VerticalStackLayout>
 
     </VerticalStackLayout>
 </ContentPage>

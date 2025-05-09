@@ -5,7 +5,7 @@
              BackgroundColor="White">
     <ScrollView>
         <VerticalStackLayout Padding="10" Spacing="10">
-            <Frame Padding="10" Margin="0">
+            <Frame x:Name="LoginInfoFrame" Padding="10" Margin="0">
                 <VerticalStackLayout>
                     <Label Text="Login Information" FontSize="16" FontAttributes="Bold"/>
                     <HorizontalStackLayout>

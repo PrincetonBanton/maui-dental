@@ -5,8 +5,19 @@ namespace DentalApp.Services.Validations
 {
     public static class DentistValidationService
     {
-        public static (bool IsValid, string ErrorMessage) ValidateDentist(DentistVM dentist)
+        public static (bool IsValid, string ErrorMessage) ValidateDentist(DentistVM dentist, string confirmPassword, bool isEditMode = false)
         {
+            if (!isEditMode) // Only validate password if not editing
+            {
+                if (string.IsNullOrWhiteSpace(dentist.Password))
+                    return (false, "Password is required.");
+
+                if (string.IsNullOrWhiteSpace(confirmPassword))
+                    return (false, "Password confirmation is required.");
+
+                if (dentist.Password != confirmPassword)
+                    return (false, "Passwords do not match.");
+            }
             if (string.IsNullOrWhiteSpace(dentist.FirstName))
                 return (false, "First name is required.");
             if (string.IsNullOrWhiteSpace(dentist.MiddleName))

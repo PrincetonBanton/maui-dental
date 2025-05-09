@@ -5,6 +5,23 @@
              BackgroundColor="White">
     <ScrollView>
         <VerticalStackLayout Padding="10" Spacing="10">
+            <Frame x:Name="LoginInfoFrame" Padding="10" Margin="0">
+                <VerticalStackLayout>
+                    <Label Text="Login Information" FontSize="16" FontAttributes="Bold"/>
+                    <HorizontalStackLayout>
+                        <Label Text="Username" WidthRequest="100"/>
+                        <Entry x:Name="UsernameEntry" Placeholder="Username" VerticalOptions="Center"/>
+                    </HorizontalStackLayout>
+                    <HorizontalStackLayout>
+                        <Label x:Name="PasswordLabel" Text="Password" WidthRequest="100"/>
+                        <Entry x:Name="PasswordEntry" Placeholder="Password" IsPassword="True" VerticalOptions="Center"/>
+                    </HorizontalStackLayout>
+                    <HorizontalStackLayout>
+                        <Label x:Name="ConfirmPasswordLabel" Text="Confirm" WidthRequest="100"/>
+                        <Entry x:Name="ConfirmPasswordEntry" Placeholder="Confirm" IsPassword="True" VerticalOptions="Center"/>
+                    </HorizontalStackLayout>
+                </VerticalStackLayout>
+            </Frame>
             <Frame Padding="10" Margin="0">
                 <VerticalStackLayout>
                     <Label Text="Dentist Information" FontSize="16" FontAttributes="Bold"/>

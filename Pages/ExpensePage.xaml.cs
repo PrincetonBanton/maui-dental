@@ -199,5 +199,6 @@ namespace DentalApp.Pages
 
         private void OnNumericEntryChanged(object sender, TextChangedEventArgs e) => NumericValidationService.OnNumericEntryChanged(sender, e);
         private async void OnShowExpenseFrame(object sender, EventArgs e) => await FrameAnimationService.ToggleVisibility(inputFrame);
+        private async void OnShowCategoryFrame(object sender, EventArgs e) => await FrameAnimationService.ToggleVisibility(CategoryFrame);
     }
 }

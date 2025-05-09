@@ -24,10 +24,25 @@
                     <Label Text="Category:" WidthRequest="100"/>
                     <Picker x:Name="ExpenseCategoryPicker" ItemDisplayBinding="{Binding Name}" WidthRequest="300"/>
                 </HorizontalStackLayout>
-                <Button Text="Save Expense" Clicked="SaveButton_Clicked" />
+                <Grid ColumnDefinitions="*,*">
+                    <Button Text="Save Expense" Clicked="SaveButton_Clicked" Grid.Column="0" Margin="0,0,5,0" />
+                     <Button Text="Add Category" Clicked="OnShowCategoryFrame" Grid.Column="1" Margin="5,0,0,0"  />
+                </Grid>
+                </StackLayout>
+        </Frame>
+        <Frame x:Name="CategoryFrame" IsVisible="False" Padding="10">
+            <StackLayout>
+                <HorizontalStackLayout>
+                    <Label Text="Name:" WidthRequest="100"/>
+                    <Entry x:Name="CategoryEntry" Placeholder="Category Name"/>
+                </HorizontalStackLayout>
+                <HorizontalStackLayout>
+                    <Label Text="Description" WidthRequest="100"/>
+                    <Editor x:Name="DescriptionEditor" Placeholder="Description" AutoSize="TextChanges" WidthRequest="300" HeightRequest="50"/>
+                </HorizontalStackLayout>
+                <Button Text="Save Category" />
             </StackLayout>
         </Frame>
-
         <Frame BackgroundColor="White" BorderColor="LightGray" Padding="10">
             <StackLayout>
                 <Grid ColumnDefinitions=".8*,2.3*,2.3*,2.3*,2.3*">

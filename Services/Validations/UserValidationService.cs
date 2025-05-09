@@ -7,8 +7,8 @@ namespace DentalApp.Services.Validations
         {
         public static (bool IsValid, string ErrorMessage) ValidateUser(UserVM user, string confirmPassword, bool isEditMode = false)
         {
-            if (string.IsNullOrWhiteSpace(user.Username))
-                return (false, "Username is required.");
+            //if (string.IsNullOrWhiteSpace(user.Username))
+            //    return (false, "Username is required.");
 
             if (!isEditMode) // Only validate password if not editing
             {
