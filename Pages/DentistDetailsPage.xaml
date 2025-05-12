@@ -24,7 +24,7 @@
             </Frame>
             <Frame Padding="10" Margin="0">
                 <VerticalStackLayout>
-                    <Label Text="Patient Information" FontSize="16" FontAttributes="Bold"/>
+                    <Label Text="Dentist Information" FontSize="16" FontAttributes="Bold"/>
                     <HorizontalStackLayout>
                         <Label Text="First Name" WidthRequest="100"/>
                         <Entry x:Name="FirstNameEntry" Placeholder="First Name"/>
