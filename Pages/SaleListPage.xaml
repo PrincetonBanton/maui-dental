@@ -16,32 +16,36 @@
             <Button Text="Create Sale" Clicked="OnCreateSaleButtonClicked" />
 
             <Frame Padding="10">
-                <VerticalStackLayout> 
-                    <Grid ColumnDefinitions="Auto, *">
+                <VerticalStackLayout>
+                    <!--<Grid ColumnDefinitions="Auto, *">
                         <Image Source="search.png" VerticalOptions="Center" HeightRequest="15" Grid.Column="0">
                             <Image.GestureRecognizers>
                                 <TapGestureRecognizer Tapped="OnSearchImageTapped"/>
                             </Image.GestureRecognizers>
                         </Image>
                         <Entry x:Name="SearchBar" TextChanged="OnSearchBarTextChanged" Margin="10,0,0,0" Grid.Column="1"/>
+                    </Grid>-->
+                    <Grid ColumnDefinitions=".8*,2.3*,2.3*,2.3*,2.3*">
+                        <CheckBox x:Name="quickFilterCheckBox" IsChecked="False" HorizontalOptions="Start" Grid.Column="0" CheckedChanged="OnQuickFilterCheckedChanged"/>
+                        <RadioButton x:Name="todayRadioButton" Content="Today" GroupName="DateFilter" Value="Today" Grid.Column="1" CheckedChanged="OnQuickFilterRadioButtonChanged"/>
+                        <RadioButton x:Name="thisWeekRadioButton" Content="Week" GroupName="DateFilter" Value="ThisWeek" Grid.Column="2" CheckedChanged="OnQuickFilterRadioButtonChanged"/>
+                        <RadioButton x:Name="thisMonthRadioButton" Content="Month" GroupName="DateFilter" Value="ThisMonth" Grid.Column="3" CheckedChanged="OnQuickFilterRadioButtonChanged"/>
+                        <RadioButton x:Name="thisYearRadioButton" Content="Year" GroupName="DateFilter" Value="ThisYear" Grid.Column="4" CheckedChanged="OnQuickFilterRadioButtonChanged"/>
                     </Grid>
-                    <Grid ColumnDefinitions="*,*">
-                        <HorizontalStackLayout Grid.Column="0">
-                            <Label Text="From" Margin="0,0,10,0"/>
-                            <DatePicker x:Name="saleStartPicker" Date="{Binding CurrentDate}" Format="MM/dd/yyyy" Grid.Column="2" HorizontalOptions="Start" DateSelected="OnStartDateChanged"/>
-                        </HorizontalStackLayout>
-                        <HorizontalStackLayout Grid.Column="1">
-                            <Label Text="To" Margin="0,0,10,0"  />
-                            <DatePicker x:Name="saleEndPicker" Date="{Binding CurrentDate}" Format="MM/dd/yyyy" Grid.Column="3" HorizontalOptions="Start" DateSelected="OnEndDateChanged"/>
-                        </HorizontalStackLayout>
+                    <Grid ColumnDefinitions=".8*,2.8*,2.3*,2.3*,2*">
+                        <CheckBox x:Name="customDateCheckBox" IsChecked="False" VerticalOptions="Center" Grid.Column="0" HorizontalOptions="Start" CheckedChanged="OnCustomDateCheckedChanged"/>
+                        <Label Text="Custom Filter" Grid.Column="1"/>
+                        <DatePicker x:Name="expenseStartPicker" Date="{Binding CurrentDate}" Format="MM/dd/yyyy" Grid.Column="2" HorizontalOptions="Start" DateSelected="OnStartDateChanged"/>
+                        <DatePicker x:Name="expenseEndPicker" Date="{Binding CurrentDate}" Format="MM/dd/yyyy" Grid.Column="3" HorizontalOptions="Start" DateSelected="OnEndDateChanged"/>
                     </Grid>
-                    <Grid ColumnDefinitions="*,*" >
+                    <!--<Grid ColumnDefinitions="*,*" >
                         <Label Text="Total Sale:" FontSize="14" VerticalOptions="Center" Grid.Column="0"/>
                         <Entry Placeholder="0.00" Keyboard="Numeric" Grid.Column="1"/>
-                    </Grid>
+                    </Grid>-->
                 </VerticalStackLayout>
             </Frame>
 
+            <!-- LISTVIEW -->
             <Grid Padding="5" BackgroundColor="DarkGray" ColumnDefinitions="1.6*,3.4*,1.6*,1.7*,1.5*">
                     <Label Text="Date" FontAttributes="Bold" Grid.Column="0" />
                     <Label Text="Patient" FontAttributes="Bold" Grid.Column="1" />
@@ -60,7 +64,6 @@
                                 <Label Text="{Binding Status}" FontSize="13" Grid.Column="3"/>
                                 <Label Text="{Binding StatusText}" FontSize="13" Grid.Column="5"/>
                                 <HorizontalStackLayout Grid.Column="4" Spacing="5">
-
                                     <!-- Pay button (only if unpaid) -->
                                     <ImageButton Source="pay.png" HeightRequest="20" WidthRequest="20" Clicked="OnPayButtonClicked">
                                         <ImageButton.Triggers>
@@ -75,7 +78,6 @@
                                             </DataTrigger>
                                         </ImageButton.Triggers>
                                     </ImageButton>
-
                                     <!-- Edit button (only if paid) -->
                                     <ImageButton Source="info.png" HeightRequest="20" WidthRequest="20" Clicked="OnEditButtonClicked">
                                         <ImageButton.Triggers>
@@ -90,7 +92,6 @@
                                             </DataTrigger>
                                         </ImageButton.Triggers>
                                     </ImageButton>
-
                                     <!-- Delete button (always visible) -->
                                     <ImageButton Source="delete.png" HeightRequest="25" WidthRequest="25" Clicked="OnDeleteButtonClicked"/>
                                 </HorizontalStackLayout>

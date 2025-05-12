@@ -115,6 +115,8 @@ namespace DentalApp.Pages
                 await DisplayAlert(success ? "Success" : "Error", success ? "Expense deleted." : "Failed to delete expense.", "OK");
             }
         }
+        private void OnStartDateChanged(object sender, DateChangedEventArgs e) => ApplyCustomDateFilter();
+        private void OnEndDateChanged(object sender, DateChangedEventArgs e) => ApplyCustomDateFilter();
 
         private void OnQuickFilterCheckedChanged(object sender, CheckedChangedEventArgs e)
         {
@@ -144,17 +146,6 @@ namespace DentalApp.Pages
             if (isChecked) ApplyCustomDateFilter();
   
         }
-        private void UpdateExpenseList(List<Expense> filteredExpenses)
-        {
-            _expenses.Clear(); // Clears the current list
-            foreach (var expense in filteredExpenses)
-                _expenses.Add(expense); // Automatically updates the UI
-
-            ExpenseListView.ItemsSource = _expenses;
-            UpdateExpenseCount();
-        }
-        private void UpdateExpenseCount() => ExpenseCountLabel.Text = $"{_expenses.Count}";
-
         private void ApplyFilter(Func<Expense, bool> filterCriteria)
         {
             var filteredExpenses = _allExpenses
@@ -165,37 +156,16 @@ namespace DentalApp.Pages
             UpdateExpenseList(filteredExpenses);
         }
 
-        private void OnQuickFilterRadioButtonChanged(object sender, CheckedChangedEventArgs e)
+        private void UpdateExpenseList(List<Expense> filteredExpenses)
         {
-            if (!quickFilterCheckBox.IsChecked) return;
+            _expenses.Clear(); // Clears the current list
+            foreach (var expense in filteredExpenses)
+                _expenses.Add(expense); // Automatically updates the UI
 
-            DateTime today = DateTime.Today;
-            DateTime startOfWeek = today.AddDays(-(int)today.DayOfWeek);
-            DateTime startOfMonth = new DateTime(today.Year, today.Month, 1);
-            int currentYear = today.Year;
-
-            if (todayRadioButton.IsChecked)
-                ApplyFilter(expense => expense.ExpenseDate.Date == today);
-            else if (thisWeekRadioButton.IsChecked)
-                ApplyFilter(expense => expense.ExpenseDate.Date >= startOfWeek);
-            else if (thisMonthRadioButton.IsChecked)
-                ApplyFilter(expense => expense.ExpenseDate.Date >= startOfMonth);
-            else if (thisYearRadioButton.IsChecked)
-                ApplyFilter(expense => expense.ExpenseDate.Year == currentYear);
+            ExpenseListView.ItemsSource = _expenses;
+            UpdateExpenseCount();
         }
-
-        private void OnStartDateChanged(object sender, DateChangedEventArgs e) => ApplyCustomDateFilter();
-        private void OnEndDateChanged(object sender, DateChangedEventArgs e) => ApplyCustomDateFilter();
-
-        private void ApplyCustomDateFilter()
-        {
-            if (!customDateCheckBox.IsChecked) return;
-
-            DateTime startDate = expenseStartPicker.Date;
-            DateTime endDate = expenseEndPicker.Date;
-
-            ApplyFilter(expense => expense.ExpenseDate.Date >= startDate && expense.ExpenseDate.Date <= endDate);
-        }
+        private void UpdateExpenseCount() => ExpenseCountLabel.Text = $"{_expenses.Count}";
 
         private void OnNumericEntryChanged(object sender, TextChangedEventArgs e) => NumericValidationService.OnNumericEntryChanged(sender, e);
         private async void OnShowExpenseFrame(object sender, EventArgs e) => await FrameAnimationService.ToggleVisibility(inputFrame);

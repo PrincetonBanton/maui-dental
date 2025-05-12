@@ -108,42 +108,45 @@ public partial class SaleListPage : ContentPage
             await DisplayAlert(success ? "Success" : "Error", success ? "Sale deleted." : "Failed to delete sale.", "OK");
         }
     }
-    private void OnSearchBarTextChanged(object sender, TextChangedEventArgs e)
-    {
-        var searchText = e.NewTextValue.ToLower();
+    //private void OnSearchBarTextChanged(object sender, TextChangedEventArgs e)
+    //{
+    //    var searchText = e.NewTextValue.ToLower();
 
-        SaleListView.ItemsSource = string.IsNullOrWhiteSpace(searchText)
-            ? _allSales
-            : _allSales.Where(p => p.PatientName.ToLower().Contains(searchText)).ToList();
-    }
-    private void OnSearchImageTapped(object sender, TappedEventArgs e) => SearchBar.Focus();
+    //    SaleListView.ItemsSource = string.IsNullOrWhiteSpace(searchText)
+    //        ? _allSales
+    //        : _allSales.Where(p => p.PatientName.ToLower().Contains(searchText)).ToList();
+    //}
+    //private void OnSearchImageTapped(object sender, TappedEventArgs e) => SearchBar.Focus();
+
     private void OnStartDateChanged(object sender, DateChangedEventArgs e) => ApplyCustomDateFilter();
     private void OnEndDateChanged(object sender, DateChangedEventArgs e) => ApplyCustomDateFilter();
 
-    private void ApplyCustomDateFilter()
+    private void OnQuickFilterCheckedChanged(object sender, CheckedChangedEventArgs e)
     {
-        DateTime startDate = saleStartPicker.Date;
-        DateTime endDate = saleEndPicker.Date;
-
-        ApplyFilter(sales => sales.SaleDate.Date >= startDate && sales.SaleDate.Date <= endDate);
+        bool isChecked = quickFilterCheckBox.IsChecked;
+        todayRadioButton.IsEnabled = isChecked;
+        thisWeekRadioButton.IsEnabled = isChecked;
+        thisMonthRadioButton.IsEnabled = isChecked;
+        thisYearRadioButton.IsEnabled = isChecked;
+        // Disable Custom Date Group if Quick Filter is checked
+        customDateCheckBox.IsChecked = !isChecked;
+        expenseStartPicker.IsEnabled = !isChecked;
+        expenseEndPicker.IsEnabled = !isChecked;
     }
-    private void ApplyFilter(Func<SaleVM, bool> filterCriteria)
+
+    private void OnCustomDateCheckedChanged(object sender, CheckedChangedEventArgs e)
     {
-        var filteredSales = _allSales
-            .Where(filterCriteria)
-            .OrderByDescending(sale => sale.SaleDate)
-            .ToList();
+        bool isChecked = customDateCheckBox.IsChecked;
+        expenseStartPicker.IsEnabled = isChecked;
+        expenseEndPicker.IsEnabled = isChecked;
+        // Disable Quick Filter Group if Custom Date is checked
+        quickFilterCheckBox.IsChecked = !isChecked;
+        todayRadioButton.IsEnabled = !isChecked;
+        thisWeekRadioButton.IsEnabled = !isChecked;
+        thisMonthRadioButton.IsEnabled = !isChecked;
+        thisYearRadioButton.IsEnabled = !isChecked;
 
-        UpdateSaleList(filteredSales);
-    }
-    private void UpdateSaleList(List<SaleVM> filteredSales)
-    {
-        Sales.Clear();
+        //if (isChecked) ApplyCustomDateFilter();
 
-        foreach (var sale in filteredSales)
-            Sales.Add(sale); // Automatically updates the UI
-
-        SaleListView.ItemsSource = Sales;
-        //UpdateExpenseCount();
     }
 }
