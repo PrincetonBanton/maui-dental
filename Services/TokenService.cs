@@ -1,7 +1,6 @@
-﻿using System.Net.Http.Headers;
+﻿using System.IdentityModel.Tokens.Jwt;
+using System.Net.Http.Headers;
 using System.Text.Json;
-using Microsoft.Maui.Storage;
-using System.IdentityModel.Tokens.Jwt;
 
 namespace DentalApp.Services
 {
@@ -11,8 +10,8 @@ namespace DentalApp.Services
         {
             if (Shell.Current == null) return;
 
-            var tokenJson = Preferences.Get("AuthToken", string.Empty);
-            if (string.IsNullOrEmpty(tokenJson))
+            var token = Preferences.Get("AuthToken", string.Empty);
+            if (string.IsNullOrEmpty(token))
             {
                 await Shell.Current.DisplayAlert("Token", "No token found in Preferences", "OK");
                 return;
@@ -20,29 +19,22 @@ namespace DentalApp.Services
 
             try
             {
-                var tokenObject = JsonSerializer.Deserialize<Dictionary<string, object>>(tokenJson);
-                var tokenResult = tokenObject?.GetValueOrDefault("result")?.ToString();
-
-                if (string.IsNullOrEmpty(tokenResult))
-                {
-                    await Shell.Current.DisplayAlert("Token Error", "Result field is empty in the token", "OK");
-                    return;
-                }
-
-                if (IsTokenExpired(tokenResult))
+                if (IsTokenExpired(token))
                 {
                     await Shell.Current.DisplayAlert("Session Expired", "Your session has expired. Please log in again.", "OK");
                     Preferences.Remove("AuthToken");
                     Application.Current.MainPage = new NavigationPage(new Pages.Auth.LoginPage());
+                    return;
                 }
 
-                httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", tokenResult);
+                httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
             }
             catch (Exception ex)
             {
-                await Shell.Current.DisplayAlert("Deserialization Error", $"Error: {ex.Message}", "OK");
+                await Shell.Current.DisplayAlert("Token Error", $"Error: {ex.Message}", "OK");
             }
         }
+
 
         public static bool IsTokenExpired(string token)
         {

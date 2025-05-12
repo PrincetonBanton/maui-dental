@@ -14,49 +14,8 @@ namespace DentalApp.Services
 
         public ApiService()
         {
-            //AttachToken();
             _ = TokenService.AttachTokenAsync(_httpClient);
-
         }
-
-        //private async void AttachToken()
-        //{
-
-        //    if (Shell.Current == null) return;
-        //    var tokenJson = Preferences.Get("AuthToken", string.Empty);
-        //    if (string.IsNullOrEmpty(tokenJson))
-        //    {
-        //        await Shell.Current.DisplayAlert("Token", "No token found in Preferences", "OK");
-        //        return;
-        //    }
-
-        //    try
-        //    {
-        //        var tokenObject = JsonSerializer.Deserialize<Dictionary<string, object>>(tokenJson);
-        //        if (tokenObject != null && tokenObject.ContainsKey("result"))
-        //        {
-        //            var tokenResult = tokenObject["result"]?.ToString();
-        //            if (!string.IsNullOrEmpty(tokenResult))
-        //            {
-        //                _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", tokenResult);
-        //            }
-        //            else
-        //            {
-
-        //                // Preferences.Set("AuthToken", string.Empty);
-        //                await Shell.Current.DisplayAlert("Token Error", "Result field is empty in the token", "OK");
-        //            }
-        //        }
-        //        else
-        //        {
-        //            await Shell.Current.DisplayAlert("Deserialization Error", "Failed to find 'result' in the token JSON", "OK");
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        await Shell.Current.DisplayAlert("Deserialization Error", $"Error: {ex.Message}", "OK");
-        //    }
-        //}
 
         // Generic method to handle requests
         private async Task<T?> RequestAsync<T>(Func<Task<T?>> request, string errorMessage)
