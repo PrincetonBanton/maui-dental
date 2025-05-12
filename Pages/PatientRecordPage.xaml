@@ -5,15 +5,15 @@
              Title="Patient Records"
              BackgroundColor="White">
 
-    <VerticalStackLayout Padding="10" Spacing="15">
+    <VerticalStackLayout Padding="20" Spacing="15">
         <VerticalStackLayout>
-            <Label x:Name="NameLabel" FontSize="14"/>
-            <Label x:Name="BdayLabel" FontSize="14"/>
-            <Label x:Name="MobileLabel" FontSize="14"/>
-            <Label x:Name="EmailLabel" FontSize="14"/>
+            <Label x:Name="NameLabel" FontSize="18" FontAttributes="Bold" />
+            <Label x:Name="BdayLabel" />
+            <Label x:Name="MobileLabel"/>
+            <Label x:Name="EmailLabel" />
         </VerticalStackLayout>
         <VerticalStackLayout>
-            <Label Text="Appointments" FontAttributes="Bold" />
+            <Label Text="Appointments" FontSize="18" FontAttributes="Bold" />
             <Grid BackgroundColor="DarkGray" ColumnDefinitions="*, 2*, *" Padding="5">
                 <Label Text="Date" TextColor="White" Grid.Column="0" />
                 <Label Text="Description" TextColor="White" Grid.Column="1" />
@@ -32,7 +32,7 @@
             </CollectionView>
         </VerticalStackLayout>
         <VerticalStackLayout>
-            <Label Text="Sale History" FontAttributes="Bold"/>
+            <Label Text="Sale History" FontSize="18" FontAttributes="Bold"/>
             <Grid BackgroundColor="DarkGray" ColumnDefinitions="*, 2*, *" Padding="5">
                 <Label Text="Date" TextColor="White" Grid.Column="0" />
                 <Label Text="Description" TextColor="White" Grid.Column="1" />
@@ -44,7 +44,7 @@
                         <Grid ColumnDefinitions="*, 2*, *" Padding="3">
                             <Label Text="{Binding PaymentDate, StringFormat='{0:MM/dd/yyyy hh:mm tt}'}" Grid.Column="0" />
                             <!--<Label Text="{Binding SaleId}" Grid.Column="1" />-->
-                            <Label Text="Get Sale Description Id" Grid.Column="1" />
+                            <Label Text="{Binding SaleProductName}" Grid.Column="1" />
                             <Label Text="{Binding PaymentAmount}" Grid.Column="2" />
                         </Grid>
                     </DataTemplate>

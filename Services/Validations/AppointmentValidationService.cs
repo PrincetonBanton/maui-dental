@@ -29,5 +29,18 @@ namespace DentalApp.Services.Validations
 
             return (true, string.Empty);
         }
+
+        public static bool HasTimeConflict(Appointment newAppointment, IEnumerable<Appointment> existingAppointments)
+        {
+            return existingAppointments.Any(existing =>
+                existing.DentistId == newAppointment.DentistId &&
+                existing.Id != newAppointment.Id &&                            
+                existing.StartDate.Date == newAppointment.StartDate.Date &&    
+                (
+                    newAppointment.StartDate < existing.EndDate &&
+                    newAppointment.EndDate > existing.StartDate
+                )
+            );
+        }
     }
 }

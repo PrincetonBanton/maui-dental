@@ -31,8 +31,9 @@
         }
         private void BindPatientDetails()
         {
-            NameLabel.Text = $"Name: {_patient.FirstName} {_patient.MiddleName} {_patient.LastName}".Trim();
+            //NameLabel.Text = $"Name: {_patient.FirstName} {_patient.MiddleName} {_patient.LastName}".Trim();
             //BdayLabel.Text = _patient.BirthDate.ToString();
+            NameLabel.Text = $"{_patient.FirstName} {_patient.MiddleName} {_patient.LastName}".Trim();
             BdayLabel.Text = $"Age: {CalculateAge(_patient.BirthDate).ToString()}";
             MobileLabel.Text = $"Mobile: {_patient.Mobile}";
             EmailLabel.Text = $"Email: {_patient.Email}"; ;   
@@ -77,8 +78,16 @@
             var payments = isApiAvailable
                 ? await _apiService.GetPaymentsAsync(patientId) ?? new List<Payment>()
                 : new List<Payment>();
-            var jsonUser = System.Text.Json.JsonSerializer.Serialize(payments, new System.Text.Json.JsonSerializerOptions { WriteIndented = true });
-            await DisplayAlert("User Object", jsonUser, "OK");
+
+            //var jsonUser = System.Text.Json.JsonSerializer.Serialize(payments, new System.Text.Json.JsonSerializerOptions { WriteIndented = true });
+            //await DisplayAlert("User Object", jsonUser, "OK");
+
+            foreach (var payment in payments)
+            {
+                var saleDetail = await _apiService.GetSaleDetailAsync(payment.SaleId);
+                payment.SaleProductName = saleDetail?.Items.FirstOrDefault()?.ProductName ?? "Unknown Product";
+            }
+
             PaymentListView.ItemsSource = payments;
         }
         catch (Exception ex)

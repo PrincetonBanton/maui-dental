@@ -91,8 +91,17 @@ public partial class AppointmentDetailsPage : ContentPage
             await DisplayAlert("Validation Error", errorMessage, "OK");
             return;
         }
-        var jsonUser = System.Text.Json.JsonSerializer.Serialize(_appointment, new System.Text.Json.JsonSerializerOptions { WriteIndented = true });
-        await DisplayAlert("User Object", jsonUser, "OK");
+
+        // Conflict check
+        var existingAppointments = await _apiService.GetAppointmentsAsync();
+        if (AppointmentValidationService.HasTimeConflict(_appointment, existingAppointments))
+        {
+            await DisplayAlert("Conflict", "This appointment overlaps with another appointment for the selected dentist.", "OK");
+            return;
+        }
+
+        //var jsonUser = System.Text.Json.JsonSerializer.Serialize(_appointment, new System.Text.Json.JsonSerializerOptions { WriteIndented = true });
+        //await DisplayAlert("User Object", jsonUser, "OK");
 
         bool success = _appointment.Id != 0
             ? await _apiService.UpdateAppointmentAsync(_appointment)
