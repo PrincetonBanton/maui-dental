@@ -130,7 +130,24 @@ namespace DentalApp.Pages
             expenseStartPicker.IsEnabled = !isChecked;
             expenseEndPicker.IsEnabled = !isChecked;
         }
+        private void OnQuickFilterRadioButtonChanged(object sender, CheckedChangedEventArgs e)
+        {
+            if (!quickFilterCheckBox.IsChecked) return;
 
+            DateTime today = DateTime.Today;
+            DateTime startOfWeek = today.AddDays(-(int)today.DayOfWeek);
+            DateTime startOfMonth = new DateTime(today.Year, today.Month, 1);
+            int currentYear = today.Year;
+
+            if (todayRadioButton.IsChecked)
+                ApplyFilter(expense => expense.ExpenseDate.Date == today);
+            else if (thisWeekRadioButton.IsChecked)
+                ApplyFilter(expense => expense.ExpenseDate.Date >= startOfWeek);
+            else if (thisMonthRadioButton.IsChecked)
+                ApplyFilter(expense => expense.ExpenseDate.Date >= startOfMonth);
+            else if (thisYearRadioButton.IsChecked)
+                ApplyFilter(expense => expense.ExpenseDate.Year == currentYear);
+        }
         private void OnCustomDateCheckedChanged(object sender, CheckedChangedEventArgs e)
         {
             bool isChecked = customDateCheckBox.IsChecked;
@@ -146,6 +163,15 @@ namespace DentalApp.Pages
             if (isChecked) ApplyCustomDateFilter();
   
         }
+        private void ApplyCustomDateFilter()
+        {
+            if (!customDateCheckBox.IsChecked) return;
+
+            DateTime startDate = expenseStartPicker.Date;
+            DateTime endDate = expenseEndPicker.Date;
+
+            ApplyFilter(expense => expense.ExpenseDate.Date >= startDate && expense.ExpenseDate.Date <= endDate);
+        }
         private void ApplyFilter(Func<Expense, bool> filterCriteria)
         {
             var filteredExpenses = _allExpenses
@@ -155,7 +181,6 @@ namespace DentalApp.Pages
 
             UpdateExpenseList(filteredExpenses);
         }
-
         private void UpdateExpenseList(List<Expense> filteredExpenses)
         {
             _expenses.Clear(); // Clears the current list
