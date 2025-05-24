@@ -117,23 +117,8 @@ namespace DentalApp.Services
         // Sale
         public async Task<List<SaleVM>> GetSalesAsync()
         {
-            try
-            {
-                var sales = await GetAsync<List<SaleVM>>("Sale/GetAll");
-
-                if (sales == null)
-                {
-                    await Shell.Current.DisplayAlert("Error", "Unable to load sales. The server returned no data.", "OK");
-                    return new List<SaleVM>();
-                }
-
-                return sales.OrderByDescending(e => e.SaleId).ToList();
-            }
-            catch (Exception ex)
-            {
-                await Shell.Current.DisplayAlert("Error", $"An error occurred while fetching sales:\n{ex.Message}", "OK");
-                return new List<SaleVM>();
-            }
+            var sales = await GetAsync<List<SaleVM>>("Sale/GetAll") ?? new List<SaleVM>();
+            return sales.OrderByDescending(e => e.SaleId).ToList();
         }
 
         public Task<SaleVM?> GetSaleDetailAsync(int id) => GetAsync<SaleVM>($"Sale/GetDetail/{id}");

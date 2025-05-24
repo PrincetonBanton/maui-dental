@@ -76,6 +76,9 @@
 	  <Compile Update="Pages\ProductListPage.xaml.cs">
 	    <DependentUpon>ProductListPage.xaml</DependentUpon>
 	  </Compile>
+	  <Compile Update="Pages\SaleDetailsPage.xaml.cs">
+	    <DependentUpon>SaleDetailsPage.xaml</DependentUpon>
+	  </Compile>
 	  <Compile Update="Pages\UserDetailsPage.xaml.cs">
 	    <DependentUpon>UserDetailsPage.xaml</DependentUpon>
 	  </Compile>
@@ -115,7 +118,7 @@
 	  <MauiXaml Update="Pages\SaleListPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="Pages\SalesPage.xaml">
+	  <MauiXaml Update="Pages\SaleDetailsPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Pages\StaticPages\ProductListPage.xaml">

@@ -8,7 +8,7 @@ namespace DentalApp.Models
     public partial class Sale : BaseModel
     {
         public DateTime SaleDate { get; set; }
-        public string SaleNo { get; set; }
+        public string? SaleNo { get; set; }
         public DateTime CreatedOn { get; set; } = DateTime.Now;
         public int PatientId { get; set; }
         public int DentistId { get; set; }

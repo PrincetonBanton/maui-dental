@@ -8,7 +8,6 @@ namespace DentalApp.Pages
     public partial class ProductListPage : ContentPage
     {
         private readonly ApiService _apiService = new();
-        //private List<ProductVM> _allProducts = new();
         private ObservableCollection<ProductVM> _allProducts = new();
 
         public ProductListPage()
@@ -35,7 +34,6 @@ namespace DentalApp.Pages
                 await DisplayAlert("Error", "Failed to load products. Please try again.", "OK");
             }
             ProductListView.ItemsSource = _allProducts;
-
         }
         private async void OnCreateProductButtonClicked(object sender, EventArgs e)
         {

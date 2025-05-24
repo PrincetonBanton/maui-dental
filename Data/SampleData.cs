@@ -62,6 +62,7 @@ namespace DentalApp.Data
                 new SaleVM { SaleId = 4, SaleDate = DateTime.Now.AddDays(-10), PatientName = "Pam Beesly", DentistName = "Dr. Sarah Connor", Total = 900.00m, Status = 0 }
             };
         }
+
         public static List<Supplier> GetSampleSuppliers()
         {
             return new List<Supplier>

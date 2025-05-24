@@ -2,7 +2,7 @@
 {
     public class SaleCreate
     {
-        public string SaleNo { get; set; }
+        public string? SaleNo { get; set; }
         public DateTime SaleDate { get; set; }
         public int PatientId { get; set; }
         public int DentistId { get; set; }

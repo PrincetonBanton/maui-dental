@@ -19,7 +19,7 @@ namespace DentalApp.Models
         public DateTime PaymentDate { get; set; }
         public DateTime CreatedOn { get; set; } = DateTime.Now;
 
-        public string SaleProductName { get; set; }
+        public string? SaleProductName { get; set; }
         public virtual Sale? Sale { get; set; }
     }
 }

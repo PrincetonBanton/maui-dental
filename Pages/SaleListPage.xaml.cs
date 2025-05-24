@@ -9,12 +9,15 @@ public partial class SaleListPage : ContentPage
 {
     private readonly ApiService _apiService = new();
     private ObservableCollection<SaleVM> _allSales = new();
-    public ObservableCollection<SaleVM> Sales { get; set; } = new();
-
+    private ObservableCollection<ProductVM> _allProducts = new();
     public SaleListPage()
-	{
+    {
         InitializeComponent();
-        BindingContext = this; // Set the BindingContext to the page itself
+        LoadSaleList();
+    }
+    protected override void OnAppearing()
+    {
+        base.OnAppearing();
         LoadSaleList();
     }
     private async void LoadSaleList()
@@ -23,17 +26,15 @@ public partial class SaleListPage : ContentPage
         bool isApiAvailable = ApiConnectivityService.Instance.IsApiAvailable;
         try
         {
-            var salesList = isApiAvailable
-                ? await _apiService.GetSalesAsync() ?? new List<SaleVM>()
-                : SampleData.GetSampleSales(); // Replace with offline data sync
-
+            var saleList = isApiAvailable
+                   ? await _apiService.GetSalesAsync() ?? new List<SaleVM>()
+                   : SampleData.GetSampleSales();
             _allSales.Clear();
-            salesList.ForEach(_allSales.Add);
+            saleList.ForEach(_allSales.Add);
+            SaleListView.ItemsSource = _allSales;
 
             //var jsonUser = System.Text.Json.JsonSerializer.Serialize(_allSales, new System.Text.Json.JsonSerializerOptions { WriteIndented = true });
             //await DisplayAlert("User Object", jsonUser, "OK");
-
-            SaleListView.ItemsSource = _allSales;
         }
         catch (Exception)
         {
@@ -42,15 +43,8 @@ public partial class SaleListPage : ContentPage
     }
     private async void OnCreateSaleButtonClicked(object sender, EventArgs e)
     {
-        var salesPage = new SalesPage(null, OnSaleCreated);
-        await Navigation.PushAsync(salesPage);
+        await Navigation.PushAsync(new SaleDetailsPage(_allSales));
     }
-    private void OnSaleCreated(SaleVM newSale)
-    {
-        _allSales.Insert(0, newSale); // Add to master list
-        Sales.Insert(0, newSale);     // Add to bound list (UI)
-    }
-
     private async void OnPayButtonClicked(object sender, EventArgs e)
     {
         if (sender is ImageButton button && button.BindingContext is SaleVM selectedSale)
@@ -75,7 +69,7 @@ public partial class SaleListPage : ContentPage
                 EnteredBy = 41,
                 PaymentDate = DateTime.Now
             };
-            
+
             var jsonUser = System.Text.Json.JsonSerializer.Serialize(payment, new System.Text.Json.JsonSerializerOptions { WriteIndented = true });
             await DisplayAlert("User Object", jsonUser, "OK");
 
@@ -92,7 +86,7 @@ public partial class SaleListPage : ContentPage
     {
         if (sender is ImageButton button && button.BindingContext is SaleVM selectedSale)
         {
-            await Navigation.PushAsync(new SalesPage(selectedSale));
+            await Navigation.PushAsync(new SaleDetailsPage(_allSales, selectedSale));
         }
     }
 
@@ -102,85 +96,9 @@ public partial class SaleListPage : ContentPage
         {
             bool confirmDelete = await DisplayAlert("Confirm", "Delete this sale?", "Yes", "No");
             if (!confirmDelete) return;
-
             var success = await _apiService.DeleteSaleAsync(selectedSale.SaleId);
             LoadSaleList();
             await DisplayAlert(success ? "Success" : "Error", success ? "Sale deleted." : "Failed to delete sale.", "OK");
         }
-    }
-    //private void OnSearchBarTextChanged(object sender, TextChangedEventArgs e)
-    //{
-    //    var searchText = e.NewTextValue.ToLower();
-
-    //    SaleListView.ItemsSource = string.IsNullOrWhiteSpace(searchText)
-    //        ? _allSales
-    //        : _allSales.Where(p => p.PatientName.ToLower().Contains(searchText)).ToList();
-    //}
-    //private void OnSearchImageTapped(object sender, TappedEventArgs e) => SearchBar.Focus();
-
-    private void OnStartDateChanged(object sender, DateChangedEventArgs e) => ApplyCustomDateFilter();
-    private void OnEndDateChanged(object sender, DateChangedEventArgs e) => ApplyCustomDateFilter();
-
-    private void OnQuickFilterCheckedChanged(object sender, CheckedChangedEventArgs e)
-    {
-        bool isChecked = quickFilterCheckBox.IsChecked;
-        todayRadioButton.IsEnabled = isChecked;
-        thisWeekRadioButton.IsEnabled = isChecked;
-        thisMonthRadioButton.IsEnabled = isChecked;
-        thisYearRadioButton.IsEnabled = isChecked;
-        // Disable Custom Date Group if Quick Filter is checked
-        customDateCheckBox.IsChecked = !isChecked;
-        expenseStartPicker.IsEnabled = !isChecked;
-        expenseEndPicker.IsEnabled = !isChecked;
-    }
-    private void OnQuickFilterRadioButtonChanged(object sender, CheckedChangedEventArgs e)
-    {
-        if (!quickFilterCheckBox.IsChecked) return;
-
-        DateTime today = DateTime.Today;
-        DateTime startOfWeek = today.AddDays(-(int)today.DayOfWeek);
-        DateTime startOfMonth = new DateTime(today.Year, today.Month, 1);
-        int currentYear = today.Year;
-
-        if (todayRadioButton.IsChecked)
-            ApplyFilter(expense => expense.ExpenseDate.Date == today);
-        else if (thisWeekRadioButton.IsChecked)
-            ApplyFilter(expense => expense.ExpenseDate.Date >= startOfWeek);
-        else if (thisMonthRadioButton.IsChecked)
-            ApplyFilter(expense => expense.ExpenseDate.Date >= startOfMonth);
-        else if (thisYearRadioButton.IsChecked)
-            ApplyFilter(expense => expense.ExpenseDate.Year == currentYear);
-    }
-    private void OnCustomDateCheckedChanged(object sender, CheckedChangedEventArgs e)
-    {
-        bool isChecked = customDateCheckBox.IsChecked;
-        expenseStartPicker.IsEnabled = isChecked;
-        expenseEndPicker.IsEnabled = isChecked;
-        // Disable Quick Filter Group if Custom Date is checked
-        quickFilterCheckBox.IsChecked = !isChecked;
-        todayRadioButton.IsEnabled = !isChecked;
-        thisWeekRadioButton.IsEnabled = !isChecked;
-        thisMonthRadioButton.IsEnabled = !isChecked;
-        thisYearRadioButton.IsEnabled = !isChecked;
-
-        //if (isChecked) ApplyCustomDateFilter();
-    }
-    private void ApplyCustomDateFilter()
-    {
-        //if (!customDateCheckBox.IsChecked) return;
-
-        //DateTime startDate = expenseStartPicker.Date;
-        //DateTime endDate = expenseEndPicker.Date;
-
-        //ApplyFilter(expense => expense.ExpenseDate.Date >= startDate && expense.ExpenseDate.Date <= endDate);
-    }
-    private void ApplyFilter(Func<Expense, bool> filterCriteria)
-    {
-    //    var filteredExpenses = _allExpenses
-    //        .Where(filterCriteria)
-    //        .OrderByDescending(expense => expense.ExpenseDate)
-    //        .ToList();
-
-    //    UpdateExpenseList(filteredExpenses);
     }
 }

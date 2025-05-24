@@ -5,7 +5,7 @@ namespace DentalApp.Models
 {
     public class SaleVM : BaseModel
     {
-        public int SaleId { get; set; }  // Only for existing sales
+        public int SaleId { get; set; }          // Only for existing sales
         public string? SaleNo { get; set; }
         public DateTime SaleDate { get; set; }
         public int PatientId { get; set; }
