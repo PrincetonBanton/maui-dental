@@ -1,23 +1,37 @@
-<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:microcharts="clr-namespace:Microcharts.Maui;assembly=Microcharts.Maui"
              x:Class="DentalApp.Pages.Dashboard"
              BackgroundColor="White">
 
     <ContentPage.ToolbarItems>
-        <ToolbarItem Text="Logout"
-                     IconImageSource="logout_icon.png"  
-            Clicked="OnLogoutClicked" />
+        <ToolbarItem Text="Logout" IconImageSource="logout_icon.png" Clicked="OnLogoutClicked" />
     </ContentPage.ToolbarItems>
 
-    <Grid RowDefinitions="Auto,*,Auto" Padding="20">
-        <VerticalStackLayout Spacing="10" HorizontalOptions="CenterAndExpand" Grid.Row="0">
-            <Image Source="logo1.png" WidthRequest="200" HeightRequest="200" HorizontalOptions="Center" Margin="0,60,0,0" />
-            <Label Text="Your Clinic Here" FontSize="24" FontAttributes="Bold" TextColor="Black" HorizontalOptions="Center" />
+    <Grid RowDefinitions="Auto,*,Auto">
+        <VerticalStackLayout Grid.Row="0">
+            <HorizontalStackLayout Padding="10">
+                <Image Source="logo1.png" WidthRequest="75" HeightRequest="75"/>
+                <Label Text="Your Clinic Here" FontSize="18" FontAttributes="Bold" TextColor="Black" Padding="0,30,0,0" />
+            </HorizontalStackLayout>
+            <Frame BackgroundColor="White" BorderColor="LightGray" Padding="2">
+                <StackLayout>
+                    <Grid ColumnDefinitions="2*,2*,2*,2*,2*" Padding="20,0">
+                        <RadioButton x:Name="todayRadioButton" Content="Today" GroupName="DateFilter" Value="Today" Grid.Column="0" CheckedChanged="OnQuickFilterRadioButtonChanged"/>
+                        <RadioButton x:Name="thisWeekRadioButton" Content="Week" GroupName="DateFilter" Value="ThisWeek" Grid.Column="1" CheckedChanged="OnQuickFilterRadioButtonChanged"/>
+                        <RadioButton x:Name="thisMonthRadioButton" Content="Month" GroupName="DateFilter" Value="ThisMonth" Grid.Column="2" CheckedChanged="OnQuickFilterRadioButtonChanged"/>
+                        <RadioButton x:Name="thisYearRadioButton" Content="Year" GroupName="DateFilter" Value="ThisYear" Grid.Column="3" CheckedChanged="OnQuickFilterRadioButtonChanged"/>
+                        <RadioButton x:Name="allTimeRadioButton" Content="All Time" GroupName="DateFilter" Value="AllTime" Grid.Column="4" CheckedChanged="OnQuickFilterRadioButtonChanged"/>
+                    </Grid>
+                </StackLayout>
+            </Frame>
+            <Grid Grid.Row="1" ColumnDefinitions="5*,5*" Margin="10,30">
+                <microcharts:ChartView x:Name="SalesExpenseChart" HeightRequest="250" Grid.Column="0"/>
+                <microcharts:ChartView x:Name="SalesExpensePieChart" HeightRequest="250" Grid.Column="1" />
+            </Grid>
         </VerticalStackLayout>
-        <!-- Spacer (takes up remaining space) -->
-        <BoxView Grid.Row="1" BackgroundColor="Transparent"/>
+
         <Label Grid.Row="2" Text="All rights reserved Mazion Co., Inc." FontSize="12" TextColor="Gray"
-               HorizontalOptions="Center" VerticalOptions="End" Margin="0,10,0,10" />
+                HorizontalOptions="Center" VerticalOptions="End" Margin="0,10,0,10" />
     </Grid>
 </ContentPage>

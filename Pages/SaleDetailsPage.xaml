@@ -58,9 +58,9 @@
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>
-            <Grid x:Name="SaveButtonGroup" ColumnDefinitions="5*,5*" ColumnSpacing="2">
+            <Grid x:Name="SaveButtonGroup" ColumnDefinitions="10*" ColumnSpacing="2">
                 <Button Text="Save Only"  Clicked="OnSaveSaleClicked" Grid.Column="0"/>
-                <Button Text="Save and Pay" Clicked="OnSavePayClicked" Grid.Column="1"/>
+                <!--<Button Text="Save and Pay" Clicked="OnSavePayClicked" Grid.Column="1"/>-->
             </Grid>
         </StackLayout>
     </ScrollView>

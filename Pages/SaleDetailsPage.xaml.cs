@@ -132,41 +132,41 @@ public partial class SaleDetailsPage : ContentPage
 
     private async void OnSavePayClicked(object sender, EventArgs e)
     {
-        var subtotal = SelectedProducts.Sum(p => p.SubTotal);
-        string input = await DisplayPromptAsync("Enter Payment", "Enter payment amount:", "OK", "Cancel", initialValue: subtotal.ToString("N2"), keyboard: Keyboard.Numeric);
+        //var subtotal = SelectedProducts.Sum(p => p.SubTotal);
+        //string input = await DisplayPromptAsync("Enter Payment", "Enter payment amount:", "OK", "Cancel", initialValue: subtotal.ToString("N2"), keyboard: Keyboard.Numeric);
 
-        if (string.IsNullOrWhiteSpace(input) || !decimal.TryParse(input, out decimal amount))
-        {
-            await DisplayAlert("Error", "Invalid payment amount entered.", "OK");
-            return;
-        }
-        var jsonUser = JsonSerializer.Serialize(_sale, new JsonSerializerOptions { WriteIndented = true });
-        await DisplayAlert("User Object", jsonUser, "OK");
+        //if (string.IsNullOrWhiteSpace(input) || !decimal.TryParse(input, out decimal amount))
+        //{
+        //    await DisplayAlert("Error", "Invalid payment amount entered.", "OK");
+        //    return;
+        //}
+        //var jsonUser = JsonSerializer.Serialize(_sale, new JsonSerializerOptions { WriteIndented = true });
+        //await DisplayAlert("User Object", jsonUser, "OK");
 
-        bool saleSaved = await SaveSaleAsync(amount);
-        if (saleSaved)
-        {
-            await SavePayment(amount);
-        }
+        //bool saleSaved = await SaveSaleAsync(amount);
+        //if (saleSaved)
+        //{
+        //    await SavePayment(amount);
+        //}
     }
     private async Task SavePayment(decimal amount)
     {
-        var payment = new Payment
-        {
-            SaleId = _sale.SaleId,
-            PaymentAmount = amount,
-            AmountTendered = amount,
-            PaymentType = 0, // Assuming 0 means Cash or Default
-            EnteredBy = 41,  // Replace with actual user ID if dynamic
-            PaymentDate = DateTime.Now
-        };
+        //var payment = new Payment
+        //{
+        //    SaleId = _sale.SaleId,
+        //    PaymentAmount = amount,
+        //    AmountTendered = amount,
+        //    PaymentType = 0, // Assuming 0 means Cash or Default
+        //    EnteredBy = 41,  // Replace with actual user ID if dynamic
+        //    PaymentDate = DateTime.Now
+        //};
 
-        var jsonUser = JsonSerializer.Serialize(payment, new JsonSerializerOptions { WriteIndented = true });
-        await DisplayAlert("User Object", jsonUser, "OK");
+        //var jsonUser = JsonSerializer.Serialize(payment, new JsonSerializerOptions { WriteIndented = true });
+        //await DisplayAlert("User Object", jsonUser, "OK");
 
-        bool success = await _apiService.AddPaymentAsync(payment);
-        string message = success ? "Payment added successfully!" : "Failed to add payment.";
-        await DisplayAlert(success ? "Success" : "Error", message, "OK");
+        //bool success = await _apiService.AddPaymentAsync(payment);
+        //string message = success ? "Payment added successfully!" : "Failed to add payment.";
+        //await DisplayAlert(success ? "Success" : "Error", message, "OK");
     }
     private async Task<bool> SaveSaleAsync(decimal paymentAmount)
     {

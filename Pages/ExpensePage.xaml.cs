@@ -18,20 +18,10 @@ namespace DentalApp.Pages
             InitializeComponent();
             ExpenseListView.ItemsSource = _expenses;
             _expense = expense ?? new Expense();
-            //BindExpenseDetails();
             LoadExpenseCategories();
             LoadExpenseList();
         }
         private async void LoadExpenseCategories() =>ExpenseCategoryPicker.ItemsSource = await _apiService.GetExpenseCategoryAsync();
-
-        private void BindExpenseDetails()
-        {
-            DescriptionEntry.Text = _expense.Description;
-            AmountEntry.Text = _expense.Amount.ToString("N2");
-            ExpenseDatePicker.Date = _expense.ExpenseDate;
-            ExpenseCategoryPicker.SelectedItem = (ExpenseCategoryPicker.ItemsSource as List<ExpenseCategory>)?
-                .FirstOrDefault(c => c.Id == _expense.ExpenseCategoryId);
-        }
 
         private async void LoadExpenseList()
         {
@@ -54,6 +44,16 @@ namespace DentalApp.Pages
                 await DisplayAlert("Error", "Failed to load expenses. Please try again.", "OK");
             }
             ExpenseListView.ItemsSource = _allExpenses; 
+        }
+        private async void OnShowExpenseFrame(object sender, EventArgs e)
+        {
+            _expense = new Expense(); // Reset the working expense
+            DescriptionEntry.Text = string.Empty;
+            AmountEntry.Text = string.Empty;
+            ExpenseDatePicker.Date = DateTime.Today;
+            ExpenseCategoryPicker.SelectedItem = null;
+
+            await FrameAnimationService.ToggleVisibility(inputFrame);
         }
 
         private async void SaveButton_Clicked(object sender, EventArgs e)
@@ -193,7 +193,6 @@ namespace DentalApp.Pages
         private void UpdateExpenseCount() => ExpenseCountLabel.Text = $"{_expenses.Count}";
 
         private void OnNumericEntryChanged(object sender, TextChangedEventArgs e) => NumericValidationService.OnNumericEntryChanged(sender, e);
-        private async void OnShowExpenseFrame(object sender, EventArgs e) => await FrameAnimationService.ToggleVisibility(inputFrame);
         private async void OnShowCategoryFrame(object sender, EventArgs e) => await FrameAnimationService.ToggleVisibility(CategoryFrame);
     }
 }
