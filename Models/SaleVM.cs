@@ -27,7 +27,7 @@ namespace DentalApp.Models
             public int? Id { get; set; }  // Allowing null for the ID
             public int ProductId { get; set; }
             public int Quantity { get; set; }
-            public decimal Amount { get; set; } 
+            public decimal Amount { get; set; } = 0.00m;
             public decimal? SubTotal { get; set; }      // Updated to match API structure
             public decimal? Total { get; set; }         // Updated to match API structure
             public string? ProductName { get; set; }    // Allowing null for ProductName

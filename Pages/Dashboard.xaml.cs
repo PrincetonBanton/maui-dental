@@ -14,7 +14,7 @@ namespace DentalApp.Pages
         public Dashboard()
         {
             InitializeComponent();
-            _viewModel = new DashboardViewModel(UpdateMainCharts, UpdateSubCharts);
+            _viewModel = new DashboardViewModel(UpdateRevenueChart, UpdateMainCharts, UpdateSubCharts);
             BindingContext = _viewModel;
         }
 
@@ -31,16 +31,7 @@ namespace DentalApp.Pages
             else
             {
                 await _viewModel.LoadDataAsync();
-
-                var monthlyEntries = await _viewModel.LoadMonthlyRevenueAsync(DateTime.Today.Year);
-                RevenueMonthlyBar.Chart = new LineChart
-                {
-                    Entries = monthlyEntries,
-                    LabelTextSize = 14,
-                    LineMode = LineMode.Straight,
-                    ValueLabelOrientation = Orientation.Horizontal,
-                    LabelOrientation = Orientation.Horizontal
-                };
+                await _viewModel.LoadMonthlyRevenueChartAsync(DateTime.Today.Year);
             }
         }
 
@@ -87,7 +78,17 @@ namespace DentalApp.Pages
 
             await _viewModel.LoadDataAsync(startDate, endDate);
         }
-
+        private void UpdateRevenueChart(List<ChartEntry> monthlyEntries)
+        {
+            RevenueMonthlyBar.Chart = new LineChart
+            {
+                Entries = monthlyEntries,
+                LabelTextSize = 14,
+                LineMode = LineMode.Straight,
+                ValueLabelOrientation = Orientation.Horizontal,
+                LabelOrientation = Orientation.Horizontal
+            };
+        }
         private void UpdateMainCharts(int salesValue, int expensesValue)
         {
             var barEntries = new[]
@@ -106,7 +107,7 @@ namespace DentalApp.Pages
 
             var pieEntries = new[]
             {
-                new ChartEntry(salesValue) { Label = "Revenues", ValueLabel = salesValue.ToString(), Color = SKColor.Parse("#00C853") },                   
+                new ChartEntry(salesValue) { Label = "Revenues", ValueLabel = salesValue.ToString(), Color = SKColor.Parse("#00C853") },
                 new ChartEntry(expensesValue) { Label = "Expenses", ValueLabel = expensesValue.ToString(), Color = SKColor.Parse("#D50000") }
             };
 
@@ -146,6 +147,7 @@ namespace DentalApp.Pages
     public class DashboardViewModel : INotifyPropertyChanged
     {
         private readonly ApiService _apiService = new();
+        private readonly Action<List<ChartEntry>> _updateRevenueChart;
         private readonly Action<int, int> _updateMainChart;
         private readonly Action<List<ChartEntry>, List<ChartEntry>> _updateSubCharts;
 
@@ -154,13 +156,14 @@ namespace DentalApp.Pages
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-        public DashboardViewModel(Action<int, int> updateMainChart, Action<List<ChartEntry>, List<ChartEntry>> updateSubCharts)
+        public DashboardViewModel(Action<List<ChartEntry>> updateRevenueChart, Action<int, int> updateMainChart, Action<List<ChartEntry>, List<ChartEntry>> updateSubCharts)
         {
+            _updateRevenueChart = updateRevenueChart;
             _updateMainChart = updateMainChart;
             _updateSubCharts = updateSubCharts;
         }
 
-        public async Task<List<ChartEntry>> LoadMonthlyRevenueAsync(int year)
+        public async Task LoadMonthlyRevenueChartAsync(int year)
         {
             var sales = await _apiService.GetSalesAsync();
 
@@ -183,7 +186,7 @@ namespace DentalApp.Pages
                 });
             }
 
-            return entries;
+            _updateRevenueChart?.Invoke(entries);
         }
 
         public async Task LoadDataAsync(DateTime? startDate = null, DateTime? endDate = null)
@@ -197,8 +200,8 @@ namespace DentalApp.Pages
                 expenses = expenses?.Where(e => e.ExpenseDate.Date >= startDate.Value && e.ExpenseDate.Date <= endDate.Value).ToList();
             }
 
-            SalesValue = (int)(sales?.Sum(s => s.Total) ?? 0);
-            ExpensesValue = (int)(expenses?.Sum(e => e.Amount) ?? 0);
+            SalesValue = Convert.ToInt32(sales?.Sum(s => s.Total) ?? 0m);
+            ExpensesValue = Convert.ToInt32(expenses?.Sum(e => e.Amount) ?? 0m);
 
             OnPropertyChanged(nameof(SalesValue));
             OnPropertyChanged(nameof(ExpensesValue));
@@ -217,22 +220,24 @@ namespace DentalApp.Pages
             if (startDate.HasValue && endDate.HasValue)
                 sales = sales?.Where(s => s.SaleDate.Date >= startDate.Value && s.SaleDate.Date <= endDate.Value).ToList();
 
-            var grouped = sales?
+            if (sales?.Any() != true)
+                return [new ChartEntry(0) { Label = "N/A", ValueLabel = "0", Color = SKColor.Parse("#4CAF50") }];
+
+            var grouped = sales
                 .GroupBy(s => s.DentistName)
                 .Select(g => new
                 {
                     Dentist = g.Key,
-                    Total = (float)g.Sum(s => s.Total)
+                    Total = (float)g.Sum(e => e.Total)
                 }).ToList();
 
-            return grouped?.Select(g => new ChartEntry(g.Total)
+            return grouped.Select(g => new ChartEntry(g.Total)
             {
                 Label = g.Dentist,
                 ValueLabel = g.Total.ToString("0"),
                 Color = SKColor.Parse("#4CAF50")
-            }).ToList() ?? new List<ChartEntry>();
-        }
-
+            }).ToList();
+         }
         public async Task<List<ChartEntry>> LoadExpenseCategoryChartAsync(DateTime? startDate = null, DateTime? endDate = null)
         {
             var expenses = await _apiService.GetExpensesAsync();
@@ -240,8 +245,11 @@ namespace DentalApp.Pages
             if (startDate.HasValue && endDate.HasValue)
                 expenses = expenses?.Where(e => e.ExpenseDate.Date >= startDate.Value && e.ExpenseDate.Date <= endDate.Value).ToList();
 
-            var grouped = expenses?
-                .Where(e => e.ExpenseCategory != null) // Ensure category is loaded
+            if (expenses?.Any() != true)
+                return [new ChartEntry(0) { Label = "N/A", ValueLabel = "0", Color = SKColor.Parse("#F44336") }];
+
+            var grouped = expenses
+                .Where(e => e.ExpenseCategory != null)
                 .GroupBy(e => e.ExpenseCategory.Name)
                 .Select(g => new
                 {
@@ -249,14 +257,17 @@ namespace DentalApp.Pages
                     Total = (float)g.Sum(e => e.Amount)
                 }).ToList();
 
-            return grouped?.Select(g => new ChartEntry(g.Total)
+
+            return grouped.Select(g => new ChartEntry(g.Total)
             {
                 Label = g.CategoryName,
                 ValueLabel = g.Total.ToString("0"),
                 Color = SKColor.Parse("#F44336")
-            }).ToList() ?? new List<ChartEntry>();
+            }).ToList();
         }
         protected void OnPropertyChanged(string name) =>
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
     }
+
 }
+
