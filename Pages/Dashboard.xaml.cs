@@ -3,6 +3,7 @@ using Microcharts;
 using SkiaSharp;
 using Microcharts.Maui;
 using System.ComponentModel;
+using DentalApp.Models;
 
 namespace DentalApp.Pages
 {
@@ -13,54 +14,34 @@ namespace DentalApp.Pages
         public Dashboard()
         {
             InitializeComponent();
-            _viewModel = new DashboardViewModel(UpdateCharts);
+            _viewModel = new DashboardViewModel(UpdateMainCharts, UpdateSubCharts);
             BindingContext = _viewModel;
         }
 
-        //protected override async void OnAppearing()
-        //{
-        //    base.OnAppearing();
-
-        //    var tokenJson = Preferences.Get("AuthToken", string.Empty);
-        //    if (string.IsNullOrEmpty(tokenJson) || TokenService.IsTokenExpired(tokenJson))
-        //    {
-        //        Preferences.Remove("AuthToken");
-        //        Application.Current.MainPage = new NavigationPage(new Pages.Auth.LoginPage());
-        //    }
-        //    else
-        //    {
-        //        await _viewModel.LoadDataAsync();
-        //    }
-        //}
-
-        private void UpdateCharts(int salesValue, int expensesValue)
+        protected override async void OnAppearing()
         {
-            var barEntries = new[]
-            {
-                new ChartEntry(salesValue) { Label = "Sales", ValueLabel = salesValue.ToString(), Color = SKColor.Parse("#00C853") },
-                new ChartEntry(expensesValue) { Label = "Expenses", ValueLabel = expensesValue.ToString(),  Color = SKColor.Parse("#D50000") }
-            };
+            base.OnAppearing();
 
-            SalesExpenseChart.Chart = new BarChart
+            var tokenJson = Preferences.Get("AuthToken", string.Empty);
+            if (string.IsNullOrEmpty(tokenJson) || TokenService.IsTokenExpired(tokenJson))
             {
-                Entries = barEntries,
-                LabelTextSize = 15,
-                ValueLabelOrientation = Orientation.Horizontal,
-                LabelOrientation = Orientation.Horizontal
-            };
+                Preferences.Remove("AuthToken");
+                Application.Current.MainPage = new NavigationPage(new Pages.Auth.LoginPage());
+            }
+            else
+            {
+                await _viewModel.LoadDataAsync();
 
-            var pieEntries = new[]
-            {
-                new ChartEntry(salesValue) { Color = SKColor.Parse("#00C853") },
-                new ChartEntry(expensesValue) { Color = SKColor.Parse("#D50000") }
-            };
-
-            SalesExpensePieChart.Chart = new DonutChart
-            {
-                Entries = pieEntries,
-                LabelTextSize = 20,
-                HoleRadius = 0.4f
-            };
+                var monthlyEntries = await _viewModel.LoadMonthlyRevenueAsync(DateTime.Today.Year);
+                RevenueMonthlyBar.Chart = new LineChart
+                {
+                    Entries = monthlyEntries,
+                    LabelTextSize = 14,
+                    LineMode = LineMode.Straight,
+                    ValueLabelOrientation = Orientation.Horizontal,
+                    LabelOrientation = Orientation.Horizontal
+                };
+            }
         }
 
         private void OnLogoutClicked(object sender, EventArgs e)
@@ -100,7 +81,6 @@ namespace DentalApp.Pages
             }
             else if (allTimeRadioButton.IsChecked)
             {
-                // Pass null to load everything
                 await _viewModel.LoadDataAsync();
                 return;
             }
@@ -108,92 +88,175 @@ namespace DentalApp.Pages
             await _viewModel.LoadDataAsync(startDate, endDate);
         }
 
-
-        public class DashboardViewModel : INotifyPropertyChanged
+        private void UpdateMainCharts(int salesValue, int expensesValue)
         {
-            private readonly ApiService _apiService = new();
-            private readonly Action<int, int> _updateChartAction;
-
-            public int SalesValue { get; set; }
-            public int ExpensesValue { get; set; }
-
-            public event PropertyChangedEventHandler PropertyChanged;
-
-            public DashboardViewModel(Action<int, int> updateChart)
+            var barEntries = new[]
             {
-                _updateChartAction = updateChart;
-            }
+                new ChartEntry(salesValue) { Label = "Revenues", ValueLabel = salesValue.ToString(), Color = SKColor.Parse("#00C853") },
+                new ChartEntry(expensesValue) { Label = "Expenses", ValueLabel = expensesValue.ToString(),  Color = SKColor.Parse("#D50000") }
+            };
 
-            public async Task LoadDataAsync(DateTime? startDate = null, DateTime? endDate = null)
+            SalesExpenseChart.Chart = new BarChart
             {
-                var sales = await _apiService.GetSalesAsync();
-                var expenses = await _apiService.GetExpensesAsync();
+                Entries = barEntries,
+                LabelTextSize = 15,
+                ValueLabelOrientation = Orientation.Horizontal,
+                LabelOrientation = Orientation.Horizontal
+            };
 
-                if (startDate.HasValue && endDate.HasValue)
+            var pieEntries = new[]
+            {
+                new ChartEntry(salesValue) { Label = "Revenues", ValueLabel = salesValue.ToString(), Color = SKColor.Parse("#00C853") },                   
+                new ChartEntry(expensesValue) { Label = "Expenses", ValueLabel = expensesValue.ToString(), Color = SKColor.Parse("#D50000") }
+            };
+
+            SalesExpensePieChart.Chart = new DonutChart
+            {
+                Entries = pieEntries,
+                LabelTextSize = 20,
+                LabelMode = LabelMode.None,
+                HoleRadius = 0.4f
+            };
+            SalesValueLabel.Text = salesValue.ToString("N2");
+            ExpensesValueLabel.Text = expensesValue.ToString("N2");
+            IncomeValueLabel.Text = (salesValue - expensesValue).ToString("N2");
+        }
+
+        private void UpdateSubCharts(List<ChartEntry> dentistEntries, List<ChartEntry> expenseEntries)
+        {
+            DentistSaleChart.Chart = new BarChart
+            {
+                Entries = dentistEntries,
+                LabelTextSize = 14,
+                ValueLabelOrientation = Orientation.Horizontal,
+                LabelOrientation = Orientation.Horizontal
+            };
+
+            ExpenseCategoryChart.Chart = new BarChart
+            {
+                Entries = expenseEntries,
+                LabelTextSize = 14,
+                ValueLabelOrientation = Orientation.Horizontal,
+                LabelOrientation = Orientation.Horizontal
+            };
+        }
+    }
+
+    // DashboardViewModel included temporarily in the same file
+    public class DashboardViewModel : INotifyPropertyChanged
+    {
+        private readonly ApiService _apiService = new();
+        private readonly Action<int, int> _updateMainChart;
+        private readonly Action<List<ChartEntry>, List<ChartEntry>> _updateSubCharts;
+
+        public int SalesValue { get; set; }
+        public int ExpensesValue { get; set; }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        public DashboardViewModel(Action<int, int> updateMainChart, Action<List<ChartEntry>, List<ChartEntry>> updateSubCharts)
+        {
+            _updateMainChart = updateMainChart;
+            _updateSubCharts = updateSubCharts;
+        }
+
+        public async Task<List<ChartEntry>> LoadMonthlyRevenueAsync(int year)
+        {
+            var sales = await _apiService.GetSalesAsync();
+
+            var monthlyTotals = sales?
+                .Where(s => s.SaleDate.Year == year)
+                .GroupBy(s => s.SaleDate.Month)
+                .ToDictionary(g => g.Key, g => (float)g.Sum(s => s.Total)) ?? new Dictionary<int, float>();
+
+            var entries = new List<ChartEntry>();
+
+            for (int month = 1; month <= 12; month++)
+            {
+                monthlyTotals.TryGetValue(month, out float total);
+
+                entries.Add(new ChartEntry(total)
                 {
-                    sales = sales?.Where(s => s.SaleDate.Date >= startDate.Value && s.SaleDate.Date <= endDate.Value).ToList();
-                    expenses = expenses?.Where(e => e.ExpenseDate.Date >= startDate.Value && e.ExpenseDate.Date <= endDate.Value).ToList();
-                }
-
-                SalesValue = (int)(sales?.Sum(s => s.Total) ?? 0);
-                ExpensesValue = (int)(expenses?.Sum(e => e.Amount) ?? 0);
-
-                OnPropertyChanged(nameof(SalesValue));
-                OnPropertyChanged(nameof(ExpensesValue));
-
-                _updateChartAction?.Invoke(SalesValue, ExpensesValue);
+                    Label = new DateTime(year, month, 1).ToString("MMM"),
+                    ValueLabel = total.ToString("0"),
+                    Color = SKColor.Parse("#2196F3")
+                });
             }
 
-            protected void OnPropertyChanged(string name) =>
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
+            return entries;
         }
 
-        //--------- CYCLE PRESENTATION COMMENT OUT --------------
-        protected override async void OnAppearing()
+        public async Task LoadDataAsync(DateTime? startDate = null, DateTime? endDate = null)
         {
-            base.OnAppearing();
-            StartCyclingRadioButtons();
-            var tokenJson = Preferences.Get("AuthToken", string.Empty);
-            if (string.IsNullOrEmpty(tokenJson) || TokenService.IsTokenExpired(tokenJson))
+            var sales = await _apiService.GetSalesAsync();
+            var expenses = await _apiService.GetExpensesAsync();
+
+            if (startDate.HasValue && endDate.HasValue)
             {
-                Preferences.Remove("AuthToken");
-                Application.Current.MainPage = new NavigationPage(new Pages.Auth.LoginPage());
+                sales = sales?.Where(s => s.SaleDate.Date >= startDate.Value && s.SaleDate.Date <= endDate.Value).ToList();
+                expenses = expenses?.Where(e => e.ExpenseDate.Date >= startDate.Value && e.ExpenseDate.Date <= endDate.Value).ToList();
             }
-            else
-            {
-                await _viewModel.LoadDataAsync();
-            }
+
+            SalesValue = (int)(sales?.Sum(s => s.Total) ?? 0);
+            ExpensesValue = (int)(expenses?.Sum(e => e.Amount) ?? 0);
+
+            OnPropertyChanged(nameof(SalesValue));
+            OnPropertyChanged(nameof(ExpensesValue));
+
+            _updateMainChart?.Invoke(SalesValue, ExpensesValue);
+
+            var dentistEntries = await LoadDentistRevenueChartAsync(startDate, endDate);
+            var expenseEntries = await LoadExpenseCategoryChartAsync(startDate, endDate);
+            _updateSubCharts?.Invoke(dentistEntries, expenseEntries);
         }
 
-        protected override void OnDisappearing()
+        public async Task<List<ChartEntry>> LoadDentistRevenueChartAsync(DateTime? startDate = null, DateTime? endDate = null)
         {
-            base.OnDisappearing();
-            StopCyclingRadioButtons();
-        }
-        private CancellationTokenSource _radioCycleCts;
-        private void StartCyclingRadioButtons()
-        {
-            _radioCycleCts = new CancellationTokenSource();
-            _ = Task.Run(async () =>
-            {
-                var buttons = new[] { todayRadioButton, thisWeekRadioButton, thisMonthRadioButton, thisYearRadioButton, allTimeRadioButton };
-                int index = 0;
+            var sales = await _apiService.GetSalesAsync();
 
-                while (!_radioCycleCts.IsCancellationRequested)
+            if (startDate.HasValue && endDate.HasValue)
+                sales = sales?.Where(s => s.SaleDate.Date >= startDate.Value && s.SaleDate.Date <= endDate.Value).ToList();
+
+            var grouped = sales?
+                .GroupBy(s => s.DentistName)
+                .Select(g => new
                 {
-                    MainThread.BeginInvokeOnMainThread(() =>
-                    {
-                        buttons[index].IsChecked = true;
-                    });
+                    Dentist = g.Key,
+                    Total = (float)g.Sum(s => s.Total)
+                }).ToList();
 
-                    index = (index + 1) % buttons.Length;
-                    await Task.Delay(3000); // 3 seconds
-                }
-            });
+            return grouped?.Select(g => new ChartEntry(g.Total)
+            {
+                Label = g.Dentist,
+                ValueLabel = g.Total.ToString("0"),
+                Color = SKColor.Parse("#4CAF50")
+            }).ToList() ?? new List<ChartEntry>();
         }
-        private void StopCyclingRadioButtons()
+
+        public async Task<List<ChartEntry>> LoadExpenseCategoryChartAsync(DateTime? startDate = null, DateTime? endDate = null)
         {
-            _radioCycleCts?.Cancel();
+            var expenses = await _apiService.GetExpensesAsync();
+
+            if (startDate.HasValue && endDate.HasValue)
+                expenses = expenses?.Where(e => e.ExpenseDate.Date >= startDate.Value && e.ExpenseDate.Date <= endDate.Value).ToList();
+
+            var grouped = expenses?
+                .Where(e => e.ExpenseCategory != null) // Ensure category is loaded
+                .GroupBy(e => e.ExpenseCategory.Name)
+                .Select(g => new
+                {
+                    CategoryName = g.Key,
+                    Total = (float)g.Sum(e => e.Amount)
+                }).ToList();
+
+            return grouped?.Select(g => new ChartEntry(g.Total)
+            {
+                Label = g.CategoryName,
+                ValueLabel = g.Total.ToString("0"),
+                Color = SKColor.Parse("#F44336")
+            }).ToList() ?? new List<ChartEntry>();
         }
+        protected void OnPropertyChanged(string name) =>
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
     }
 }

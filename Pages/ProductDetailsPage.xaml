@@ -1,117 +1,49 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"  
-            xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"  
-            x:Class="DentalApp.Pages.ProductDetailsPage"  
-            BackgroundColor="White">
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"  
+             x:Class="DentalApp.Pages.ProductDetailsPage"  
+             Title="Product Details"
+             BackgroundColor="White">
     <ScrollView>
-        <Grid Padding="20" RowSpacing="20" BackgroundColor="#F9F9F9"  
-             RowDefinitions="Auto, Auto, Auto, Auto">
-
-            <!-- Product Details Section -->
-            <Frame Padding="15"  
-                  CornerRadius="12"  
-                  BackgroundColor="White"  
-                  HasShadow="True"  
-                  HorizontalOptions="FillAndExpand">
-
-                <Grid RowSpacing="15"  
-                     RowDefinitions="Auto, Auto, Auto, Auto, Auto, Auto"  
-                     ColumnDefinitions="Auto, *"  
-                     ColumnSpacing="10">
-
-                    <Label Grid.Row="0" Grid.ColumnSpan="2"  
-                          Text="Product Details"  
-                          FontAttributes="Bold"  
-                          FontSize="20"  
-                          TextColor="#333"/>
-
-                    <HorizontalStackLayout Spacing="10" Grid.Row="1" Grid.ColumnSpan="2">
-                        <Label Text="Name:" VerticalOptions="Center"/>
-                        <Entry  x:Name="NameEntry"  
-                              Placeholder="Product Name"                           
-                              BackgroundColor="#F2F2F2"  
-                              HeightRequest="45"                           
-                              HorizontalTextAlignment="Start" />            
+        <VerticalStackLayout Padding="10" Spacing="10">
+            <Frame Padding="10" Margin="0">
+                <VerticalStackLayout Spacing="5">
+                    <Label Text="Product Details" FontSize="16" FontAttributes="Bold"/>
+                    <HorizontalStackLayout>
+                        <Label Text="Name" WidthRequest="120"/>
+                        <Entry x:Name="NameEntry" Placeholder="Product Name" VerticalOptions="Center"/>
                     </HorizontalStackLayout>
-
-                    <HorizontalStackLayout Spacing="10" Grid.Row="2" Grid.ColumnSpan="2">
-                        <Label Text="Product Code:" VerticalOptions="Center"/>
-                        <Entry x:Name="ProductCodeEntry"  
-                                  Placeholder="Product Code"  
-                                  BackgroundColor="#F2F2F2"  
-                                  HeightRequest="45"  
-                                  HorizontalTextAlignment="Start"/>         
+                    <HorizontalStackLayout>
+                        <Label Text="Product Code" WidthRequest="120"/>
+                        <Entry x:Name="ProductCodeEntry" Placeholder="Product Code" VerticalOptions="Center"/>
                     </HorizontalStackLayout>
-
-                    <HorizontalStackLayout Spacing="10" Grid.Row="3" Grid.ColumnSpan="2">
-                        <Label Text="Description:" VerticalOptions="Start"/>
-                        <Editor x:Name="DescriptionEditor"  
-                           Placeholder="Description"  
-                           AutoSize="TextChanges"  
-                           HeightRequest="100"  
-                           BackgroundColor="#F2F2F2"/>  
+                    <HorizontalStackLayout>
+                        <Label Text="Description" WidthRequest="120" VerticalOptions="Start"/>
+                        <Editor x:Name="DescriptionEditor" Placeholder="Description" AutoSize="TextChanges" WidthRequest="250" HeightRequest="80"/>
                     </HorizontalStackLayout>
-
-                    <Label Grid.Row="4" Grid.Column="0" Text="Product Type:" VerticalOptions="Center"/>
-                    <Picker Grid.Row="4" Grid.Column="1" x:Name="ProductTypePicker"                              
-                           HeightRequest="70"  
-                           BackgroundColor="#F2F2F2"/>
-                </Grid>
+                    <HorizontalStackLayout>
+                        <Label Text="Product Type" WidthRequest="120"/>
+                        <Picker x:Name="ProductTypePicker" WidthRequest="250" HeightRequest="45"/>
+                    </HorizontalStackLayout>
+                </VerticalStackLayout>
             </Frame>
-
-            <!-- Pricing Section -->            
-           <Frame Grid.Row="1" Padding="15" CornerRadius="12" BackgroundColor="White" HasShadow="True">  
-               <Grid RowSpacing="15"  
-                     RowDefinitions="Auto, Auto, Auto, Auto"  
-                     ColumnDefinitions="Auto, *"  
-                     ColumnSpacing="10">  
-
-                   <Label Grid.Row="0" Grid.ColumnSpan="2"  
-                          Text="Pricing"  
-                          FontAttributes="Bold"  
-                          FontSize="20"  
-                          TextColor="#333"/>  
-
-                   <Label Grid.Row="1" Grid.Column="0" Text="Amount:" VerticalOptions="Center" WidthRequest="150"/>  
-                   <Entry Grid.Row="1" Grid.Column="1" x:Name="AmountEntry"  
-                          Placeholder="0.00"  
-                          Keyboard="Numeric"  
-                          HeightRequest="45"  
-                          BackgroundColor="#F2F2F2"  
-                          TextChanged="OnNumericEntryChanged"/>  
-
-                   <Label Grid.Row="2" Grid.Column="0" Text="Min Price:" VerticalOptions="Center"/>  
-                   <Entry Grid.Row="2" Grid.Column="1" x:Name="MinPriceEntry"  
-                          Placeholder="0.00"  
-                          Keyboard="Numeric"  
-                          HeightRequest="45"  
-                          BackgroundColor="#F2F2F2"  
-                          TextChanged="OnNumericEntryChanged"/>  
-
-                   <Label Grid.Row="3" Grid.Column="0" Text="Max Price:" VerticalOptions="Center"/>  
-                   <Entry Grid.Row="3" Grid.Column="1" x:Name="MaxPriceEntry"  
-                          Placeholder="0.00"  
-                          Keyboard="Numeric"  
-                          HeightRequest="45"  
-                          BackgroundColor="#F2F2F2"  
-                          TextChanged="OnNumericEntryChanged"/>  
-               </Grid>  
-           </Frame>  
-
-           <!-- Save Button -->
-            <Grid Grid.Row="2" ColumnDefinitions="*">
-                <Button    
-                   Text="Save"    
-                   x:Name="SaveButton"    
-                   Clicked="SaveButton_Clicked"    
-                   BackgroundColor="#007AFF"    
-                   TextColor="White"    
-                   CornerRadius="10"    
-                   HeightRequest="50"    
-                   WidthRequest="150"    
-                   HorizontalOptions="Center"/>
-            </Grid>
-        </Grid>
+            <Frame Padding="10" Margin="0">
+                <VerticalStackLayout Spacing="5">
+                    <Label Text="Pricing" FontSize="16" FontAttributes="Bold"/>
+                    <HorizontalStackLayout>
+                        <Label Text="Amount" WidthRequest="120"/>
+                        <Entry x:Name="AmountEntry" Placeholder="0.00" Keyboard="Numeric" VerticalOptions="Center" TextChanged="OnNumericEntryChanged"/>
+                    </HorizontalStackLayout>
+                    <HorizontalStackLayout>
+                        <Label Text="Min Price" WidthRequest="120"/>
+                        <Entry x:Name="MinPriceEntry" Placeholder="0.00" Keyboard="Numeric" VerticalOptions="Center" TextChanged="OnNumericEntryChanged"/>
+                    </HorizontalStackLayout>
+                    <HorizontalStackLayout>
+                        <Label Text="Max Price" WidthRequest="120"/>
+                        <Entry x:Name="MaxPriceEntry" Placeholder="0.00" Keyboard="Numeric" VerticalOptions="Center" TextChanged="OnNumericEntryChanged"/>
+                    </HorizontalStackLayout>
+                </VerticalStackLayout>
+            </Frame>
+            <Button Text="Save" x:Name="SaveButton" Clicked="SaveButton_Clicked" BackgroundColor="#007AFF" TextColor="White" CornerRadius="10" HeightRequest="50" WidthRequest="150" HorizontalOptions="Center"/>
+        </VerticalStackLayout>
     </ScrollView>
 </ContentPage>
-
-

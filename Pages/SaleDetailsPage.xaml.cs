@@ -180,7 +180,7 @@ public partial class SaleDetailsPage : ContentPage
             await DisplayAlert("Validation Error", errorMessage, "OK");
             return false;
         }
-        _sale ??= CreateSale.BuildSale(patient, dentist, SelectedProducts, paymentAmount);
+        _sale ??= CreateSale.BuildSale(patient, dentist, SelectedProducts, paymentAmount, TreatmentDatePicker.Date);
 
         bool success = await _apiService.CreateSaleAsync(_sale);
         string message = success ? "Sale saved successfully!" : "Failed to save sale.";

@@ -8,30 +8,68 @@
         <ToolbarItem Text="Logout" IconImageSource="logout_icon.png" Clicked="OnLogoutClicked" />
     </ContentPage.ToolbarItems>
 
-    <Grid RowDefinitions="Auto,*,Auto">
-        <VerticalStackLayout Grid.Row="0">
-            <HorizontalStackLayout Padding="10">
-                <Image Source="logo1.png" WidthRequest="75" HeightRequest="75"/>
-                <Label Text="Your Clinic Here" FontSize="18" FontAttributes="Bold" TextColor="Black" Padding="0,30,0,0" />
-            </HorizontalStackLayout>
-            <Frame BackgroundColor="White" BorderColor="LightGray" Padding="2">
-                <StackLayout>
-                    <Grid ColumnDefinitions="2*,2*,2*,2*,2*" Padding="20,0">
-                        <RadioButton x:Name="todayRadioButton" Content="Today" GroupName="DateFilter" Value="Today" Grid.Column="0" CheckedChanged="OnQuickFilterRadioButtonChanged"/>
-                        <RadioButton x:Name="thisWeekRadioButton" Content="Week" GroupName="DateFilter" Value="ThisWeek" Grid.Column="1" CheckedChanged="OnQuickFilterRadioButtonChanged"/>
-                        <RadioButton x:Name="thisMonthRadioButton" Content="Month" GroupName="DateFilter" Value="ThisMonth" Grid.Column="2" CheckedChanged="OnQuickFilterRadioButtonChanged"/>
-                        <RadioButton x:Name="thisYearRadioButton" Content="Year" GroupName="DateFilter" Value="ThisYear" Grid.Column="3" CheckedChanged="OnQuickFilterRadioButtonChanged"/>
-                        <RadioButton x:Name="allTimeRadioButton" Content="All Time" GroupName="DateFilter" Value="AllTime" Grid.Column="4" CheckedChanged="OnQuickFilterRadioButtonChanged"/>
-                    </Grid>
-                </StackLayout>
-            </Frame>
-            <Grid Grid.Row="1" ColumnDefinitions="5*,5*" Margin="10,30">
-                <microcharts:ChartView x:Name="SalesExpenseChart" HeightRequest="250" Grid.Column="0"/>
-                <microcharts:ChartView x:Name="SalesExpensePieChart" HeightRequest="250" Grid.Column="1" />
-            </Grid>
-        </VerticalStackLayout>
+    <ScrollView>
+        <Grid RowDefinitions="Auto,*,Auto">
+            <VerticalStackLayout Grid.Row="0" Padding="10">
+                <HorizontalStackLayout Margin="0,0,0,30">
+                    <Image Source="logo1.png" WidthRequest="75" HeightRequest="75"/>
+                    <Label Text="Your Clinic Here" FontSize="18" FontAttributes="Bold" TextColor="Black" Padding="0,20,0,0" />
+                </HorizontalStackLayout>
 
-        <Label Grid.Row="2" Text="All rights reserved Mazion Co., Inc." FontSize="12" TextColor="Gray"
-                HorizontalOptions="Center" VerticalOptions="End" Margin="0,10,0,10" />
-    </Grid>
+                <!-- Monthly Revenue Chart -->
+                <Frame Padding="0">
+                    <VerticalStackLayout Padding="0">
+                        <Label Text="Monthly Revenue" FontAttributes="Bold" Padding="5"/>
+                        <microcharts:ChartView x:Name="RevenueMonthlyBar" HeightRequest="200"/>
+                    </VerticalStackLayout>
+                </Frame>
+
+                <!-- Sales vs Expense + Sub Charts -->
+                <Frame BackgroundColor="White" BorderColor="LightGray" Padding="2">
+                    <StackLayout>
+                        <Label Text="Clinic Income" FontAttributes="Bold" Padding="5"/>
+                        <Grid ColumnDefinitions="2*,2*,2*,2*,2*" Padding="20,0">
+                            <RadioButton x:Name="todayRadioButton" Content="Today" GroupName="DateFilter" Value="Today" Grid.Column="0" CheckedChanged="OnQuickFilterRadioButtonChanged"/>
+                            <RadioButton x:Name="thisWeekRadioButton" Content="Week" GroupName="DateFilter" Value="ThisWeek" Grid.Column="1" CheckedChanged="OnQuickFilterRadioButtonChanged"/>
+                            <RadioButton x:Name="thisMonthRadioButton" Content="Month" GroupName="DateFilter" Value="ThisMonth" Grid.Column="2" CheckedChanged="OnQuickFilterRadioButtonChanged"/>
+                            <RadioButton x:Name="thisYearRadioButton" Content="Year" GroupName="DateFilter" Value="ThisYear" Grid.Column="3" CheckedChanged="OnQuickFilterRadioButtonChanged"/>
+                            <RadioButton x:Name="allTimeRadioButton" Content="All Time" GroupName="DateFilter" Value="AllTime" Grid.Column="4" CheckedChanged="OnQuickFilterRadioButtonChanged"/>
+                        </Grid>
+
+                        <Grid Grid.Row="1" ColumnDefinitions="5*,5*" Margin="10,30">
+                            <VerticalStackLayout Grid.Column="0">
+                                <microcharts:ChartView x:Name="SalesExpenseChart" HeightRequest="250"/>
+                                <Grid ColumnDefinitions="5*,5*" Margin="10,30">
+                                    <microcharts:ChartView x:Name="DentistSaleChart" HeightRequest="250" Grid.Column="0" />
+                                    <microcharts:ChartView x:Name="ExpenseCategoryChart" HeightRequest="250" Grid.Column="1" />
+                                </Grid>
+                            </VerticalStackLayout>
+
+                            <VerticalStackLayout Grid.Column="1" Margin="0,0,0,10">
+                                <microcharts:ChartView x:Name="SalesExpensePieChart" HeightRequest="300" Margin="0,100,0,0" />
+                                <Grid ColumnDefinitions="*,*,*" Margin="0,10">
+                                    <HorizontalStackLayout HorizontalOptions="Center" Spacing="10" Margin="30,0,0,0" Grid.Column="0" >
+                                        <Label Text="Sales:" FontAttributes="Bold" TextColor="Green" />
+                                        <Label x:Name="SalesValueLabel" TextColor="Green"/>
+                                    </HorizontalStackLayout>
+                                    <HorizontalStackLayout HorizontalOptions="Center" Spacing="10" Grid.Column="1" >
+                                        <Label Text="Expense:" FontAttributes="Bold" TextColor="Red" />
+                                        <Label x:Name="ExpensesValueLabel" TextColor="Red" />
+                                    </HorizontalStackLayout>
+                                    <HorizontalStackLayout HorizontalOptions="Center" Spacing="10" Margin="0,0,30,0" Grid.Column="2" >
+                                        <Label Text="Income:" FontAttributes="Bold" TextColor="Blue" />
+                                        <Label x:Name="IncomeValueLabel" TextColor="Blue"/>
+                                    </HorizontalStackLayout>
+                                </Grid>
+                            </VerticalStackLayout>
+                        </Grid>
+                    </StackLayout>
+                </Frame>
+            </VerticalStackLayout>
+
+            <Label Grid.Row="2" Text="All rights reserved Mazion Co., Inc." FontSize="12" TextColor="Gray"
+                   HorizontalOptions="Center" VerticalOptions="End" Margin="0,10,0,10" />
+        </Grid>
+    </ScrollView>
+
 </ContentPage>
