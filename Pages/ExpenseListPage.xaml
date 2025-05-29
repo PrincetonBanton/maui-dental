@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="DentalApp.Pages.ExpenseListPage"
+             BackgroundColor="White">
+    <ScrollView>
+        <StackLayout Margin="10" Padding="0">
+            <Button Text="Create Expense" Clicked="OnCreateExpenseButtonClicked" />
+            <Frame BackgroundColor="White" BorderColor="LightGray" Padding="10">
+                <StackLayout>
+                    <Grid ColumnDefinitions=".8*,2.3*,2.3*,2.3*,2.3*">
+                        <CheckBox x:Name="quickFilterCheckBox" IsChecked="False" HorizontalOptions="Start" Grid.Column="0" CheckedChanged="OnQuickFilterCheckedChanged"/>
+                        <RadioButton x:Name="todayRadioButton" Content="Today" GroupName="DateFilter" Value="Today" Grid.Column="1" CheckedChanged="OnQuickFilterRadioButtonChanged"/>
+                        <RadioButton x:Name="thisWeekRadioButton" Content="Week" GroupName="DateFilter" Value="ThisWeek" Grid.Column="2" CheckedChanged="OnQuickFilterRadioButtonChanged"/>
+                        <RadioButton x:Name="thisMonthRadioButton" Content="Month" GroupName="DateFilter" Value="ThisMonth" Grid.Column="3" CheckedChanged="OnQuickFilterRadioButtonChanged"/>
+                        <RadioButton x:Name="thisYearRadioButton" Content="Year" GroupName="DateFilter" Value="ThisYear" Grid.Column="4" CheckedChanged="OnQuickFilterRadioButtonChanged"/>
+                    </Grid>
+                    <Grid ColumnDefinitions=".8*,2.8*,2.3*,2.3*,2*">
+                        <CheckBox x:Name="customDateCheckBox" IsChecked="False" VerticalOptions="Center" Grid.Column="0" HorizontalOptions="Start" CheckedChanged="OnCustomDateCheckedChanged"/>
+                        <Label Text="Custom Filter" Grid.Column="1"/>
+                        <DatePicker x:Name="expenseStartPicker" Date="{Binding CurrentDate}" Format="MM/dd/yyyy" Grid.Column="2" HorizontalOptions="Start" DateSelected="OnStartDateChanged"/>
+                        <DatePicker x:Name="expenseEndPicker" Date="{Binding CurrentDate}" Format="MM/dd/yyyy" Grid.Column="3" HorizontalOptions="Start" DateSelected="OnEndDateChanged"/>
+                    </Grid>
+                </StackLayout>
+            </Frame>
+            <Grid BackgroundColor="DarkGray" Padding="5">
+                <Grid ColumnDefinitions="2*,5*,2*,2*">
+                    <Label Text="Date" FontAttributes="Bold" TextColor="White" Grid.Column="0"/>
+                    <Label Text="Description" FontAttributes="Bold" TextColor="White" Grid.Column="1"/>
+                    <Label Text="Amount" FontAttributes="Bold" TextColor="White" Grid.Column="2"/>
+                </Grid>
+            </Grid>
+            
+            <ListView x:Name="ExpenseListView" HasUnevenRows="True" BackgroundColor="White">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <ViewCell>
+                            <Grid Padding="5" ColumnDefinitions="2*,5*,2*,2*">
+                                <Label Text="{Binding ExpenseDate, StringFormat='{0:MM/dd/yyyy}'}" FontSize="12" Grid.Column="0"/>
+                                <Label Text="{Binding Description}" FontSize="12" Grid.Column="1"/>
+                                <Label Text="{Binding Amount, StringFormat='{0:N2}'}" FontSize="12" Grid.Column="2"/>
+                                <HorizontalStackLayout Margin="0,0,20,0" Grid.Column="3" Spacing="5">
+                                    <ImageButton Source="edit.png" HeightRequest="25" WidthRequest="25" Clicked="OnEditButtonClicked"/>
+                                    <ImageButton Source="delete.png" HeightRequest="25" WidthRequest="25" Clicked="OnDeleteButtonClicked"/>
+                                </HorizontalStackLayout>
+                                </Grid>
+                        </ViewCell>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+            <HorizontalStackLayout>
+                <Label Text="Number of Expenses:" TextColor="Black" Margin="0,20,0,0"/>
+                <Label x:Name="ExpenseCountLabel" Text="0" TextColor="Black"  Margin="10,20,0,0" />
+            </HorizontalStackLayout>
+        
+        </StackLayout>
+    </ScrollView>
+</ContentPage>

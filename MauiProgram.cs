@@ -26,7 +26,7 @@ namespace DentalApp
                     fonts.AddFont("fa-brands-400.ttf", "FABrands");
                 });
                 
-            builder.Services.AddTransient<ExpensePage>();
+            builder.Services.AddTransient<ExpenseListPage>();
             builder.Services.AddTransient<UserListPage>();
             builder.Services.AddTransient<UserDetailsPage>();
 

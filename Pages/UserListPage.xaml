@@ -15,7 +15,7 @@
                 <Entry x:Name="SearchBar" TextChanged="OnSearchBarTextChanged" Margin="10,0,0,0" Grid.Column="1"/>
             </Grid>
 
-            <ListView x:Name="UserListView" HasUnevenRows="True" ItemTapped="UserListView_ItemTapped">
+            <ListView x:Name="UserListView" HasUnevenRows="True">
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <ViewCell>

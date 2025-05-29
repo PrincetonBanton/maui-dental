@@ -68,7 +68,6 @@ public partial class PatientDetailsPage : ContentPage
         string message = success
             ? (_patient.Id != 0 ? "Patient updated successfully!" : "Patient created successfully!")
             : "Failed to save patient. Please try again.";
-
         await DisplayAlert(success ? "Success" : "Error", message, "OK");
 
         if (success)

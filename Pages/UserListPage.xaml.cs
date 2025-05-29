@@ -52,15 +52,6 @@ namespace DentalApp.Pages
                 await Navigation.PushAsync(new UserDetailsPage(_allUsers, selectedUser));
             }
         }
-        private async void UserListView_ItemTapped(object sender, ItemTappedEventArgs e)
-        {
-            //if (e.Item is UserVM selectedUser)
-            //{
-            //    App.Instance.UserNavigated = "userdetails";
-            //    await Navigation.PushAsync(new UserDetailsPage(_allUsers, selectedUser));
-            //}
-            //((ListView)sender).SelectedItem = null;
-        }
         private async void OnDeleteButtonClicked(object sender, EventArgs e)
         {
             if (sender is ImageButton button && button.BindingContext is UserVM selectedUser)

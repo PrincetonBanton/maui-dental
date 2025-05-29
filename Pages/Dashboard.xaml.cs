@@ -32,7 +32,7 @@ namespace DentalApp.Pages
             else
             {
                 await _viewModel.LoadMonthlyRevenueChartAsync(DateTime.Today.Year);
-                await _viewModel.LoadDataAsync();
+                await _viewModel.LoadSalesExpenseAsync();
             }
         }
 
@@ -73,11 +73,11 @@ namespace DentalApp.Pages
             }
             else if (allTimeRadioButton.IsChecked)
             {
-                await _viewModel.LoadDataAsync();
+                await _viewModel.LoadSalesExpenseAsync();
                 return;
             }
 
-            await _viewModel.LoadDataAsync(startDate, endDate);
+            await _viewModel.LoadSalesExpenseAsync(startDate, endDate);
         }
         private void UpdateRevenueChart(List<ChartEntry> monthlyEntries)
         {

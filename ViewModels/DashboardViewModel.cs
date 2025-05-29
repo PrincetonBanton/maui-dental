@@ -54,7 +54,7 @@ namespace DentalApp.ViewModels
             _updateRevenueChart?.Invoke(entries);
         }
 
-        public async Task LoadDataAsync(DateTime? startDate = null, DateTime? endDate = null)
+        public async Task LoadSalesExpenseAsync(DateTime? startDate = null, DateTime? endDate = null)
         {
             var sales = await _apiService.GetSalesAsync();
             var expenses = await _apiService.GetExpensesAsync();
@@ -130,7 +130,6 @@ namespace DentalApp.ViewModels
                 Color = SKColor.Parse("#F44336")
             }).ToList();
         }
-
         protected void OnPropertyChanged(string name) =>
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
     }

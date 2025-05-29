@@ -30,11 +30,13 @@
                         <ListView.ItemTemplate>
                             <DataTemplate>
                                 <ViewCell>
-                                    <Grid Padding="0,2" ColumnDefinitions="5*,3*,2*">
-                                        <Label Text="{Binding Name}" FontSize="13" Grid.Column="0"/>
-                                        <Label Text="{Binding Amount, StringFormat='{0:N2}'}" FontSize="13" HorizontalTextAlignment="Start" Grid.Column="1"/>
-                                        <ImageButton Source="add.png" HeightRequest="25" WidthRequest="25" Clicked="OnAddServiceClicked" Grid.Column="2"/>
-                                    </Grid>
+                                    <ScrollView>
+                                        <Grid Padding="0,2" ColumnDefinitions="5*,3*,2*">
+                                            <Label Text="{Binding Name}" FontSize="13" Grid.Column="0"/>
+                                            <Label Text="{Binding Amount, StringFormat='{0:N2}'}" FontSize="13" HorizontalTextAlignment="Start" Grid.Column="1"/>
+                                            <ImageButton Source="add.png" HeightRequest="25" WidthRequest="25" Clicked="OnAddServiceClicked" Grid.Column="2"/>
+                                        </Grid>
+                                    </ScrollView>
                                 </ViewCell>
                             </DataTemplate>
                         </ListView.ItemTemplate>
