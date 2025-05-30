@@ -85,6 +85,13 @@ namespace DentalApp.ViewModels
                 float revenue = monthlySales.TryGetValue(month, out var rev) ? rev : 0f;
                 float expense = monthlyExpenses.TryGetValue(month, out var exp) ? exp : 0f;
 
+                //Spacer
+                entries.Add(new ChartEntry(0)
+                {
+                    Label = "",
+                    ValueLabel = "",
+                    Color = SKColors.Transparent
+                });
                 entries.Add(new ChartEntry(revenue)
                 {
                     Label = new DateTime(year, month, 1).ToString("MMM"),
@@ -98,7 +105,7 @@ namespace DentalApp.ViewModels
                     ValueLabel = expense.ToString("0"),
                     Color = SKColor.Parse("#D50000") // Red for expense
                 });
-                // Spacer
+                //Spacer
                 entries.Add(new ChartEntry(0)
                 {
                     Label = "",

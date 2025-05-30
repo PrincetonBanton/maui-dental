@@ -18,7 +18,6 @@ namespace DentalApp.Pages
             _viewModel = new DashboardViewModel(UpdateRevenueChart, UpdateMainCharts, UpdateSubCharts);
             BindingContext = _viewModel;
         }
-
         protected override async void OnAppearing()
         {
             base.OnAppearing();
@@ -38,7 +37,6 @@ namespace DentalApp.Pages
                 await _viewModel.LoadSalesExpenseAsync();
             }
         }
-
         private void OnLogoutClicked(object sender, EventArgs e)
         {
             Preferences.Remove("AuthToken");
@@ -88,7 +86,7 @@ namespace DentalApp.Pages
             RevenueMonthlyBar.Chart = new LineChart
             {
                 Entries = monthlyEntries,
-                LabelTextSize = 13,
+                LabelTextSize = 11,
                 LineMode = LineMode.Straight,
                 ValueLabelOrientation = Orientation.Horizontal,
                 LabelOrientation = Orientation.Horizontal
@@ -104,7 +102,6 @@ namespace DentalApp.Pages
                 ValueLabelOrientation = Orientation.Horizontal,
                 LabelOrientation = Orientation.Horizontal,
                 Margin = 5, // Increase space between bars
-                BarAreaAlpha = 50 // Make bars fully opaque
             };
         }
 
@@ -116,13 +113,13 @@ namespace DentalApp.Pages
                 new ChartEntry(expensesValue) { Label = "Expenses", ValueLabel = expensesValue.ToString(),  Color = SKColor.Parse("#D50000") }
             };
 
-            SalesExpenseChart.Chart = new BarChart
-            {
-                Entries = barEntries,
-                LabelTextSize = 13,
-                ValueLabelOrientation = Orientation.Horizontal,
-                //LabelOrientation = Orientation.Horizontal
-            };
+            //SalesExpenseChart.Chart = new BarChart
+            //{
+            //    Entries = barEntries,
+            //    LabelTextSize = 13,
+            //    ValueLabelOrientation = Orientation.Horizontal,
+            //    LabelOrientation = Orientation.Horizontal
+            //};
 
             var pieEntries = new[]
             {
@@ -137,6 +134,8 @@ namespace DentalApp.Pages
                 LabelMode = LabelMode.None,
                 HoleRadius = 0.4f
             };
+
+            // Update UI labels
             SalesValueLabel.Text = salesValue.ToString("N2");
             ExpensesValueLabel.Text = expensesValue.ToString("N2");
             IncomeValueLabel.Text = (salesValue - expensesValue).ToString("N2");
@@ -148,6 +147,7 @@ namespace DentalApp.Pages
             {
                 Entries = dentistEntries,
                 LabelTextSize = 13,
+                Margin = 10,
                 ValueLabelOrientation = Orientation.Horizontal,
                 LabelOrientation = Orientation.Horizontal
             };
@@ -156,6 +156,7 @@ namespace DentalApp.Pages
             {
                 Entries = expenseEntries,
                 LabelTextSize = 13,
+                Margin = 10,
                 ValueLabelOrientation = Orientation.Horizontal,
                 LabelOrientation = Orientation.Horizontal
             };

@@ -10,69 +10,63 @@
 
     <ScrollView>
         <Grid RowDefinitions="Auto,*,Auto">
-            <VerticalStackLayout Grid.Row="0" Padding="10">
+
+            <VerticalStackLayout Padding="10" Grid.Row="0" >
                 <HorizontalStackLayout Margin="0,0,0,30">
                     <Image Source="logo1.png" WidthRequest="75" HeightRequest="75"/>
                     <Label Text="Your Clinic Here" FontSize="18" FontAttributes="Bold" TextColor="Black" Padding="0,20,0,0" />
                 </HorizontalStackLayout>
-
                 <!-- Monthly Revenue Chart -->
-                <Frame Padding="0">
-                    <VerticalStackLayout Padding="10">
-                        <Label Text="Monthly Income" FontAttributes="Bold" />
-                        <microcharts:ChartView x:Name="RevenueMonthlyBar" HeightRequest="200" HorizontalOptions="FillAndExpand" VerticalOptions="Start" Margin="0"/>
-                        <microcharts:ChartView x:Name="RevenueExpenseMonthlyBarChart" HeightRequest="200" Margin="50,0,0,0" />
-                        <Label Text="Total Revenue: " TextColor="Green"/>
-                        <Label Text="Total Expense: " TextColor="Red"/>
-                        <Label Text="Total Income: " TextColor="blue"/>
-                    </VerticalStackLayout>
-                </Frame>
-
-                <!-- Sales vs Expense + Sub Charts -->
-                <Frame BackgroundColor="White" BorderColor="LightGray" Padding="2">
+                <Frame BackgroundColor="White" BorderColor="LightGray" Padding="10">
                     <StackLayout>
-                        <Label Text="Clinic Income" FontAttributes="Bold" Padding="5"/>
+                        <Label Text="Monthly Income" FontSize="12" FontAttributes="Bold"/>
+                        <microcharts:ChartView x:Name="RevenueMonthlyBar" HeightRequest="200"/>
+                        <microcharts:ChartView x:Name="RevenueExpenseMonthlyBarChart" HeightRequest="200" />
+                        <Label x:Name="TotalRevenueLabel" Text="Total Revenue:" FontSize="12" FontAttributes="Bold" TextColor="Green"/>
+                        <Label x:Name="TotalExpenseLabel" Text="Total Expense:" FontSize="12" FontAttributes="Bold" TextColor="Red"/>
+                        <Label x:Name="TotalIncomeLabel" Text="Total Income:" FontSize="12" FontAttributes="Bold" TextColor="Blue"/>
+                    </StackLayout>
+                </Frame>
+                <!-- Sales vs Expense + Sub Charts -->
+                <Frame BackgroundColor="White" BorderColor="LightGray" Padding="10">
+                    <StackLayout>
+                        <Label Text="Clinic Income" FontSize="12" FontAttributes="Bold"/>
                         <Grid ColumnDefinitions="2*,2*,2*,2*,2*" Padding="20,0">
-                            <RadioButton x:Name="todayRadioButton" Content="Today" GroupName="DateFilter" Value="Today" Grid.Column="0" CheckedChanged="OnQuickFilterRadioButtonChanged"/>
-                            <RadioButton x:Name="thisWeekRadioButton" Content="Week" GroupName="DateFilter" Value="ThisWeek" Grid.Column="1" CheckedChanged="OnQuickFilterRadioButtonChanged"/>
-                            <RadioButton x:Name="thisMonthRadioButton" Content="Month" GroupName="DateFilter" Value="ThisMonth" Grid.Column="2" CheckedChanged="OnQuickFilterRadioButtonChanged"/>
-                            <RadioButton x:Name="thisYearRadioButton" Content="Year" GroupName="DateFilter" Value="ThisYear" Grid.Column="3" CheckedChanged="OnQuickFilterRadioButtonChanged"/>
-                            <RadioButton x:Name="allTimeRadioButton" Content="All Time" GroupName="DateFilter" Value="AllTime" Grid.Column="4" CheckedChanged="OnQuickFilterRadioButtonChanged"/>
+                            <RadioButton x:Name="todayRadioButton" Content="Today" GroupName="DateFilter" Value="Today" Grid.Column="0" CheckedChanged="OnQuickFilterRadioButtonChanged" FontSize="12"/>
+                            <RadioButton x:Name="thisWeekRadioButton" Content="Week" GroupName="DateFilter" Value="ThisWeek" Grid.Column="1" CheckedChanged="OnQuickFilterRadioButtonChanged" FontSize="12"/>
+                            <RadioButton x:Name="thisMonthRadioButton" Content="Month" GroupName="DateFilter" Value="ThisMonth" Grid.Column="2" CheckedChanged="OnQuickFilterRadioButtonChanged" FontSize="12"/>
+                            <RadioButton x:Name="thisYearRadioButton" Content="Year" GroupName="DateFilter" Value="ThisYear" Grid.Column="3" CheckedChanged="OnQuickFilterRadioButtonChanged" FontSize="12"/>
+                            <RadioButton x:Name="allTimeRadioButton" Content="All Time" GroupName="DateFilter" Value="AllTime" Grid.Column="4" CheckedChanged="OnQuickFilterRadioButtonChanged" FontSize="12"/>
                         </Grid>
-
-                        <Grid Grid.Row="1" ColumnDefinitions="5*,5*" Margin="10,30">
-                            <VerticalStackLayout Grid.Column="0">
-                                <microcharts:ChartView x:Name="SalesExpenseChart" HeightRequest="250"/>
-                                <Grid ColumnDefinitions="5*,5*" Margin="10,30">
-                                    <microcharts:ChartView x:Name="DentistSaleChart" HeightRequest="250" Grid.Column="0" />
-                                    <microcharts:ChartView x:Name="ExpenseCategoryChart" HeightRequest="250" Grid.Column="1" />
-                                </Grid>
-                            </VerticalStackLayout>
-
-                            <VerticalStackLayout Grid.Column="1" Margin="0,0,0,10">
-                                <microcharts:ChartView x:Name="SalesExpensePieChart" HeightRequest="300" Margin="0,100,0,0" />
-                                <Grid ColumnDefinitions="*,*,*" Margin="0,10">
-                                    <HorizontalStackLayout HorizontalOptions="Center" Spacing="10" Margin="30,0,0,0" Grid.Column="0" >
-                                        <Label Text="Sales:" FontAttributes="Bold" TextColor="Green" />
-                                        <Label x:Name="SalesValueLabel" TextColor="Green"/>
-                                    </HorizontalStackLayout>
-                                    <HorizontalStackLayout HorizontalOptions="Center" Spacing="10" Grid.Column="1" >
-                                        <Label Text="Expense:" FontAttributes="Bold" TextColor="Red" />
-                                        <Label x:Name="ExpensesValueLabel" TextColor="Red" />
-                                    </HorizontalStackLayout>
-                                    <HorizontalStackLayout HorizontalOptions="Center" Spacing="10" Margin="0,0,30,0" Grid.Column="2" >
-                                        <Label Text="Income:" FontAttributes="Bold" TextColor="Blue" />
-                                        <Label x:Name="IncomeValueLabel" TextColor="Blue"/>
-                                    </HorizontalStackLayout>
-                                </Grid>
-                            </VerticalStackLayout>
-                        </Grid>
+                        <VerticalStackLayout Grid.Column="0" Margin="0,0,0,10">
+                            <HorizontalStackLayout HorizontalOptions="Center" Spacing="10" >
+                                <Label Text="Income:" FontSize="12" FontAttributes="Bold" TextColor="Blue" />
+                                <Label x:Name="IncomeValueLabel" TextColor="Blue"/>
+                            </HorizontalStackLayout>
+                            <microcharts:ChartView x:Name="SalesExpensePieChart" HeightRequest="200" />
+                            <Grid ColumnDefinitions="*,*" Margin="0,10">
+                                <HorizontalStackLayout HorizontalOptions="Center" Spacing="10" Margin="30,0,0,0" Grid.Column="0" >
+                                    <Label Text="Revenue:" FontSize="12" FontAttributes="Bold" TextColor="Green" />
+                                    <Label x:Name="SalesValueLabel" TextColor="Green"/>
+                                </HorizontalStackLayout>
+                                <HorizontalStackLayout HorizontalOptions="Center" Spacing="10" Grid.Column="1" >
+                                    <Label Text="Expense:" FontSize="12" FontAttributes="Bold" TextColor="Red" />
+                                    <Label x:Name="ExpensesValueLabel" TextColor="Red" />
+                                </HorizontalStackLayout>
+                            </Grid>
+                            <!--<microcharts:ChartView x:Name="SalesExpenseChart" HeightRequest="200" IsVisible="False"/>-->
+                            <Grid ColumnDefinitions="5*,5*" Margin="10,30">
+                                <microcharts:ChartView x:Name="DentistSaleChart" HeightRequest="200" Grid.Column="0" />
+                                <microcharts:ChartView x:Name="ExpenseCategoryChart" HeightRequest="200" Grid.Column="1" />
+                            </Grid>
+                        </VerticalStackLayout>
                     </StackLayout>
                 </Frame>
             </VerticalStackLayout>
-
-            <Label Grid.Row="2" Text="All rights reserved Mazion Co., Inc." FontSize="12" TextColor="Gray"
-                   HorizontalOptions="Center" VerticalOptions="End" Margin="0,10,0,10" />
+            
+            <!-- Footer -->
+            <Label Text="All rights reserved Mazion Co., Inc." FontSize="12" TextColor="Gray"
+                   HorizontalOptions="Center" VerticalOptions="End" Margin="0,10,0,10" Grid.Row="2"/>
         </Grid>
     </ScrollView>
 
