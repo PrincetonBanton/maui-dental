@@ -31,27 +31,83 @@ namespace DentalApp.ViewModels
         public async Task LoadMonthlyRevenueChartAsync(int year)
         {
             var sales = await _apiService.GetSalesAsync();
+            var expenses = await _apiService.GetExpensesAsync();
 
-            var monthlyTotals = sales?
+            var monthlySales = sales?
                 .Where(s => s.SaleDate.Year == year)
                 .GroupBy(s => s.SaleDate.Month)
-                .ToDictionary(g => g.Key, g => (float)g.Sum(s => s.Total)) ?? new Dictionary<int, float>();
+                .ToDictionary(g => g.Key, g => (float)g.Sum(s => s.Total)) ?? new();
+
+            var monthlyExpenses = expenses?
+                .Where(e => e.ExpenseDate.Year == year)
+                .GroupBy(e => e.ExpenseDate.Month)
+                .ToDictionary(g => g.Key, g => (float)g.Sum(e => e.Amount)) ?? new();
 
             var entries = new List<ChartEntry>();
 
             for (int month = 1; month <= 12; month++)
             {
-                monthlyTotals.TryGetValue(month, out float total);
+                float revenue = monthlySales.TryGetValue(month, out var rev) ? rev : 0f;
+                float expense = monthlyExpenses.TryGetValue(month, out var exp) ? exp : 0f;
+                float income = revenue - expense;
 
-                entries.Add(new ChartEntry(total)
+                entries.Add(new ChartEntry(income)
                 {
                     Label = new DateTime(year, month, 1).ToString("MMM"),
-                    ValueLabel = total.ToString("0"),
-                    Color = SKColor.Parse("#2196F3")
+                    ValueLabel = income.ToString("0"),
+                    Color = SKColor.Parse("#2196F3") // You can change color if you want to distinguish income
                 });
             }
 
             _updateRevenueChart?.Invoke(entries);
+        }
+
+
+        public async Task<List<ChartEntry>> LoadMonthlyRevenueExpenseBarChartAsync(int year)
+        {
+            var sales = await _apiService.GetSalesAsync();
+            var expenses = await _apiService.GetExpensesAsync();
+
+            var monthlySales = sales?
+                .Where(s => s.SaleDate.Year == year)
+                .GroupBy(s => s.SaleDate.Month)
+                .ToDictionary(g => g.Key, g => (float)g.Sum(s => s.Total)) ?? new();
+
+            var monthlyExpenses = expenses?
+                .Where(e => e.ExpenseDate.Year == year)
+                .GroupBy(e => e.ExpenseDate.Month)
+                .ToDictionary(g => g.Key, g => (float)g.Sum(e => e.Amount)) ?? new();
+
+            var entries = new List<ChartEntry>();
+
+            for (int month = 1; month <= 12; month++)
+            {
+                float revenue = monthlySales.TryGetValue(month, out var rev) ? rev : 0f;
+                float expense = monthlyExpenses.TryGetValue(month, out var exp) ? exp : 0f;
+
+                entries.Add(new ChartEntry(revenue)
+                {
+                    Label = new DateTime(year, month, 1).ToString("MMM"),
+                    ValueLabel = revenue.ToString("0"),
+                    Color = SKColor.Parse("#00C853") // Green for revenue
+                });
+
+                entries.Add(new ChartEntry(expense)
+                {
+                    Label = "", // No duplicate month label
+                    ValueLabel = expense.ToString("0"),
+                    Color = SKColor.Parse("#D50000") // Red for expense
+                });
+                // Spacer
+                entries.Add(new ChartEntry(0)
+                {
+                    Label = "",
+                    ValueLabel = "",
+                    Color = SKColors.Transparent
+                });
+            }
+
+            return entries;
         }
 
         public async Task LoadSalesExpenseAsync(DateTime? startDate = null, DateTime? endDate = null)
@@ -130,6 +186,7 @@ namespace DentalApp.ViewModels
                 Color = SKColor.Parse("#F44336")
             }).ToList();
         }
+
         protected void OnPropertyChanged(string name) =>
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
     }

@@ -111,8 +111,13 @@ namespace DentalApp.Services
         public Task<bool> CreateExpenseAsync(Expense expense) => PostAsync("Expense/Create", expense);
         public Task<bool> UpdateExpenseAsync(Expense expense) => PutAsync($"Expense/Update/{expense.Id}", expense);
         public Task<bool> DeleteExpenseAsync(int id) => DeleteAsync($"Expense/Delete/{id}");
+
+        //--Category
         public Task<List<ExpenseCategory>> GetExpenseCategoryAsync()
             => GetAsync<List<ExpenseCategory>>("Expense/GetCategories") ?? Task.FromResult(new List<ExpenseCategory>());
+        public Task<bool> CreateExpenseCategoryAsync(ExpenseCategory category) => PostAsync("Expense/CreateExpenseCategory", category);
+        public Task<bool> UpdateExpenseCategoryAsync(ExpenseCategory category) => PutAsync($"Expense/UpdateExpenseCategory/{category.Id}", category);
+        public Task<bool> DeleteExpenseCategoryAsync(int id) => DeleteAsync($"Expense/DeleteExpenseCategory/{id}");
 
         // Sale
         public async Task<List<SaleVM>> GetSalesAsync()

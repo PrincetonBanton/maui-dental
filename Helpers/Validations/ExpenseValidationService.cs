@@ -23,5 +23,14 @@ namespace DentalApp.Services.Validations
 
             return (true, string.Empty);
         }
+        public static (bool IsValid, string ErrorMessage) ValidateCategory(ExpenseCategory category)
+        {
+            if (string.IsNullOrWhiteSpace(category.Name))
+                return (false, "Category Name is required.");
+            if (string.IsNullOrWhiteSpace(category.Description))
+                return (false, "Category description is required.");
+
+            return (true, string.Empty);
+        }
     }
 }

@@ -31,7 +31,10 @@ namespace DentalApp.Pages
             }
             else
             {
-                await _viewModel.LoadMonthlyRevenueChartAsync(DateTime.Today.Year);
+                int currentYear = DateTime.Today.Year;
+                await _viewModel.LoadMonthlyRevenueChartAsync(currentYear);
+                var barEntries = await _viewModel.LoadMonthlyRevenueExpenseBarChartAsync(currentYear);
+                UpdateMonthlyRevenueExpenseBarChart(barEntries);
                 await _viewModel.LoadSalesExpenseAsync();
             }
         }
@@ -79,17 +82,32 @@ namespace DentalApp.Pages
 
             await _viewModel.LoadSalesExpenseAsync(startDate, endDate);
         }
+
         private void UpdateRevenueChart(List<ChartEntry> monthlyEntries)
         {
             RevenueMonthlyBar.Chart = new LineChart
             {
                 Entries = monthlyEntries,
-                LabelTextSize = 14,
+                LabelTextSize = 13,
                 LineMode = LineMode.Straight,
                 ValueLabelOrientation = Orientation.Horizontal,
                 LabelOrientation = Orientation.Horizontal
             };
         }
+
+        private void UpdateMonthlyRevenueExpenseBarChart(List<ChartEntry> entries)
+        {
+            RevenueExpenseMonthlyBarChart.Chart = new BarChart
+            {
+                Entries = entries,
+                LabelTextSize = 11,
+                ValueLabelOrientation = Orientation.Horizontal,
+                LabelOrientation = Orientation.Horizontal,
+                Margin = 5, // Increase space between bars
+                BarAreaAlpha = 50 // Make bars fully opaque
+            };
+        }
+
         private void UpdateMainCharts(int salesValue, int expensesValue)
         {
             var barEntries = new[]
@@ -101,9 +119,9 @@ namespace DentalApp.Pages
             SalesExpenseChart.Chart = new BarChart
             {
                 Entries = barEntries,
-                LabelTextSize = 15,
+                LabelTextSize = 13,
                 ValueLabelOrientation = Orientation.Horizontal,
-                LabelOrientation = Orientation.Horizontal
+                //LabelOrientation = Orientation.Horizontal
             };
 
             var pieEntries = new[]
@@ -129,7 +147,7 @@ namespace DentalApp.Pages
             DentistSaleChart.Chart = new BarChart
             {
                 Entries = dentistEntries,
-                LabelTextSize = 14,
+                LabelTextSize = 13,
                 ValueLabelOrientation = Orientation.Horizontal,
                 LabelOrientation = Orientation.Horizontal
             };
@@ -137,11 +155,10 @@ namespace DentalApp.Pages
             ExpenseCategoryChart.Chart = new BarChart
             {
                 Entries = expenseEntries,
-                LabelTextSize = 14,
+                LabelTextSize = 13,
                 ValueLabelOrientation = Orientation.Horizontal,
                 LabelOrientation = Orientation.Horizontal
             };
         }
     }
 }
-

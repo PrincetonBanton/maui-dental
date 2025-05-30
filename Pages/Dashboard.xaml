@@ -18,9 +18,13 @@
 
                 <!-- Monthly Revenue Chart -->
                 <Frame Padding="0">
-                    <VerticalStackLayout Padding="0">
-                        <Label Text="Monthly Revenue" FontAttributes="Bold" Padding="5"/>
-                        <microcharts:ChartView x:Name="RevenueMonthlyBar" HeightRequest="200"/>
+                    <VerticalStackLayout Padding="10">
+                        <Label Text="Monthly Income" FontAttributes="Bold" />
+                        <microcharts:ChartView x:Name="RevenueMonthlyBar" HeightRequest="200" HorizontalOptions="FillAndExpand" VerticalOptions="Start" Margin="0"/>
+                        <microcharts:ChartView x:Name="RevenueExpenseMonthlyBarChart" HeightRequest="200" Margin="50,0,0,0" />
+                        <Label Text="Total Revenue: " TextColor="Green"/>
+                        <Label Text="Total Expense: " TextColor="Red"/>
+                        <Label Text="Total Income: " TextColor="blue"/>
                     </VerticalStackLayout>
                 </Frame>
 
