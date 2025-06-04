@@ -1,13 +1,14 @@
 using DentalApp.Data;
 using DentalApp.Models;
 using DentalApp.Services;
+using DentalApp.Services.ApiServices;
 using System.Collections.ObjectModel;
 
 namespace DentalApp.Pages
 {
     public partial class SupplierListPage : ContentPage
     {
-        private readonly ApiService _apiService = new();
+        private readonly SupplierService _supplierService = new();
         private ObservableCollection<Supplier> _allSuppliers = new();
         private bool _isLandscape = false;
 
@@ -49,7 +50,7 @@ namespace DentalApp.Pages
             try
             {
                 var supplierList = isApiAvailable
-                    ? await _apiService.GetSuppliersAsync() ?? new List<Supplier>()
+                    ? await _supplierService.GetSuppliersAsync() ?? new List<Supplier>()
                     : SampleData.GetSampleSuppliers();
                 _allSuppliers.Clear();
                 supplierList.ForEach(_allSuppliers.Add);
@@ -89,7 +90,7 @@ namespace DentalApp.Pages
                 bool confirmDelete = await DisplayAlert("Confirm", "Delete this supplier?", "Yes", "No");
                 if (!confirmDelete) return;
 
-                var success = await _apiService.DeleteSupplierAsync(selectedSupplier.Id);
+                var success = await _supplierService.DeleteSupplierAsync(selectedSupplier.Id);
                 LoadSupplierList();
                 await DisplayAlert(success ? "Success" : "Error", success ? "Supplier deleted." : "Failed to delete supplier.", "OK");
             }

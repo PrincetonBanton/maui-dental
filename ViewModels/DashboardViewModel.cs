@@ -2,13 +2,15 @@
 using Microcharts;
 using SkiaSharp;
 using DentalApp.Services;
+using DentalApp.Services.ApiServices;
 using DentalApp.Models;
 
 namespace DentalApp.ViewModels
 {
     public class DashboardViewModel : INotifyPropertyChanged
     {
-        private readonly ApiService _apiService = new();
+        private readonly SaleService _saleService = new();
+        private readonly ExpenseService _expenseService = new();
         private readonly DashboardService _dashboardService = new(); // Reusable instance
         private readonly Action<List<ChartEntry>> _updateRevenueChart;
         private readonly Action<int, int> _updateMainChart;
@@ -114,7 +116,7 @@ namespace DentalApp.ViewModels
 
         public async Task<List<ChartEntry>> LoadDentistRevenueChartAsync(DateTime? startDate = null, DateTime? endDate = null)
         {
-            var sales = await _apiService.GetSalesAsync();
+            var sales = await _saleService.GetSalesAsync();
 
             if (startDate.HasValue && endDate.HasValue)
                 sales = sales?.Where(s => s.SaleDate.Date >= startDate.Value && s.SaleDate.Date <= endDate.Value).ToList();
@@ -140,7 +142,7 @@ namespace DentalApp.ViewModels
 
         public async Task<List<ChartEntry>> LoadExpenseCategoryChartAsync(DateTime? startDate = null, DateTime? endDate = null)
         {
-            var expenses = await _apiService.GetExpensesAsync();
+            var expenses = await _expenseService.GetExpensesAsync();
 
             if (startDate.HasValue && endDate.HasValue)
                 expenses = expenses?.Where(e => e.ExpenseDate.Date >= startDate.Value && e.ExpenseDate.Date <= endDate.Value).ToList();

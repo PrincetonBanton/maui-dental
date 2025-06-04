@@ -1,6 +1,7 @@
 using DentalApp.Data;
 using DentalApp.Models;
 using DentalApp.Services;
+using DentalApp.Services.ApiServices;
 using System.Text.Json;
 using System.Collections.ObjectModel;
 
@@ -8,7 +9,8 @@ namespace DentalApp.Pages
 {
     public partial class AppointmentListPage : ContentPage
     {
-        private readonly ApiService _apiService = new();
+        private readonly PaymentService _paymentService = new();
+        private readonly AppointmentService _appointmentService = new();
         private ObservableCollection<Appointment> _allAppointments = new();
         private bool _isLandscape = false;
 
@@ -50,7 +52,7 @@ namespace DentalApp.Pages
             try
             {
                 var appointmentList = isApiAvailable
-                    ? await _apiService.GetAppointmentsAsync() ?? new List<Appointment>()
+                    ? await _appointmentService.GetAppointmentsAsync() ?? new List<Appointment>()
                     : SampleData.GetSampleAppointments();
 
                 _allAppointments.Clear();
@@ -91,7 +93,7 @@ namespace DentalApp.Pages
                 bool confirmDelete = await DisplayAlert("Confirm", "Delete this appointment?", "Yes", "No");
                 if (!confirmDelete) return;
 
-                var success = await _apiService.DeleteAppointmentAsync(selectedAppointment.Id);
+                var success = await _appointmentService.DeleteAppointmentAsync(selectedAppointment.Id);
                 LoadAppointmentList();
                 await DisplayAlert(success ? "Success" : "Error", success ? "Appointment deleted." : "Failed to delete appointment.", "OK");
             }

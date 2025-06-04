@@ -1,13 +1,14 @@
 using DentalApp.Data;
 using DentalApp.Models;
 using DentalApp.Services;
+using DentalApp.Services.ApiServices;
 using System.Collections.ObjectModel;
 
 namespace DentalApp.Pages
 {
     public partial class ProductListPage : ContentPage
     {
-        private readonly ApiService _apiService = new();
+        private readonly ProductService _productService = new();
         private ObservableCollection<ProductVM> _allProducts = new();
 
         public ProductListPage()
@@ -22,7 +23,7 @@ namespace DentalApp.Pages
             try
             {
                 var productList = isApiAvailable
-                    ? await _apiService.GetProductsAsync() ?? new List<ProductVM>()
+                    ? await _productService.GetProductsAsync() ?? new List<ProductVM>()
                     : SampleData.GetSampleProducts();
 
                 _allProducts.Clear();
@@ -53,7 +54,7 @@ namespace DentalApp.Pages
                 bool confirmDelete = await DisplayAlert("Confirm", "Delete this product?", "Yes", "No");
                 if (!confirmDelete) return;
 
-                var success = await _apiService.DeleteProductAsync(selectedProduct.Id);
+                var success = await _productService.DeleteProductAsync(selectedProduct.Id);
                 LoadProductList();
                 await DisplayAlert(success ? "Success" : "Error", success ? "Product deleted." : "Failed to delete product.", "OK");
             }

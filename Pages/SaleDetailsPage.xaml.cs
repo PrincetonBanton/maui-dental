@@ -1,6 +1,7 @@
 using DentalApp.Data;
 using DentalApp.Models;
 using DentalApp.Services;
+using DentalApp.Services.ApiServices;
 using DentalApp.Services.Validations;
 using System.Collections.ObjectModel;
 using System.Text.Json;
@@ -9,12 +10,15 @@ namespace DentalApp.Pages;
 
 public partial class SaleDetailsPage : ContentPage
 {
-    private readonly ApiService _apiService = new();
+    private readonly PaymentService _paymentService;
+    private readonly DentistService _dentistService = new();
+    private readonly PatientService _patientService = new();
+    private readonly ProductService _productService = new();
+    private readonly SaleService _saleService = new();
     private SaleVM _sale;
     private ObservableCollection<SaleVM> _allSales = new();
     private ObservableCollection<ProductVM> _allProducts = new();
     private ObservableCollection<SaleLine> SelectedProducts = new();
-    //private ObservableCollection<ProductVM> FilteredProducts = new();
 
     public SaleDetailsPage(ObservableCollection<SaleVM> allSales, SaleVM sale = null)
     {
@@ -38,7 +42,7 @@ public partial class SaleDetailsPage : ContentPage
     {
         try
         {
-            var response = await _apiService.GetSaleDetailAsync(selectedSale.SaleId);
+            var response = await _saleService.GetSaleDetailAsync(selectedSale.SaleId);
 
             if (response != null)
             {
@@ -76,12 +80,12 @@ public partial class SaleDetailsPage : ContentPage
     }
     private async Task LoadPatients()
     {
-        try { PatientPicker.ItemsSource = await _apiService.GetPatientsAsync(); }
+        try { PatientPicker.ItemsSource = await _patientService.GetPatientsAsync(); }
         catch { await DisplayAlert("Error", "Failed to load patients.", "OK"); }
     }
     private async Task LoadDentists()
     {
-        try { DentistPicker.ItemsSource = await _apiService.GetDentistsAsync(); }
+        try { DentistPicker.ItemsSource = await _dentistService.GetDentistsAsync(); }
         catch { await DisplayAlert("Error", "Failed to load dentists.", "OK"); }
     }
 
@@ -92,7 +96,7 @@ public partial class SaleDetailsPage : ContentPage
         try
         {
             var productList = isApiAvailable
-                ? await _apiService.GetProductsAsync() ?? new List<ProductVM>()
+                ? await _productService.GetProductsAsync() ?? new List<ProductVM>()
                 : SampleData.GetSampleProducts();
 
             _allProducts.Clear();
@@ -182,7 +186,7 @@ public partial class SaleDetailsPage : ContentPage
         }
         _sale ??= CreateSale.BuildSale(patient, dentist, SelectedProducts, paymentAmount, TreatmentDatePicker.Date);
 
-        bool success = await _apiService.CreateSaleAsync(_sale);
+        bool success = await _saleService.CreateSaleAsync(_sale);
         string message = success ? "Sale saved successfully!" : "Failed to save sale.";
         await DisplayAlert(success ? "Success" : "Error", message, "OK");
 

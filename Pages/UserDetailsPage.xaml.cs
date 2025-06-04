@@ -1,5 +1,6 @@
 using DentalApp.Models;
 using DentalApp.Services;
+using DentalApp.Services.ApiServices;
 using DentalApp.Models.Enum;
 using DentalApp.Services.Validations;
 using System.Collections.ObjectModel;
@@ -8,7 +9,7 @@ namespace DentalApp.Pages;
 
 public partial class UserDetailsPage : ContentPage
 {
-    private readonly ApiService _apiService = new();
+    private readonly UserService _userService = new();
     private UserVM _user;
     private ObservableCollection<UserVM> _allUsers = new();
     private bool _isEditMode;
@@ -87,12 +88,12 @@ public partial class UserDetailsPage : ContentPage
         //await DisplayAlert("User Object", jsonUser, "OK");
 
         bool success = _user.Id != 0
-            ? await _apiService.UpdateUserAsync(_user)
-            : await _apiService.CreateUserAsync(_user);
+            ? await _userService.UpdateUserAsync(_user)
+            : await _userService.CreateUserAsync(_user);
 
         if (success)
         {
-            var updatedList = await _apiService.GetUsersAsync() ?? new List<UserVM>();
+            var updatedList = await _userService.GetUsersAsync() ?? new List<UserVM>();
             _allUsers.Clear();
             updatedList.ForEach(_allUsers.Add);
         }   

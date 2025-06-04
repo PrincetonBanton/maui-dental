@@ -1,6 +1,7 @@
 using CommunityToolkit.Maui.Converters;
 using DentalApp.Models;
 using DentalApp.Services;
+using DentalApp.Services.ApiServices;
 using DentalApp.Services.Validations;
 using Microsoft.Maui.Graphics;
 using System.Collections.ObjectModel;
@@ -8,7 +9,9 @@ using System.Collections.ObjectModel;
 namespace DentalApp.Pages;
 public partial class ExpenseDetailsPage : ContentPage
 {
-    private readonly ApiService _apiService = new();
+
+    private readonly ExpenseService _expenseService = new();
+    private readonly ExpenseCategoryService _categoryService = new();
     private Expense _expense;
     private ObservableCollection<Expense> _allExpenses = new();
     private ExpenseCategory _category;
@@ -32,7 +35,7 @@ public partial class ExpenseDetailsPage : ContentPage
 
     private async Task LoadExpenseCategories()
     {
-        var categories = await _apiService.GetExpenseCategoryAsync();
+        var categories = await _categoryService.GetExpenseCategoriesAsync();
         _allCategories = new ObservableCollection<ExpenseCategory>(categories);
 
         ExpenseCategoryPicker.ItemsSource = _allCategories;
@@ -64,12 +67,12 @@ public partial class ExpenseDetailsPage : ContentPage
         }
 
         var success = _expense.Id == 0
-            ? await _apiService.CreateExpenseAsync(_expense)
-            : await _apiService.UpdateExpenseAsync(_expense);
+            ? await _expenseService.CreateExpenseAsync(_expense)
+            : await _expenseService.UpdateExpenseAsync(_expense);
 
         if (success)
         {
-            var updatedList = await _apiService.GetExpensesAsync() ?? new List<Expense>();
+            var updatedList = await _expenseService.GetExpensesAsync() ?? new List<Expense>();
             _allExpenses.Clear();
             updatedList.ForEach(_allExpenses.Add);
         }
@@ -104,8 +107,8 @@ public partial class ExpenseDetailsPage : ContentPage
         }
 
         bool success = _category.Id == 0
-            ? await _apiService.CreateExpenseCategoryAsync(_category)
-            : await _apiService.UpdateExpenseCategoryAsync(_category);
+            ? await _categoryService.CreateExpenseCategoryAsync(_category)
+            : await _categoryService.UpdateExpenseCategoryAsync(_category);
 
         string msg = success
             ? (_category.Id != 0 ? "Category updated successfully!" : "Category created successfully!")
@@ -139,7 +142,7 @@ public partial class ExpenseDetailsPage : ContentPage
             bool confirmDelete = await DisplayAlert("Confirm", "Delete this category?", "Yes", "No");
             if (!confirmDelete) return;
 
-            var success = await _apiService.DeleteExpenseCategoryAsync(selectedCategory.Id);
+            var success = await _categoryService.DeleteExpenseCategoryAsync(selectedCategory.Id);
             if (success)
             {
                 _allCategories.Remove(selectedCategory);

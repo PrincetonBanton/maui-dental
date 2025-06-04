@@ -1,13 +1,14 @@
 using DentalApp.Models;
 using DentalApp.Data;
 using DentalApp.Services;
+using DentalApp.Services.ApiServices;
 using System.Collections.ObjectModel;
 
 namespace DentalApp.Pages
 {
     public partial class PatientListPage : ContentPage
     {
-        private readonly ApiService _apiService = new();
+        private readonly PatientService _patientService = new();
         private ObservableCollection<PatientVM> _allPatients = new();
 
         public PatientListPage()
@@ -28,7 +29,7 @@ namespace DentalApp.Pages
             try
             {
                 var patientList = isApiAvailable
-                    ? await _apiService.GetPatientsAsync() ?? new List<PatientVM>()
+                    ? await _patientService.GetPatientsAsync() ?? new List<PatientVM>()
                     : SampleData.GetSamplePatients(); 
                 _allPatients.Clear();
                 patientList.ForEach(_allPatients.Add);
@@ -69,7 +70,7 @@ namespace DentalApp.Pages
             {
                 bool confirmDelete = await DisplayAlert("Confirm", "Delete this patient?", "Yes", "No");
                 if (!confirmDelete) return;
-                var success = await _apiService.DeletePatientAsync(selectedPatient.Id);
+                var success = await _patientService.DeletePatientAsync(selectedPatient.Id);
                 LoadPatientList();
                 await DisplayAlert(success ? "Success" : "Error", success ? "Patient deleted." : "Failed to delete patient.", "OK");
             }

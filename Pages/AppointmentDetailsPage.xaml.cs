@@ -1,5 +1,6 @@
 using DentalApp.Models;
 using DentalApp.Services;
+using DentalApp.Services.ApiServices;
 using DentalApp.Services.Validations;
 using System.Collections.ObjectModel;
 
@@ -7,7 +8,9 @@ namespace DentalApp.Pages;
 
 public partial class AppointmentDetailsPage : ContentPage
 {
-    private readonly ApiService _apiService = new();
+    private readonly PatientService _patientService = new();
+    private readonly DentistService _dentistService = new();
+    private readonly AppointmentService _appointmentService = new();
     private Appointment _appointment;
     private ObservableCollection<Appointment> _allAppointments;
     private List<PatientVM> _patients;
@@ -39,7 +42,7 @@ public partial class AppointmentDetailsPage : ContentPage
     {
         try
         {
-            var patients = await _apiService.GetPatientsAsync();
+            var patients = await _patientService.GetPatientsAsync();
             PatientPicker.ItemsSource = patients;
 
             if (_appointment != null)
@@ -59,7 +62,7 @@ public partial class AppointmentDetailsPage : ContentPage
     {
         try
         {
-            var dentists = await _apiService.GetDentistsAsync();
+            var dentists = await _dentistService.GetDentistsAsync();
             DentistPicker.ItemsSource = dentists;
 
             if (_appointment != null)
@@ -93,7 +96,7 @@ public partial class AppointmentDetailsPage : ContentPage
         }
 
         // Conflict check
-        var existingAppointments = await _apiService.GetAppointmentsAsync();
+        var existingAppointments = await _appointmentService.GetAppointmentsAsync();
         if (AppointmentValidationService.HasTimeConflict(_appointment, existingAppointments))
         {
             await DisplayAlert("Conflict", "This appointment overlaps with another appointment for the selected dentist.", "OK");
@@ -104,12 +107,12 @@ public partial class AppointmentDetailsPage : ContentPage
         //await DisplayAlert("User Object", jsonUser, "OK");
 
         bool success = _appointment.Id != 0
-            ? await _apiService.UpdateAppointmentAsync(_appointment)
-            : await _apiService.CreateAppointmentAsync(_appointment);
+            ? await _appointmentService.UpdateAppointmentAsync(_appointment)
+            : await _appointmentService.CreateAppointmentAsync(_appointment);
 
         if (success)
         {
-            var updatedList = await _apiService.GetAppointmentsAsync() ?? new List<Appointment>();
+            var updatedList = await _appointmentService.GetAppointmentsAsync() ?? new List<Appointment>();
             _allAppointments.Clear();
             updatedList.ForEach(_allAppointments.Add);
         }

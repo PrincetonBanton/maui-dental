@@ -1,13 +1,14 @@
 using DentalApp.Models;
 using DentalApp.Data;
 using DentalApp.Services;
+using DentalApp.Services.ApiServices;
 using System.Collections.ObjectModel;
 
 namespace DentalApp.Pages
 {
     public partial class UserListPage : ContentPage
     {
-        private readonly ApiService _apiService = new();
+        private readonly UserService _userService = new();
         private ObservableCollection<UserVM> _allUsers = new();
 
         public UserListPage()
@@ -28,7 +29,7 @@ namespace DentalApp.Pages
             try
             {
                 var userList = isApiAvailable
-                    ? await _apiService.GetUsersAsync() ?? new List<UserVM>()
+                    ? await _userService.GetUsersAsync() ?? new List<UserVM>()
                     : SampleData.GetSampleUsers();
                 _allUsers.Clear();
                 userList.ForEach(_allUsers.Add);
@@ -58,7 +59,7 @@ namespace DentalApp.Pages
             {
                 bool confirmDelete = await DisplayAlert("Confirm", "Delete this user?", "Yes", "No");
                 if (!confirmDelete) return;
-                var success = await _apiService.DeleteUserAsync(selectedUser.Id);
+                var success = await _userService.DeleteUserAsync(selectedUser.Id);
                 LoadUserList();
                 await DisplayAlert(success ? "Success" : "Error", success ? "User deleted." : "Failed to delete user.", "OK");
             }

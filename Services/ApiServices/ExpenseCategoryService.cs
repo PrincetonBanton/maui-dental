@@ -3,12 +3,12 @@ using System.Net.Http.Json;
 
 namespace DentalApp.Services.ApiServices
 {
-    public class ExpenseService
+    public class ExpenseCategoryService
     {
         private const string BaseUrl = "https://localhost:7078";
         private readonly HttpClient _httpClient = new();
 
-        public ExpenseService()
+        public ExpenseCategoryService()
         {
             _ = TokenService.AttachTokenAsync(_httpClient);
         }
@@ -50,20 +50,17 @@ namespace DentalApp.Services.ApiServices
                 return response.IsSuccessStatusCode;
             }, "Error deleting data");
 
-        // Expense methods
-        public async Task<List<Expense>> GetExpensesAsync()
-        {
-            var expenses = await GetAsync<List<Expense>>("Expense/GetAll") ?? new List<Expense>();
-            return expenses.OrderByDescending(e => e.Id).ToList();
-        }
+        // Expense Categories
+        public Task<List<ExpenseCategory>> GetExpenseCategoriesAsync()
+            => GetAsync<List<ExpenseCategory>>("Expense/GetCategories") ?? Task.FromResult(new List<ExpenseCategory>());
 
-        public Task<bool> CreateExpenseAsync(Expense expense)
-            => PostAsync("Expense/Create", expense);
+        public Task<bool> CreateExpenseCategoryAsync(ExpenseCategory category)
+            => PostAsync("Expense/CreateExpenseCategory", category);
 
-        public Task<bool> UpdateExpenseAsync(Expense expense)
-            => PutAsync($"Expense/Update/{expense.Id}", expense);
+        public Task<bool> UpdateExpenseCategoryAsync(ExpenseCategory category)
+            => PutAsync($"Expense/UpdateExpenseCategory/{category.Id}", category);
 
-        public Task<bool> DeleteExpenseAsync(int id)
-            => DeleteAsync($"Expense/Delete/{id}");
+        public Task<bool> DeleteExpenseCategoryAsync(int id)
+            => DeleteAsync($"Expense/DeleteExpenseCategory/{id}");
     }
 }

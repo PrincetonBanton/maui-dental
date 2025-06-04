@@ -1,5 +1,6 @@
 using DentalApp.Models;
 using DentalApp.Services;
+using DentalApp.Services.ApiServices;
 using DentalApp.Services.Validations;
 using System.Collections.ObjectModel;
 
@@ -7,7 +8,7 @@ namespace DentalApp.Pages;
 
 public partial class PatientDetailsPage : ContentPage
 {
-    private readonly ApiService _apiService = new();
+    private readonly PatientService _patientService = new();
     private PatientVM _patient;
     private ObservableCollection<PatientVM> _allPatients = new();
 
@@ -55,12 +56,12 @@ public partial class PatientDetailsPage : ContentPage
             return;
         }
         bool success = _patient.Id != 0
-            ? await _apiService.UpdatePatientAsync(_patient)
-            : await _apiService.CreatePatientAsync(_patient);
+            ? await _patientService.UpdatePatientAsync(_patient)
+            : await _patientService.CreatePatientAsync(_patient);
 
         if (success)
         {
-            var updatedList = await _apiService.GetPatientsAsync() ?? new List<PatientVM>();
+            var updatedList = await _patientService.GetPatientsAsync() ?? new List<PatientVM>();
             _allPatients.Clear();
             updatedList.ForEach(_allPatients.Add);
         }

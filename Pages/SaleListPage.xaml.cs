@@ -1,13 +1,15 @@
 using DentalApp.Data;
 using DentalApp.Models;
 using DentalApp.Services;
+using DentalApp.Services.ApiServices;
 using System.Collections.ObjectModel;
 
 namespace DentalApp.Pages;
 
 public partial class SaleListPage : ContentPage
 {
-    private readonly ApiService _apiService = new();
+    private readonly PaymentService _paymentService = new();
+    private readonly SaleService _saleService = new();
     private ObservableCollection<SaleVM> _allSales = new();
     private ObservableCollection<ProductVM> _allProducts = new();
     public SaleListPage()
@@ -27,7 +29,7 @@ public partial class SaleListPage : ContentPage
         try
         {
             var saleList = isApiAvailable
-                   ? await _apiService.GetSalesAsync() ?? new List<SaleVM>()
+                   ? await _saleService.GetSalesAsync() ?? new List<SaleVM>()
                    : SampleData.GetSampleSales();
             _allSales.Clear();
             saleList.ForEach(_allSales.Add);
@@ -73,7 +75,7 @@ public partial class SaleListPage : ContentPage
             var jsonUser = System.Text.Json.JsonSerializer.Serialize(payment, new System.Text.Json.JsonSerializerOptions { WriteIndented = true });
             await DisplayAlert("User Object", jsonUser, "OK");
 
-            bool success = await _apiService.AddPaymentAsync(payment);
+            bool success = await _paymentService.AddPaymentAsync(payment);
 
             await DisplayAlert(success ? "Success" : "Error",
                 success ? $"Payment of {paymentAmount:C} recorded." : "Payment failed. Try again.",
@@ -96,7 +98,7 @@ public partial class SaleListPage : ContentPage
         {
             bool confirmDelete = await DisplayAlert("Confirm", "Delete this sale?", "Yes", "No");
             if (!confirmDelete) return;
-            var success = await _apiService.DeleteSaleAsync(selectedSale.SaleId);
+            var success = await _saleService.DeleteSaleAsync(selectedSale.SaleId);
             LoadSaleList();
             await DisplayAlert(success ? "Success" : "Error", success ? "Sale deleted." : "Failed to delete sale.", "OK");
         }

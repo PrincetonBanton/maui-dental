@@ -1,6 +1,7 @@
 using DentalApp.Models;
 using DentalApp.Models.Enum;
 using DentalApp.Services;
+using DentalApp.Services.ApiServices;
 using DentalApp.Services.Validations;
 using System.Collections.ObjectModel;
 
@@ -9,7 +10,7 @@ namespace DentalApp.Pages;
 
 public partial class ProductDetailsPage : ContentPage
 {
-    private readonly ApiService _apiService = new();
+    private readonly ProductService _productService = new();
     private ProductVM _product;
     private ObservableCollection<ProductVM> _allProducts = new();
     private bool _isEditMode;
@@ -67,12 +68,12 @@ public partial class ProductDetailsPage : ContentPage
         }
 
         bool success = _product.Id != 0
-            ? await _apiService.UpdateProductAsync(_product)
-            : await _apiService.CreateProductAsync(_product);
+            ? await _productService.UpdateProductAsync(_product)
+            : await _productService.CreateProductAsync(_product);
 
             if (success)
             {
-                var updatedList = await _apiService.GetProductsAsync() ?? new List<ProductVM>();
+                var updatedList = await _productService.GetProductsAsync() ?? new List<ProductVM>();
                 _allProducts.Clear();
                 updatedList.ForEach(_allProducts.Add);
             }

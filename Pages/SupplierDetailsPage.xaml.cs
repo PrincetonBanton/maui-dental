@@ -1,5 +1,6 @@
 using DentalApp.Models;
 using DentalApp.Services;
+using DentalApp.Services.ApiServices;
 using DentalApp.Services.Validations;
 using System.Collections.ObjectModel;
 
@@ -7,7 +8,7 @@ namespace DentalApp.Pages;
 
 public partial class SupplierDetailsPage : ContentPage
 {
-    private readonly ApiService _apiService = new();
+    private readonly SupplierService _supplierService = new();
     private Supplier _supplier;
     private ObservableCollection<Supplier> _allSuppliers  = new();
 
@@ -49,11 +50,11 @@ public partial class SupplierDetailsPage : ContentPage
         }
 
         bool success = _supplier.Id != 0
-            ? await _apiService.UpdateSupplierAsync(_supplier)
-            : await _apiService.CreateSupplierAsync(_supplier);
+            ? await _supplierService.UpdateSupplierAsync(_supplier)
+            : await _supplierService.CreateSupplierAsync(_supplier);
         if (success)
         {
-            var updatedList = await _apiService.GetSuppliersAsync() ?? new List<Supplier>();
+            var updatedList = await _supplierService.GetSuppliersAsync() ?? new List<Supplier>();
             _allSuppliers.Clear();
             updatedList.ForEach(_allSuppliers.Add);
         }

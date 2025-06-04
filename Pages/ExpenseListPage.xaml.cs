@@ -1,6 +1,7 @@
 using DentalApp.Data;
 using DentalApp.Models;
 using DentalApp.Services;
+using DentalApp.Services.ApiServices;
 using DentalApp.Services.Validations;
 using System.Collections.ObjectModel;
 
@@ -8,7 +9,7 @@ namespace DentalApp.Pages
 {
     public partial class ExpenseListPage : ContentPage
     {
-        private readonly ApiService _apiService = new();
+        private readonly ExpenseService _expenseService = new();
         private ObservableCollection<Expense> _allExpenses = new();
         private ObservableCollection<Expense> _filteredExpenses = new();
 
@@ -29,7 +30,7 @@ namespace DentalApp.Pages
             try
             {
                 var expenseList = isApiAvailable
-                    ? await _apiService.GetExpensesAsync() ?? new List<Expense>()
+                    ? await _expenseService.GetExpensesAsync() ?? new List<Expense>()
                     : SampleData.GetSampleExpenses();
 
                 _allExpenses.Clear();
@@ -71,7 +72,7 @@ namespace DentalApp.Pages
                 bool confirmDelete = await DisplayAlert("Confirm", "Delete this expense?", "Yes", "No");
                 if (!confirmDelete) return;
 
-                var success = await _apiService.DeleteExpenseAsync(selectedExpense.Id);
+                var success = await _expenseService.DeleteExpenseAsync(selectedExpense.Id);
                 if (success)
                 {
                     _allExpenses.Remove(selectedExpense);
