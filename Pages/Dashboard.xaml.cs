@@ -34,6 +34,7 @@ namespace DentalApp.Pages
                 await _viewModel.LoadMonthlyRevenueChartAsync(currentYear);
                 var barEntries = await _viewModel.LoadMonthlyRevenueExpenseBarChartAsync(currentYear);
                 UpdateMonthlyRevenueExpenseBarChart(barEntries);
+                await CalculateAndDisplayTotalIncomeAsync(currentYear);
                 await _viewModel.LoadSalesExpenseAsync();
             }
         }
@@ -42,7 +43,26 @@ namespace DentalApp.Pages
             Preferences.Remove("AuthToken");
             Application.Current.MainPage = new NavigationPage(new Pages.Auth.LoginPage());
         }
+        private async Task CalculateAndDisplayTotalIncomeAsync(int year)
+        {
+            decimal totalRevenue = 0;
+            decimal totalExpense = 0;
 
+            for (int month = 1; month <= 12; month++)
+            {
+                var startDate = new DateTime(year, month, 1);
+                var endDate = startDate.AddMonths(1).AddDays(-1);
+
+                totalRevenue += await _viewModel.GetMonthlyIncome(startDate, endDate);
+                totalExpense += await _viewModel.GetMonthlyExpense(startDate, endDate);
+            }
+
+            decimal totalIncome = totalRevenue - totalExpense;
+
+            TotalRevenueLabel.Text = $"Total Revenue: {totalRevenue:N2}";
+            TotalExpenseLabel.Text = $"Total Expense: {totalExpense:N2}";
+            TotalIncomeLabel.Text = $"Total Income: {totalIncome:N2}";
+        }
         private async void OnQuickFilterRadioButtonChanged(object sender, CheckedChangedEventArgs e)
         {
             if (!e.Value) return;

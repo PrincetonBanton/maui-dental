@@ -11,7 +11,7 @@ namespace DentalApp.ViewModels
     {
         private readonly SaleService _saleService = new();
         private readonly ExpenseService _expenseService = new();
-        private readonly DashboardService _dashboardService = new(); // Reusable instance
+        private readonly DashboardService _dashboardService = new();
         private readonly Action<List<ChartEntry>> _updateRevenueChart;
         private readonly Action<int, int> _updateMainChart;
         private readonly Action<List<ChartEntry>, List<ChartEntry>> _updateSubCharts;
@@ -25,11 +25,11 @@ namespace DentalApp.ViewModels
             Action<List<ChartEntry>> updateRevenueChart,
             Action<int, int> updateMainChart,
             Action<List<ChartEntry>, List<ChartEntry>> updateSubCharts)
-                {
-                    _updateRevenueChart = updateRevenueChart;
-                    _updateMainChart = updateMainChart;
-                    _updateSubCharts = updateSubCharts;
-                }
+        {
+            _updateRevenueChart = updateRevenueChart;
+            _updateMainChart = updateMainChart;
+            _updateSubCharts = updateSubCharts;
+        }
 
         public async Task LoadMonthlyRevenueChartAsync(int year)
         {
@@ -71,7 +71,7 @@ namespace DentalApp.ViewModels
                 float exp = (float)expense;
 
                 // Spacer
-                entries.Add(new ChartEntry(0) {Label = "", ValueLabel = "", Color = SKColors.Transparent });
+                entries.Add(new ChartEntry(0) { Label = "", ValueLabel = "", Color = SKColors.Transparent });
 
                 entries.Add(new ChartEntry(revenue)
                 {
@@ -165,6 +165,15 @@ namespace DentalApp.ViewModels
                 ValueLabel = g.Total.ToString("0"),
                 Color = SKColor.Parse("#F44336")
             }).ToList();
+        }
+
+        public async Task<decimal> GetMonthlyIncome(DateTime start, DateTime end)
+        {
+            return await _dashboardService.GetTotalIncomeAsync(start, end);
+        }
+        public async Task<decimal> GetMonthlyExpense(DateTime start, DateTime end)
+        {
+            return await _dashboardService.GetTotalExpenseAsync(start, end);
         }
 
         protected void OnPropertyChanged(string name) =>
