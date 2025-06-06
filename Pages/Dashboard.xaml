@@ -22,9 +22,17 @@
                         <Label Text="Monthly Income" FontSize="12" FontAttributes="Bold"/>
                         <microcharts:ChartView x:Name="RevenueMonthlyBar" HeightRequest="200"/>
                         <microcharts:ChartView x:Name="RevenueExpenseMonthlyBarChart" HeightRequest="200" />
-                        <Label x:Name="TotalRevenueLabel" Text="Total Revenue:" FontSize="12" FontAttributes="Bold" TextColor="Green"/>
-                        <Label x:Name="TotalExpenseLabel" Text="Total Expense:" FontSize="12" FontAttributes="Bold" TextColor="Red"/>
-                        <Label x:Name="TotalIncomeLabel" Text="Total Income:" FontSize="12" FontAttributes="Bold" TextColor="Blue"/>
+                        <Grid ColumnDefinitions="*,*,*">
+                            <Frame Grid.Column="0">
+                                <Label x:Name="TotalRevenueLabel" Text="Total Revenue:" FontAttributes="Bold" TextColor="Green" />
+                            </Frame>
+                            <Frame Grid.Column="1">
+                                <Label x:Name="TotalExpenseLabel" Text="Total Expense:" FontAttributes="Bold" TextColor="Red" />
+                            </Frame>
+                            <Frame Grid.Column="2">
+                                <Label x:Name="TotalIncomeLabel" Text="Total Income:" FontAttributes="Bold" TextColor="Blue" />
+                            </Frame>
+                        </Grid>
                     </StackLayout>
                 </Frame>
                 <!-- Sales vs Expense + Sub Charts -->

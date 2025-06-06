@@ -15,6 +15,17 @@ namespace DentalApp.Models
         public string Note { get; set; }
         public decimal SubTotal { get; set; }
         public decimal Total { get; set; }
+        public decimal TotalDue { get; set; }
+        public string PartialDueText
+        {
+            get
+            {
+                return Status == 1
+                    ? $"{Total:N2} ({TotalDue:N2})"
+                    : $"{Total:N2}";
+            }
+        }
+
         public decimal AmountDue { get; set; } // For tracking unpaid amounts
         public short Status { get; set; }    // e.g., "Unpaid", "Completed"
         public string StatusText => ((SaleStatus)Status).ToString().Replace("_", " ");

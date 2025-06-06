@@ -1,16 +1,17 @@
-﻿using System.Net.Http.Json;
+﻿using DentalApp.Services.ApiServices;
+using System.Net.Http.Json;
 
 namespace DentalApp.Services
 {
-    public class DashboardService
+    public class DashboardService : BaseApiService
     {
-        private const string BaseUrl = "https://localhost:7078";
-        private readonly HttpClient _httpClient = new();
+        //private const string BaseUrl = "https://localhost:7078";
+        //private readonly HttpClient _httpClient = new();
 
-        public DashboardService()
-        {
-            _ = TokenService.AttachTokenAsync(_httpClient);
-        }
+        //public DashboardService()
+        //{
+        //    _ = TokenService.AttachTokenAsync(_httpClient);
+        //}
 
         public async Task<decimal> GetTotalIncomeAsync(DateTime startDate, DateTime endDate)
         {

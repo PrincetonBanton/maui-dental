@@ -47,7 +47,7 @@ namespace DentalApp.ViewModels
                 entries.Add(new ChartEntry(netIncome)
                 {
                     Label = startDate.ToString("MMM"),
-                    ValueLabel = netIncome.ToString("0"),
+                    ValueLabel = netIncome.ToString("N2"),
                     Color = SKColor.Parse("#2196F3")
                 });
             }
@@ -76,14 +76,14 @@ namespace DentalApp.ViewModels
                 entries.Add(new ChartEntry(revenue)
                 {
                     Label = startDate.ToString("MMM"),
-                    ValueLabel = revenue.ToString("0"),
+                    ValueLabel = revenue.ToString("N2"),
                     Color = SKColor.Parse("#00C853")
                 });
 
                 entries.Add(new ChartEntry(exp)
                 {
                     Label = "",
-                    ValueLabel = exp.ToString("0"),
+                    ValueLabel = exp.ToString("N2"),
                     Color = SKColor.Parse("#D50000")
                 });
 
@@ -135,7 +135,7 @@ namespace DentalApp.ViewModels
             return grouped.Select(g => new ChartEntry(g.Total)
             {
                 Label = g.Dentist,
-                ValueLabel = g.Total.ToString("0"),
+                ValueLabel = g.Total.ToString("N2"),
                 Color = SKColor.Parse("#4CAF50")
             }).ToList();
         }
@@ -162,7 +162,7 @@ namespace DentalApp.ViewModels
             return grouped.Select(g => new ChartEntry(g.Total)
             {
                 Label = g.CategoryName,
-                ValueLabel = g.Total.ToString("0"),
+                ValueLabel = g.Total.ToString("N2"),
                 Color = SKColor.Parse("#F44336")
             }).ToList();
         }

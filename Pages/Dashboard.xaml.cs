@@ -119,7 +119,7 @@ namespace DentalApp.Pages
             {
                 Entries = entries,
                 LabelTextSize = 11,
-                ValueLabelOrientation = Orientation.Horizontal,
+                ValueLabelOrientation = Orientation.Vertical,
                 LabelOrientation = Orientation.Horizontal,
                 Margin = 5, // Increase space between bars
             };
