@@ -96,13 +96,18 @@ namespace DentalApp.ViewModels
 
         public async Task LoadSalesExpenseAsync(DateTime? startDate = null, DateTime? endDate = null)
         {
-            if (startDate.HasValue && endDate.HasValue)
+            if (!startDate.HasValue || !endDate.HasValue)
             {
-                var income = await _dashboardService.GetTotalIncomeAsync(startDate.Value, endDate.Value);
-                var expense = await _dashboardService.GetTotalExpenseAsync(startDate.Value, endDate.Value);
-                SalesValue = Convert.ToInt32(income);
-                ExpensesValue = Convert.ToInt32(expense);
+                var now = DateTime.Now;
+                startDate = new DateTime(now.Year, 1, 1);
+                endDate = new DateTime(now.Year, 12, 31);
             }
+
+            var income = await _dashboardService.GetTotalIncomeAsync(startDate.Value, endDate.Value);
+            var expense = await _dashboardService.GetTotalExpenseAsync(startDate.Value, endDate.Value);
+
+            SalesValue = Convert.ToInt32(income);
+            ExpensesValue = Convert.ToInt32(expense);
 
             OnPropertyChanged(nameof(SalesValue));
             OnPropertyChanged(nameof(ExpensesValue));
@@ -113,6 +118,7 @@ namespace DentalApp.ViewModels
             var expenseEntries = await LoadExpenseCategoryChartAsync(startDate, endDate);
             _updateSubCharts?.Invoke(dentistEntries, expenseEntries);
         }
+
 
         public async Task<List<ChartEntry>> LoadDentistRevenueChartAsync(DateTime? startDate = null, DateTime? endDate = null)
         {

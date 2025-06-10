@@ -137,11 +137,11 @@ namespace DentalApp.Pages
 
         private void UpdateMainCharts(int salesValue, int expensesValue)
         {
-            var barEntries = new[]
-            {
-                new ChartEntry(salesValue) { Label = "Revenues", ValueLabel = salesValue.ToString(), Color = SKColor.Parse("#00C853") },
-                new ChartEntry(expensesValue) { Label = "Expenses", ValueLabel = expensesValue.ToString(),  Color = SKColor.Parse("#D50000") }
-            };
+            //var barEntries = new[]
+            //{
+            //    new ChartEntry(salesValue) { Label = "Revenues", ValueLabel = salesValue.ToString(), Color = SKColor.Parse("#00C853") },
+            //    new ChartEntry(expensesValue) { Label = "Expenses", ValueLabel = expensesValue.ToString(),  Color = SKColor.Parse("#D50000") }
+            //};
 
             //SalesExpenseChart.Chart = new BarChart
             //{

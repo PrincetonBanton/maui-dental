@@ -19,7 +19,7 @@ public partial class LoginPage : ContentPage
 
         if (!ApiConnectivityService.Instance.IsApiAvailable)
         {
-            await DisplayAlert("Connection Error", "Cannot connect to the server. Please check your internet connection or try again later.", "OK");
+            await DisplayAlert("Connection Error", "Cannot connect to the server. Please check connection", "OK");
             UsernameEntry.Text = string.Empty;
             PasswordEntry.Text = string.Empty;
             return;

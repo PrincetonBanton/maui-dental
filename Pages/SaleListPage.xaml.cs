@@ -51,7 +51,7 @@ public partial class SaleListPage : ContentPage
     {
         if (sender is ImageButton button && button.BindingContext is SaleVM selectedSale)
         {
-            string totalAmountString = selectedSale.Total.ToString("0.00");
+            string totalAmountString = selectedSale.TotalDue.ToString("0.00");
 
             string paymentInput = await DisplayPromptAsync("Payment", "Amount:", "OK", "Cancel",
                 keyboard: Keyboard.Numeric, initialValue: totalAmountString);
