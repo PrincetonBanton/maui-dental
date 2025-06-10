@@ -23,7 +23,7 @@ namespace DentalApp.Services
                 {
                     await Shell.Current.DisplayAlert("Session Expired", "Your session has expired. Please log in again.", "OK");
                     Preferences.Remove("AuthToken");
-                    Application.Current.MainPage = new NavigationPage(new Pages.Auth.LoginPage());
+                    Application.Current.MainPage = new NavigationPage(new Pages.LoginPage());
                     return;
                 }
 

@@ -22,11 +22,20 @@ namespace DentalApp.Pages
         {
             base.OnAppearing();
 
+            // Check API connectivity before anything else
+            await ApiConnectivityService.Instance.CheckApiConnectivityAsync();
+            if (!ApiConnectivityService.Instance.IsApiAvailable)
+            {
+                await DisplayAlert("Error", "Cannot connect to the server. Please check your internet connection or try again later.", "OK");
+                Application.Current.MainPage = new NavigationPage(new Pages.LoginPage());
+                return;
+            }
+
             var tokenJson = Preferences.Get("AuthToken", string.Empty);
             if (string.IsNullOrEmpty(tokenJson) || TokenService.IsTokenExpired(tokenJson))
             {
                 Preferences.Remove("AuthToken");
-                Application.Current.MainPage = new NavigationPage(new Pages.Auth.LoginPage());
+                Application.Current.MainPage = new NavigationPage(new Pages.LoginPage());
             }
             else
             {
@@ -38,10 +47,11 @@ namespace DentalApp.Pages
                 await _viewModel.LoadSalesExpenseAsync();
             }
         }
+
         private void OnLogoutClicked(object sender, EventArgs e)
         {
             Preferences.Remove("AuthToken");
-            Application.Current.MainPage = new NavigationPage(new Pages.Auth.LoginPage());
+            Application.Current.MainPage = new NavigationPage(new Pages.LoginPage());
         }
         private async Task CalculateAndDisplayTotalIncomeAsync(int year)
         {

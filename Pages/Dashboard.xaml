@@ -17,7 +17,7 @@
                     <Label Text="Your Clinic Here" FontSize="18" FontAttributes="Bold" TextColor="Black" Padding="0,20,0,0" />
                 </HorizontalStackLayout>
                 <!-- Monthly Revenue Chart -->
-                <Frame BackgroundColor="White" BorderColor="LightGray" Padding="10">
+                <Frame BackgroundColor="White" BorderColor="LightGray" Padding="0">
                     <StackLayout>
                         <Label Text="Monthly Income" FontSize="12" FontAttributes="Bold"/>
                         <microcharts:ChartView x:Name="RevenueMonthlyBar" HeightRequest="200"/>
