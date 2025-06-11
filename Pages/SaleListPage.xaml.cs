@@ -11,7 +11,7 @@ public partial class SaleListPage : ContentPage
     private readonly PaymentService _paymentService = new();
     private readonly SaleService _saleService = new();
     private ObservableCollection<SaleVM> _allSales = new();
-    private ObservableCollection<ProductVM> _allProducts = new();
+
     public SaleListPage()
     {
         InitializeComponent();

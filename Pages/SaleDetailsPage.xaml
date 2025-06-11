@@ -26,24 +26,19 @@
             <Button x:Name="AddServicesButton" Text="Add Products/Services" Clicked="OnShowServiceFrame" />
             <Frame x:Name="inputFrame" IsVisible="False" Padding="10">
                 <StackLayout>
-                    <ListView x:Name="ProductListView" SelectionMode="Single" HeightRequest="150">
-                        <ListView.ItemTemplate>
+                    <CollectionView x:Name="ProductListView" SelectionMode="Single" HeightRequest="150">
+                        <CollectionView.ItemTemplate>
                             <DataTemplate>
-                                <ViewCell>
-                                    <ScrollView>
-                                        <Grid Padding="0,2" ColumnDefinitions="5*,3*,2*">
-                                            <Label Text="{Binding Name}" FontSize="13" Grid.Column="0"/>
-                                            <Label Text="{Binding Amount, StringFormat='{0:N2}'}" FontSize="13" HorizontalTextAlignment="Start" Grid.Column="1"/>
-                                            <ImageButton Source="add.png" HeightRequest="25" WidthRequest="25" Clicked="OnAddServiceClicked" Grid.Column="2"/>
-                                        </Grid>
-                                    </ScrollView>
-                                </ViewCell>
+                                <Grid Padding="0,2" ColumnDefinitions="5*,3*,2*">
+                                    <Label Text="{Binding Name}" FontSize="13" Grid.Column="0"/>
+                                    <Label Text="{Binding Amount, StringFormat='{0:N2}'}" FontSize="13" HorizontalTextAlignment="Start" Grid.Column="1"/>
+                                    <ImageButton Source="add.png" HeightRequest="25" WidthRequest="25" Clicked="OnAddServiceClicked" Grid.Column="2"/>
+                                </Grid>
                             </DataTemplate>
-                        </ListView.ItemTemplate>
-                    </ListView>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
                 </StackLayout>
             </Frame>
-            
             <Grid ColumnDefinitions="5*,2*,2*" BackgroundColor="LightGray" Padding="5" >
                 <Label Text="Description" Grid.Column="0"/>
                 <Label Text="Amount" Grid.Column="1"/>

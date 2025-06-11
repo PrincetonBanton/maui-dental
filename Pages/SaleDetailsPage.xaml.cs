@@ -10,10 +10,10 @@ namespace DentalApp.Pages;
 
 public partial class SaleDetailsPage : ContentPage
 {
-    private readonly PaymentService _paymentService;
     private readonly DentistService _dentistService = new();
     private readonly PatientService _patientService = new();
     private readonly ProductService _productService = new();
+    private readonly PaymentService _paymentService = new();
     private readonly SaleService _saleService = new();
     private SaleVM _sale;
     private ObservableCollection<SaleVM> _allSales = new();
@@ -131,7 +131,8 @@ public partial class SaleDetailsPage : ContentPage
 
     private async void OnSaveSaleClicked(object sender, EventArgs e)
     {
-        await SaveSaleAsync(0); // No payment yet
+        bool saleSaved = await SaveSaleAsync(0);
+        if (saleSaved) await Navigation.PopAsync();
     }
 
     private async void OnSavePayClicked(object sender, EventArgs e)
@@ -144,34 +145,44 @@ public partial class SaleDetailsPage : ContentPage
             await DisplayAlert("Error", "Invalid payment amount entered.", "OK");
             return;
         }
-        var jsonUser = JsonSerializer.Serialize(_sale, new JsonSerializerOptions { WriteIndented = true });
-        await DisplayAlert("User Object", jsonUser, "OK");
 
         bool saleSaved = await SaveSaleAsync(amount);
         if (saleSaved)
         {
-            await SavePayment(amount);
+            try
+            {
+                var allSales = await _saleService.GetSalesAsync();
+                var latestSale = allSales.OrderByDescending(s => s.SaleId).FirstOrDefault();
+                if (latestSale != null) await SavePayment(amount, latestSale.SaleId);
+            }
+            catch (Exception ex)
+            {
+                await DisplayAlert("Error", $"Failed to fetch latest sale: {ex.Message}", "OK");
+            }
+            await Navigation.PopAsync();
         }
     }
-    private async Task SavePayment(decimal amount)
+
+    private async Task SavePayment(decimal amount, int saleId)
     {
         var payment = new Payment
         {
-            SaleId = _sale.SaleId,
+            SaleId = saleId,
             PaymentAmount = amount,
             AmountTendered = amount,
-            PaymentType = 0, // Assuming 0 means Cash or Default
-            EnteredBy = 41,  // Replace with actual user ID if dynamic
+            PaymentType = 0, // Assuming 0 = Cash
+            EnteredBy = 41,  // Replace with actual user ID if needed
             PaymentDate = DateTime.Now
         };
 
-        var jsonUser = JsonSerializer.Serialize(payment, new JsonSerializerOptions { WriteIndented = true });
-        await DisplayAlert("User Object", jsonUser, "OK");
+        //var jsonUser = JsonSerializer.Serialize(payment, new JsonSerializerOptions { WriteIndented = true });
+        //await DisplayAlert("Payment Object", jsonUser, "OK");
 
         bool success = await _paymentService.AddPaymentAsync(payment);
-        string message = success ? "Payment added successfully!" : "Failed to add payment.";
-        await DisplayAlert(success ? "Success" : "Error", message, "OK");
+        //string message = success ? "Payment added successfully!" : "Failed to add payment.";
+        //await DisplayAlert(success ? "Success" : "Error", message, "OK");
     }
+
     private async Task<bool> SaveSaleAsync(decimal paymentAmount)
     {
         var patient = PatientPicker.SelectedItem as PatientVM;
@@ -186,23 +197,12 @@ public partial class SaleDetailsPage : ContentPage
         }
         _sale ??= CreateSale.BuildSale(patient, dentist, SelectedProducts, paymentAmount, TreatmentDatePicker.Date);
 
+        //var jsonUser = JsonSerializer.Serialize(_sale, new JsonSerializerOptions { WriteIndented = true });
+        //await DisplayAlert("User Object", jsonUser, "OK");
+
         bool success = await _saleService.CreateSaleAsync(_sale);
         string message = success ? "Sale saved successfully!" : "Failed to save sale.";
         await DisplayAlert(success ? "Success" : "Error", message, "OK");
-
-        if (success)
-        {
-            var newSale = new SaleVM
-            {
-                SaleId = _sale.Id,
-                SaleDate = _sale.SaleDate,
-                PatientName = patient.FullName,
-                DentistName = dentist.FullName,
-                Total = _sale.Total,
-                Status = 0
-            };
-            await Navigation.PopAsync();
-        }
 
        return success;
     }

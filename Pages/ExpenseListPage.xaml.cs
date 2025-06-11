@@ -131,7 +131,7 @@ namespace DentalApp.Pages
             foreach (var e in filtered)
                 _filteredExpenses.Add(e);
             ExpenseListView.ItemsSource = _filteredExpenses;
-            UpdateExpenseCount();
+            ExpenseCountLabel.Text = $"{_filteredExpenses.Count}";
         }
         private void ApplyCustomDateFilter()
         {
