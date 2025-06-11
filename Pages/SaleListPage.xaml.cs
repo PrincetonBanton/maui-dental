@@ -8,9 +8,10 @@ namespace DentalApp.Pages;
 
 public partial class SaleListPage : ContentPage
 {
-    private readonly PaymentService _paymentService = new();
     private readonly SaleService _saleService = new();
+    private readonly PaymentService _paymentService = new();
     private ObservableCollection<SaleVM> _allSales = new();
+    private ObservableCollection<SaleVM> _filteredSales = new();
 
     public SaleListPage()
     {
@@ -32,11 +33,14 @@ public partial class SaleListPage : ContentPage
                    ? await _saleService.GetSalesAsync() ?? new List<SaleVM>()
                    : SampleData.GetSampleSales();
             _allSales.Clear();
-            saleList.ForEach(_allSales.Add);
+            _filteredSales.Clear();
+            saleList.ForEach(e =>
+            {
+                _allSales.Add(e);
+                _filteredSales.Add(e);
+            });
             SaleListView.ItemsSource = _allSales;
-
-            //var jsonUser = System.Text.Json.JsonSerializer.Serialize(_allSales, new System.Text.Json.JsonSerializerOptions { WriteIndented = true });
-            //await DisplayAlert("User Object", jsonUser, "OK");
+            UpdateSaleCount();
         }
         catch (Exception)
         {
@@ -72,8 +76,6 @@ public partial class SaleListPage : ContentPage
                 PaymentDate = DateTime.Now
             };
 
-            var jsonUser = System.Text.Json.JsonSerializer.Serialize(payment, new System.Text.Json.JsonSerializerOptions { WriteIndented = true });
-            await DisplayAlert("User Object", jsonUser, "OK");
 
             bool success = await _paymentService.AddPaymentAsync(payment);
 
@@ -103,4 +105,74 @@ public partial class SaleListPage : ContentPage
             await DisplayAlert(success ? "Success" : "Error", success ? "Sale deleted." : "Failed to delete sale.", "OK");
         }
     }
+    //---- F I L T E R
+    private void OnCustomDateCheckedChanged(object sender, CheckedChangedEventArgs e)
+    {
+        bool isChecked = customDateCheckBox.IsChecked;
+        saleStartPicker.IsEnabled = isChecked;
+        saleEndPicker.IsEnabled = isChecked;
+        quickFilterCheckBox.IsChecked = !isChecked;
+        todayRadioButton.IsEnabled = !isChecked;
+        thisWeekRadioButton.IsEnabled = !isChecked;
+        thisMonthRadioButton.IsEnabled = !isChecked;
+        thisYearRadioButton.IsEnabled = !isChecked;
+        if (isChecked) ApplyCustomDateFilter();
+    }
+    private void OnQuickFilterCheckedChanged(object sender, CheckedChangedEventArgs e)
+    {
+        bool isChecked = quickFilterCheckBox.IsChecked;
+        todayRadioButton.IsEnabled = isChecked;
+        thisWeekRadioButton.IsEnabled = isChecked;
+        thisMonthRadioButton.IsEnabled = isChecked;
+        thisYearRadioButton.IsEnabled = isChecked;
+        customDateCheckBox.IsChecked = !isChecked;
+        saleStartPicker.IsEnabled = !isChecked;
+        saleEndPicker.IsEnabled = !isChecked;
+    }
+    private void OnQuickFilterRadioButtonChanged(object sender, CheckedChangedEventArgs e)
+    {
+        if (!quickFilterCheckBox.IsChecked) return;
+
+        DateTime today = DateTime.Today;
+        DateTime startOfWeek = today.AddDays(-(int)today.DayOfWeek);
+        DateTime startOfMonth = new DateTime(today.Year, today.Month, 1);
+        int currentYear = today.Year;
+
+        if (todayRadioButton.IsChecked)
+            ApplyFilter(e => e.SaleDate  == today);
+        else if (thisWeekRadioButton.IsChecked)
+            ApplyFilter(e => e.SaleDate >= startOfWeek);
+        else if (thisMonthRadioButton.IsChecked)
+            ApplyFilter(e => e.SaleDate >= startOfMonth);
+        else if (thisYearRadioButton.IsChecked)
+            ApplyFilter(e => e.SaleDate.Year == currentYear);
+    }
+    private void ApplyFilter(Func<SaleVM, bool> filterCriteria)
+    {
+        var filtered = _allSales.Where(filterCriteria).ToList();
+        _filteredSales.Clear();
+        foreach (var e in filtered)
+            _filteredSales.Add(e);
+        SaleListView.ItemsSource = _filteredSales;
+
+        SaleCountLabel.Text = _filteredSales.Count.ToString("N0");
+        decimal total = _filteredSales.Sum(e => e.Total);
+        SaleTotalLabel.Text = total.ToString("N2");
+    }
+    private void ApplyCustomDateFilter()
+    {
+        if (!customDateCheckBox.IsChecked) return;
+
+        DateTime startDate = saleStartPicker.Date;
+        DateTime endDate = saleEndPicker.Date;
+        ApplyFilter(e => e.SaleDate.Date >= startDate && e.SaleDate.Date <= endDate);
+    }
+    private void UpdateSaleCount()
+    {
+        SaleCountLabel.Text = _allSales.Count.ToString("N0");
+        decimal total = _allSales.Sum(e => e.Total);
+        SaleTotalLabel.Text = total.ToString("N2");
+    }
+    private void OnStartDateChanged(object sender, DateChangedEventArgs e) => ApplyCustomDateFilter();
+    private void OnEndDateChanged(object sender, DateChangedEventArgs e) => ApplyCustomDateFilter();
 }

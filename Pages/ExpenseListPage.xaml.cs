@@ -18,11 +18,6 @@ namespace DentalApp.Pages
             InitializeComponent();
             LoadExpenseList();
         }
-        //protected override void OnAppearing()
-        //{
-        //    base.OnAppearing();
-        //    LoadExpenseList();
-        //}
         private async void LoadExpenseList()
         {
             await ApiConnectivityService.Instance.CheckApiConnectivityAsync();
@@ -35,14 +30,12 @@ namespace DentalApp.Pages
 
                 _allExpenses.Clear();
                 _filteredExpenses.Clear();
-
                 expenseList.ForEach(e =>
                 {
                     _allExpenses.Add(e);
                     _filteredExpenses.Add(e);
                 });
                 ExpenseListView.ItemsSource = _allExpenses;
-                //ExpenseListView.ItemsSource = _filteredExpenses;
                 UpdateExpenseCount();
 
             }
@@ -83,6 +76,18 @@ namespace DentalApp.Pages
             }
         }
 
+        //---- F I L T E R
+        private void OnQuickFilterCheckedChanged(object sender, CheckedChangedEventArgs e)
+        {
+            bool isChecked = quickFilterCheckBox.IsChecked;
+            todayRadioButton.IsEnabled = isChecked;
+            thisWeekRadioButton.IsEnabled = isChecked;
+            thisMonthRadioButton.IsEnabled = isChecked;
+            thisYearRadioButton.IsEnabled = isChecked;
+            customDateCheckBox.IsChecked = !isChecked;
+            expenseStartPicker.IsEnabled = !isChecked;
+            expenseEndPicker.IsEnabled = !isChecked;
+        }
         private void OnCustomDateCheckedChanged(object sender, CheckedChangedEventArgs e)
         {
             bool isChecked = customDateCheckBox.IsChecked;
@@ -95,17 +100,7 @@ namespace DentalApp.Pages
             thisYearRadioButton.IsEnabled = !isChecked;
             if (isChecked) ApplyCustomDateFilter();
         }
-        private void OnQuickFilterCheckedChanged(object sender, CheckedChangedEventArgs e)
-        {
-            bool isChecked = quickFilterCheckBox.IsChecked;
-            todayRadioButton.IsEnabled = isChecked;
-            thisWeekRadioButton.IsEnabled = isChecked;
-            thisMonthRadioButton.IsEnabled = isChecked;
-            thisYearRadioButton.IsEnabled = isChecked;
-            customDateCheckBox.IsChecked = !isChecked;
-            expenseStartPicker.IsEnabled = !isChecked;
-            expenseEndPicker.IsEnabled = !isChecked;
-        }
+
         private void OnQuickFilterRadioButtonChanged(object sender, CheckedChangedEventArgs e)
         {
             if (!quickFilterCheckBox.IsChecked) return;
@@ -131,7 +126,10 @@ namespace DentalApp.Pages
             foreach (var e in filtered)
                 _filteredExpenses.Add(e);
             ExpenseListView.ItemsSource = _filteredExpenses;
-            ExpenseCountLabel.Text = $"{_filteredExpenses.Count}";
+
+            ExpenseCountLabel.Text = _filteredExpenses.Count.ToString("N0");
+            decimal total = _filteredExpenses.Sum(e => e.Amount);
+            ExpenseTotalLabel.Text = total.ToString("N2");
         }
         private void ApplyCustomDateFilter()
         {
@@ -142,8 +140,12 @@ namespace DentalApp.Pages
             ApplyFilter(e => e.ExpenseDate.Date >= startDate && e.ExpenseDate.Date <= endDate);
         }
 
-        private void UpdateExpenseCount() => ExpenseCountLabel.Text = $"{_allExpenses.Count}";
-
+        private void UpdateExpenseCount()
+        {
+            ExpenseCountLabel.Text = _allExpenses.Count.ToString("N0");
+            decimal total = _allExpenses.Sum(e => e.Amount);
+            ExpenseTotalLabel.Text = total.ToString("N2");
+        }
         private void OnStartDateChanged(object sender, DateChangedEventArgs e) => ApplyCustomDateFilter();
         private void OnEndDateChanged(object sender, DateChangedEventArgs e) => ApplyCustomDateFilter();
         private void OnNumericEntryChanged(object sender, TextChangedEventArgs e) => NumericValidationService.OnNumericEntryChanged(sender, e);

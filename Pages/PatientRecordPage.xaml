@@ -5,7 +5,8 @@
              Title="Patient Records"
              BackgroundColor="White">
 
-    <VerticalStackLayout Padding="20" Spacing="15">
+    <StackLayout Padding="20" Spacing="15">
+        
         <VerticalStackLayout>
             <Label x:Name="NameLabel" FontSize="18" FontAttributes="Bold" />
             <Label x:Name="BdayLabel" />
@@ -19,7 +20,7 @@
                 <Label Text="Description" TextColor="White" Grid.Column="1" />
                 <Label Text="Dentist" TextColor="White" Grid.Column="2" />
             </Grid>
-            <CollectionView x:Name="AppointmentListView" ItemsSource="{Binding}">
+            <CollectionView x:Name="AppointmentListView" >
                 <CollectionView.ItemTemplate>
                     <DataTemplate>
                         <Grid ColumnDefinitions="*, 2*, *" Padding="3">
@@ -31,6 +32,7 @@
                 </CollectionView.ItemTemplate>
             </CollectionView>
         </VerticalStackLayout>
+        
         <VerticalStackLayout>
             <Label Text="Sale History" FontSize="18" FontAttributes="Bold"/>
             <Grid BackgroundColor="DarkGray" ColumnDefinitions="*, 2*, *" Padding="5">
@@ -38,7 +40,7 @@
                 <Label Text="Description" TextColor="White" Grid.Column="1" />
                 <Label Text="Amount" TextColor="White" Grid.Column="2" />
             </Grid>
-            <CollectionView x:Name="PaymentListView" ItemsSource="{Binding}" >
+            <CollectionView x:Name="PaymentListView" >
                 <CollectionView.ItemTemplate >
                     <DataTemplate>
                         <Grid ColumnDefinitions="*, 2*, *" Padding="3">
@@ -50,7 +52,13 @@
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
             </CollectionView>
+            <VerticalStackLayout Margin="0,10,0,0">
+                <HorizontalStackLayout>
+                    <Label Text="Payments Total:" FontAttributes="Bold" Margin="0"/>
+                    <Label x:Name="PaymentTotalLabel" Text="0" FontAttributes="Bold"  Margin="5" />
+                </HorizontalStackLayout>
+            </VerticalStackLayout>
         </VerticalStackLayout>
 
-    </VerticalStackLayout>
+    </StackLayout>
 </ContentPage>

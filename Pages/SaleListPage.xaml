@@ -13,7 +13,31 @@
             </Grid>
 
             <Button Text="Create Sale" Clicked="OnCreateSaleButtonClicked" />
-            
+            <Frame BackgroundColor="White" BorderColor="LightGray" Padding="10">
+                <StackLayout>
+                    <Grid ColumnDefinitions=".8*,2.3*,2.3*,2.3*,2.3*">
+                        <CheckBox x:Name="quickFilterCheckBox" IsChecked="False" HorizontalOptions="Start" Grid.Column="0" CheckedChanged="OnQuickFilterCheckedChanged"/>
+                        <RadioButton x:Name="todayRadioButton" Content="Today" GroupName="DateFilter" Value="Today" Grid.Column="1" CheckedChanged="OnQuickFilterRadioButtonChanged"/>
+                        <RadioButton x:Name="thisWeekRadioButton" Content="Week" GroupName="DateFilter" Value="ThisWeek" Grid.Column="2" CheckedChanged="OnQuickFilterRadioButtonChanged"/>
+                        <RadioButton x:Name="thisMonthRadioButton" Content="Month" GroupName="DateFilter" Value="ThisMonth" Grid.Column="3" CheckedChanged="OnQuickFilterRadioButtonChanged"/>
+                        <RadioButton x:Name="thisYearRadioButton" Content="Year" GroupName="DateFilter" Value="ThisYear" Grid.Column="4" CheckedChanged="OnQuickFilterRadioButtonChanged"/>
+                    </Grid>
+                    <Grid ColumnDefinitions=".8*,2.8*,2.3*,2.3*,2*">
+                        <CheckBox x:Name="customDateCheckBox" IsChecked="False" VerticalOptions="Center" Grid.Column="0" HorizontalOptions="Start" CheckedChanged="OnCustomDateCheckedChanged"/>
+                        <Label Text="Custom Filter" Grid.Column="1"/>
+                        <DatePicker x:Name="saleStartPicker" Date="{Binding CurrentDate}" Format="MM/dd/yyyy" Grid.Column="2" HorizontalOptions="Start" DateSelected="OnStartDateChanged"/>
+                        <DatePicker x:Name="saleEndPicker" Date="{Binding CurrentDate}" Format="MM/dd/yyyy" Grid.Column="3" HorizontalOptions="Start" DateSelected="OnEndDateChanged"/>
+                    </Grid>
+                </StackLayout>
+            </Frame>
+
+            <Grid Margin="0,10,0,10" ColumnDefinitions="Auto, *" RowDefinitions="Auto, Auto">
+                <Label Text="Sales Total  :" Grid.Row="0" Grid.Column="0" />
+                <Label x:Name="SaleTotalLabel" Grid.Row="0" Grid.Column="1" Margin="10,0" />
+                <Label Text="Sales Count :" Grid.Row="1" Grid.Column="0" />
+                <Label x:Name="SaleCountLabel" Grid.Row="1" Grid.Column="1" Margin="10,0"/>
+            </Grid>
+
             <!-- LISTVIEW -->
             <Grid Padding="5" BackgroundColor="DarkGray" ColumnDefinitions="1.6*,3.4*,1.6*,1.7*,1.5*">
                 <Label Text="Date" FontAttributes="Bold" Grid.Column="0" />

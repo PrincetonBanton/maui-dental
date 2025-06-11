@@ -69,8 +69,6 @@ private async void LoadAppointmentsForPatient(int patientId)
         await DisplayAlert("Error", $"Failed to load appointments. {ex.Message}", "OK");
     }
 }
-
-
 private async void LoadPaymentsForPatient(int patientId)
 {
     await ApiConnectivityService.Instance.CheckApiConnectivityAsync();
@@ -91,8 +89,10 @@ private async void LoadPaymentsForPatient(int patientId)
             payment.SaleProductName = saleDetail?.Items.FirstOrDefault()?.ProductName ?? "Unknown Product";
         }
 
-        PaymentListView.ItemsSource = payments;
-    }
+            PaymentListView.ItemsSource = payments;
+            decimal total = payments.Sum(p => p.PaymentAmount);
+            PaymentTotalLabel.Text = total.ToString("N2"); 
+        }
     catch (Exception ex)
     {
         await DisplayAlert("Error", $"Failed to load payments. {ex.Message}", "OK");
