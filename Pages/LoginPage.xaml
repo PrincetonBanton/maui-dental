@@ -9,8 +9,8 @@
         <Frame Padding="10" CornerRadius="3" BorderColor="LightGray" Margin="0,50,0,0">
             <VerticalStackLayout Spacing="5">
                 <Label Text="Login to Your Account" FontSize="24" HorizontalOptions="Center" />
-                <Entry x:Name="UsernameEntry" Placeholder="Username" Keyboard="Default" ReturnType="Next" />
-                <Entry x:Name="PasswordEntry" Placeholder="Password" IsPassword="True" ReturnType="Done" />
+                <Entry x:Name="UsernameEntry"  Text="admin2" Placeholder="Username" Keyboard="Default" ReturnType="Next" />
+                <Entry x:Name="PasswordEntry" Text="12345" Placeholder="Password" IsPassword="True" ReturnType="Done" />
                 <Button Text="Login" Clicked="OnLoginClicked" TextColor="White" />
                 <Label x:Name="ErrorLabel" TextColor="Red" IsVisible="False" FontSize="12" HorizontalOptions="Center" />
             </VerticalStackLayout>

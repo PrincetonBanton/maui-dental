@@ -23,6 +23,10 @@ public partial class SaleDetailsPage : ContentPage
     public SaleDetailsPage(ObservableCollection<SaleVM> allSales, SaleVM sale = null)
     {
         InitializeComponent();
+
+        string itemsJson = JsonSerializer.Serialize(sale, new JsonSerializerOptions { WriteIndented = true });
+        DisplayAlert("Sale Items (API Format)", itemsJson, "OK");
+
         _allSales = allSales;
         _sale = sale;
         AddServicesButton.IsVisible = _sale == null;
@@ -30,6 +34,12 @@ public partial class SaleDetailsPage : ContentPage
         if (_sale != null)
         {
             LoadSelectedSale(sale);
+            if (_sale.Status == 0)
+            {
+                LoadProducts();
+                AddServicesButton.IsVisible = true;
+                SaveButtonGroup.IsVisible = true;
+            }
         }
         else
         {
@@ -128,6 +138,49 @@ public partial class SaleDetailsPage : ContentPage
             inputFrame.IsVisible = false;
         }
     }
+    private void QtyAddClicked(object sender, EventArgs e)
+    {
+        if (sender is ImageButton button && button.BindingContext is SaleLine saleLine)
+        {
+            saleLine.Quantity += 1;
+            saleLine.Total = saleLine.Quantity * saleLine.SubTotal; // recalculate from unit price
+            RefreshSelectedProducts();
+        }
+    }
+
+    private void QtyLessClicked(object sender, EventArgs e)
+    {
+        if (sender is ImageButton button && button.BindingContext is SaleLine saleLine)
+        {
+            if (saleLine.Quantity > 1)
+            {
+                saleLine.Quantity -= 1;
+                saleLine.Total = saleLine.Quantity * saleLine.SubTotal; // recalculate from unit price
+                RefreshSelectedProducts();
+            }
+            else
+            {
+                SelectedProducts.Remove(saleLine);
+            }
+
+            RefreshSelectedProducts();
+        }
+    }
+    private void QtyRemoveClicked(object sender, EventArgs e)
+    {
+        if (sender is ImageButton button && button.BindingContext is SaleLine saleLine)
+        {
+            SelectedProducts.Remove(saleLine);
+            RefreshSelectedProducts();
+        }
+    }
+
+
+    private void RefreshSelectedProducts()
+    {
+        AvailProductListView.ItemsSource = null;
+        AvailProductListView.ItemsSource = SelectedProducts;
+    }
 
     private async void OnSaveSaleClicked(object sender, EventArgs e)
     {
@@ -170,8 +223,8 @@ public partial class SaleDetailsPage : ContentPage
             SaleId = saleId,
             PaymentAmount = amount,
             AmountTendered = amount,
-            PaymentType = 0, // Assuming 0 = Cash
-            EnteredBy = 41,  // Replace with actual user ID if needed
+            PaymentType = 0,                // Assuming 0 = Cash
+            EnteredBy = 41,                 // Replace with actual user ID if needed
             PaymentDate = DateTime.Now
         };
 

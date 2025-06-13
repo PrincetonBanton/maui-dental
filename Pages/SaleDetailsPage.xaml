@@ -24,32 +24,40 @@
             </Frame>
             
             <Button x:Name="AddServicesButton" Text="Add Products/Services" Clicked="OnShowServiceFrame" />
+            
             <Frame x:Name="inputFrame" IsVisible="False" Padding="10">
                 <StackLayout>
                     <CollectionView x:Name="ProductListView" SelectionMode="Single" HeightRequest="150">
                         <CollectionView.ItemTemplate>
                             <DataTemplate>
-                                <Grid Padding="0,2" ColumnDefinitions="5*,3*,2*">
+                                <Grid Padding="5" ColumnDefinitions="5*,3*,2*">
                                     <Label Text="{Binding Name}" FontSize="13" Grid.Column="0"/>
                                     <Label Text="{Binding Amount, StringFormat='{0:N2}'}" FontSize="13" HorizontalTextAlignment="Start" Grid.Column="1"/>
-                                    <ImageButton Source="add.png" HeightRequest="25" WidthRequest="25" Clicked="OnAddServiceClicked" Grid.Column="2"/>
+                                    <ImageButton Source="cart.png" HeightRequest="10" Clicked="OnAddServiceClicked" Grid.Column="2"/>
                                 </Grid>
                             </DataTemplate>
                         </CollectionView.ItemTemplate>
                     </CollectionView>
                 </StackLayout>
             </Frame>
-            <Grid ColumnDefinitions="5*,2*,2*" BackgroundColor="LightGray" Padding="5" >
-                <Label Text="Description" Grid.Column="0"/>
-                <Label Text="Amount" Grid.Column="1"/>
+            <Grid Padding="5"  BackgroundColor="LightGray" ColumnDefinitions="1*,4*,1.5*,2.5*">
+                <Label Text="Quantity" Grid.Column="0"/>
+                <Label Text="Description" Grid.Column="1"/>
+                <Label Text="Amount" Grid.Column="2"/>
             </Grid>
             <ListView x:Name="AvailProductListView" ItemsSource="{Binding SelectedProducts}" HasUnevenRows="True">
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <ViewCell>
-                            <Grid ColumnDefinitions="5*,2*,2*" Padding="5">
-                                <Label Text="{Binding ProductName}" FontSize="14" Grid.Column="0"/>
-                                <Label Text="{Binding SubTotal, StringFormat='{0:N2}'}" FontSize="14" Grid.Column="1" HorizontalTextAlignment="End"/>
+                            <Grid ColumnDefinitions="1*,4*,1.5*,2.5*">
+                                <Label Text="{Binding Quantity}" FontSize="14" Grid.Column="0" Padding="10"/>
+                                <Label Text="{Binding ProductName}" FontSize="14" Grid.Column="1"/>
+                                <Label Text="{Binding Total, StringFormat='{0:N2}'}" FontSize="14" Grid.Column="2"/>
+                                <HorizontalStackLayout Padding="5" Spacing="10" Grid.Column="3">
+                                    <ImageButton Clicked="QtyAddClicked" Source="add.png" HeightRequest="10" />
+                                    <ImageButton Clicked="QtyLessClicked" Source="minus.png" HeightRequest="10" />
+                                    <ImageButton Clicked="QtyRemoveClicked" Source="delete.png" HeightRequest="10" />
+                                </HorizontalStackLayout>
                             </Grid>
                         </ViewCell>
                     </DataTemplate>

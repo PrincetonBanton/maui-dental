@@ -3,6 +3,7 @@ using DentalApp.Models;
 using DentalApp.Services;
 using DentalApp.Services.ApiServices;
 using System.Collections.ObjectModel;
+using System.Text.Json;
 
 namespace DentalApp.Pages;
 
@@ -90,6 +91,8 @@ public partial class SaleListPage : ContentPage
     {
         if (sender is ImageButton button && button.BindingContext is SaleVM selectedSale)
         {
+            var jsonUser = JsonSerializer.Serialize(selectedSale, new JsonSerializerOptions { WriteIndented = true });
+            await DisplayAlert("Payment Object", jsonUser, "OK");
             await Navigation.PushAsync(new SaleDetailsPage(_allSales, selectedSale));
         }
     }

@@ -9,7 +9,7 @@
     public enum SaleStatus : short
     {
         Unpaid = 0,
-        Partially_Paid = 1,
+        Partial= 1,
         Paid = 2
     }
 }
